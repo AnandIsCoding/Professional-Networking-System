@@ -2,11 +2,14 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import GoogleLoginComponent from "../utils/GoogleLoginComponent";
+import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
 
 function LandingPage() {
   const navigate = useNavigate()
   return (
-    <div className="w-screen h-screen flex flex-col md:flex-row items-center md:fixed">
+    <div>
+      <div className="w-screen h-screen flex flex-col md:flex-row items-center md:fixed">
+   
       {/* Left Content */}
       <div className="w-full md:w-1/2 h-1/2 md:h-full px-6 md:px-24 py-4 flex flex-col justify-center gap-4">
         <div className="leading-0">
@@ -23,7 +26,7 @@ function LandingPage() {
         <GoogleLoginComponent/>
 
       {/* Signup with email button */}
-        <button onClick={()=>navigate('/signup')} className="flex w-[280px] ml-[7.5vw] md:ml-[9.5vw] items-center cursor-pointer justify-center gap-3 px-6 py-2 bg-white border border-gray-300 rounded-md text-black font-medium text-base hover:bg-gray-100 transition">
+        <button onClick={()=>navigate('/signup')} className="flex w-[280px] ml-[7.5vw] md:ml-[9.5vw] items-center cursor-pointer justify-center gap-3 px-6 py-2 bg-white border border-gray-300 rounded-md text-black font-medium text-base hover:bg-blue-50 transition">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-5 h-5"
@@ -69,6 +72,7 @@ function LandingPage() {
         />
       </div>
      
+    </div>
     </div>
   );
 }

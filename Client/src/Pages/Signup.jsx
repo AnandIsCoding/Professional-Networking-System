@@ -3,6 +3,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import Footer from "../Components/Footer";
 import GoogleLoginComponent from "../utils/GoogleLoginComponent";
+import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
 
 function Signup() {
   const [isSignupMode, setIsSignupMode] = useState(true);
@@ -20,12 +21,15 @@ function Signup() {
  
 
   return (
-    <div className=" flex items-center justify-center   px-1 md:px-4 py-8">
+    <>
+    <PublicNavbar/>
+      <div className=" flex items-center justify-center   px-1 md:px-4 py-8">
+    
       <form
         onSubmit={(event) =>
           isSignupMode ? handleSignup(event) : handleSignin(event)
         }
-        className="backdrop-blur-md bg-white/70 shadow-0 mdLshadow-xl rounded-xl w-full max-w-lg py-24 px-2 md:p-8 "
+        className="backdrop-blur-md bg-white/70 shadow-0  rounded-xl w-full max-w-lg py-24 px-2 md:p-8 "
       >
         <h2 className="md:text-2xl font-semibold text-center text-gray-800 mb-6">
           Welcome to your professional journey —{" "}
@@ -108,6 +112,7 @@ function Signup() {
         </p>
       </form>
     </div>
+    </>
   );
 }
 
