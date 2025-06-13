@@ -88,6 +88,7 @@ function UserNavbar() {
         </div>
 
         <div
+        onClick={()=>navigate('/resume')}
           className={`flex relative flex-col items-center mx-4 cursor-pointer transition-transform duration-300 ${
             isResume ? "scale-110 font-semibold border-b-1 border-black" : ""
           }`}
@@ -125,7 +126,7 @@ function UserNavbar() {
           }`}
         >
           <img
-            src="https://picsum.photos/id/237/536/354"
+            src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
             alt="user_image"
             className="w-5 h-5 rounded-full"
           />

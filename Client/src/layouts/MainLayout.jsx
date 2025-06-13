@@ -9,7 +9,7 @@ function MainLayout({ children }) {
       <UserNavbar/>
       
       {/* Page content injected here */}
-      <div className="pt-4 px-2 md:px-44 md:pl-[15vw]">
+      <div className="pt-4 px-2 md:px-44  md:pl-[11vw] mb-18 md:mb-0">
         {children}
       </div>
 

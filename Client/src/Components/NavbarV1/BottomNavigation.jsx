@@ -82,7 +82,7 @@ function BottomNavigation() {
         onClick={() => navigate("/profile")}
       >
         <img
-          src="https://picsum.photos/id/237/536/354"
+          src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
           alt="user"
           className="w-5 h-5 rounded-full"
         />

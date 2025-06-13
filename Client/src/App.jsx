@@ -10,6 +10,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import AuthenticateNavigateFeed from "./utils/AuthenticateNavigateFeed";
 import HomePage from "./Pages/HomePage";
 import MyNetwork from "./Pages/MyNetwork";
+import Resume from "./Pages/Resume";
 
 function App() {
   useEffect(() => {
@@ -60,6 +61,7 @@ function App() {
           }
         />
         <Route path='/mynetwork' element={<MyNetwork/>} />
+        <Route path='/resume' element={<Resume/>} />
       </Routes>
     </div>
   );
