@@ -4,13 +4,17 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-const clientID = import.meta.env.VITE_GOOGLE_AUTH_KEY
+import appStore from "./Redux/appStore.js";
+import { Provider } from "react-redux";
 
+const clientID = import.meta.env.VITE_GOOGLE_AUTH_KEY;
 
 createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId={clientID} >
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </GoogleOAuthProvider>
+  <Provider store={appStore}>
+    <GoogleOAuthProvider clientId={clientID}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </GoogleOAuthProvider>
+  </Provider>
 );

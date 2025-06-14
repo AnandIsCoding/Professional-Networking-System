@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import StartPostBox from "../Components/StartPostBox";
 import MainLayout from "../layouts/MainLayout";
 import Card from "../Components/Cards/Card";
 import ProfileCard from "../Components/Cards/ProfileCard";
 import AdvertisementCard from "../Components/AdvertisementCard";
+import Post from "../Components/Post/Post";
+import ModalLayout from "../Components/modal/ModalLayout";
+import { useSelector } from "react-redux";
 
 function Feed() {
+  const showModal = useSelector(state => state.modal.showModal)
   return (
     <MainLayout>
-      <div className="flex flex-col lg:flex-row gap-4 w-full text-gray-800">
+      <div className="flex flex-col lg:flex-row gap-4 w-full text-gray-800 ">
         {/* Left Sidebar */}
-        <div className="w-full lg:w-[25%] space-y-4 h-fit md:sticky md:top-17">
+        <div className="w-full lg:w-[25%] space-y-4 h-fit  ">
           <ProfileCard />
           <Card padding={1}>
             <div className="flex justify-between text-sm">
@@ -25,13 +29,17 @@ function Feed() {
         </div>
 
         {/* Middle Feed */}
-        <div className="w-full lg:w-[50%]">
-          <StartPostBox />
+        <div className="w-full lg:w-[50%] h-fit">
+          <StartPostBox showModal={showModal} />
+          <br></br>
+          <Post/>
+          <br></br>
+          <Post/>
         </div>
 
         {/* Right Sidebar */}
         {/* Right Sidebar */}
-        <div className="w-full lg:w-[25%] flex flex-col space-y-4 h-fit md:sticky md:top-17">
+        <div className="w-full lg:w-[25%] flex flex-col space-y-4 h-fit ">
           <Card padding={1}>
             <h1 className="text-xl font-semibold text-gray-700">
               LinkedIn News
@@ -52,6 +60,7 @@ function Feed() {
           </div>
         </div>
       </div>
+     
     </MainLayout>
   );
 }

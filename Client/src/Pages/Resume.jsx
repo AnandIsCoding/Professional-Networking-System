@@ -5,7 +5,7 @@ function Resume() {
   return (
     <MainLayout>
         <div>
-      My Resume Page
+      <h1>My Resume Page !!  </h1>
     </div>
     </MainLayout>
   )

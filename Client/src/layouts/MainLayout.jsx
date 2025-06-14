@@ -5,11 +5,11 @@ import BottomNavigation from '../Components/NavbarV1/BottomNavigation';
 
 function MainLayout({ children }) {
   return (
-    <div className="w-full min-h-screen bg-[#F4F2EE]">
+    <div className="w-full min-h-[200vh]  bg-[#F4F2EE]">
       <UserNavbar/>
       
       {/* Page content injected here */}
-      <div className="pt-4 px-2 md:px-44  md:pl-[11vw] mb-18 md:mb-0">
+      <div className="pt-4 px-2 md:px-44  md:pl-[11vw] mb-18 md:mb-0 overflow-x-hidden">
         {children}
       </div>
 

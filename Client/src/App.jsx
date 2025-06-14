@@ -11,6 +11,7 @@ import AuthenticateNavigateFeed from "./utils/AuthenticateNavigateFeed";
 import HomePage from "./Pages/HomePage";
 import MyNetwork from "./Pages/MyNetwork";
 import Resume from "./Pages/Resume";
+import ScrollToTop from "./utils/ScrollToTop";
 
 function App() {
   useEffect(() => {
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <div className="select-none">
+      <ScrollToTop/>
       <Routes>
         {/* Initial auth-based redirect */}
         <Route
