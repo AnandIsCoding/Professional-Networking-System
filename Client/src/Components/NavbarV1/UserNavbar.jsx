@@ -27,7 +27,7 @@ function UserNavbar() {
           className="w-28 h-[2vw] cursor-pointer"
         >
           <img
-            src="./LinkedIn_logo.png"
+            src="/LinkedIn_logo.png"
             alt="LinkedIn Logo"
             className=" h-10 object-contain"
           />
@@ -98,6 +98,7 @@ function UserNavbar() {
         </div>
 
         <div
+        onClick={()=>navigate('/message')}
           className={`flex relative flex-col items-center mx-4 cursor-pointer transition-transform duration-300 ${
             isMessage ? "scale-110 font-semibold border-b-1 border-black" : ""
           }`}
@@ -121,6 +122,7 @@ function UserNavbar() {
         </div>
 
         <div
+         onClick={()=>navigate(`/profile/${123}`)}
           className={`flex relative flex-col items-center mx-4 cursor-pointer transition-transform duration-300 ${
             isProfile ? "scale-110 font-semibold border-b-1 border-black" : ""
           }`}

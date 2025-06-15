@@ -12,6 +12,11 @@ import HomePage from "./Pages/HomePage";
 import MyNetwork from "./Pages/MyNetwork";
 import Resume from "./Pages/Resume";
 import ScrollToTop from "./utils/ScrollToTop";
+import { useSelector } from "react-redux";
+import Message from "./Pages/Message";
+import Profile from "./Pages/Profile";
+
+
 
 function App() {
   useEffect(() => {
@@ -39,7 +44,8 @@ function App() {
     };
   }, []);
 
-  let isAuthenticated = true;
+  const isAuthenticated = useSelector(state => state.isAuthenticated.isAuthenticated)
+  console.log(isAuthenticated)
 
   return (
     <div className="select-none">
@@ -62,8 +68,27 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path='/mynetwork' element={<MyNetwork/>} />
-        <Route path='/resume' element={<Resume/>} />
+        <Route path='/mynetwork' element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} >
+            <MyNetwork/>
+          </ProtectedRoute>
+        } />
+        <Route path='/resume' element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <Resume/>
+          </ProtectedRoute>
+        } />
+        <Route path='/message' element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <Message/>
+          </ProtectedRoute>
+        }/>
+
+        <Route path={`/profile/:id`} element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <Profile/>
+          </ProtectedRoute>
+        }/>
       </Routes>
     </div>
   );

@@ -5,7 +5,7 @@ import BottomNavigation from '../Components/NavbarV1/BottomNavigation';
 
 function MainLayout({ children }) {
   return (
-    <div className="w-full min-h-[200vh]  bg-[#F4F2EE]">
+    <div className="w-full min-h-[100vh]  bg-[#F4F2EE]">
       <UserNavbar/>
       
       {/* Page content injected here */}

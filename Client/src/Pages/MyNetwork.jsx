@@ -18,7 +18,7 @@ function MyNetwork() {
             className={`px-4 py-2 rounded-md transition duration-300 text-sm sm:text-base cursor-pointer ${
               headingText === "Catch up with Friends"
                 ? "bg-blue-700 text-white"
-                : "bg-gray-200 text-black"
+                : "border border-gray-600 text-black"
             }`}
           >
             Friends
@@ -28,7 +28,7 @@ function MyNetwork() {
             className={`px-4 py-2 rounded-md transition duration-300 text-sm sm:text-base cursor-pointer ${
               headingText === "Connection Requests"
                 ? "bg-blue-700 text-white"
-                : "bg-gray-200 text-black"
+                : "border border-gray-600 text-black"
             }`}
           >
             Pending Request
