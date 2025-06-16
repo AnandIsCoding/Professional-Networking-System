@@ -4,8 +4,10 @@ import { AiFillLike } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { IoShareSocial } from "react-icons/io5";
+import { useLocation } from "react-router-dom";
 
 function Post() {
+  
   const [showMore, setShowMore] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const description = `It has just beena month since launch. 🚀
@@ -17,6 +19,9 @@ So happy to see this new product getting so much love from students! ❤️`;
   const sendComment = async (event) => {
     event.preventDefault();
   };
+  const localtion = useLocation()
+  const isProfilePage = location.pathname.startsWith('/profile')
+
   return (
     <Card padding={0}>
       <div className="px-8 py-4 flex gap-6 h-fit">
@@ -68,7 +73,7 @@ So happy to see this new product getting so much love from students! ❤️`;
       </div>
 
       {/* like comment share */}
-      <div className="px-14 py-6 flex justify-between">
+      <div className={`px-14 py-6 flex justify-between ${isProfilePage ? 'hidden' : ''}`}>
         <div className="flex gap-3 cursor-pointer hover:bg-gray-50 px-3 py-1 rounded-full">
           <AiFillLike size={22} color="blue" className="mt-[1px]" />
           <p> Like</p>

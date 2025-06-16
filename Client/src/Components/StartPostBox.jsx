@@ -8,10 +8,10 @@ import { useDispatch } from 'react-redux';
 const StartPostBox = ({showModal}) => {
   const dispatch = useDispatch()
   const handleShowModel = () => {
-      dispatch(setShowModal(true));
+      dispatch(setShowModal('writePost'));
     };
     useEffect(()=>{
-      dispatch(setShowModal(false));
+      dispatch(setShowModal(null));
     },[])
   return (
     <div className="bg-white border border-zinc-200 p-4 rounded-md md:col-span-3 md:col-start-2 md:row-start-1">
@@ -43,9 +43,12 @@ const StartPostBox = ({showModal}) => {
           <span>Write article</span>
         </div>
       </div>
-       {
-        showModal && <ModalLayout title='Start Post' showImage={1}  > <WritePostModal/> </ModalLayout>
-      }
+        {/* Modal for writing post */}
+      {showModal === 'writePost' && (
+        <ModalLayout title="Start Post" modalName="writePost" showImage={1}>
+          <WritePostModal />
+        </ModalLayout>
+      )}
     </div>
   );
 };

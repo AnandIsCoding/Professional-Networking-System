@@ -3,7 +3,7 @@ import { FcHome, FcVoicePresentation } from "react-icons/fc";
 import { HiUserGroup } from "react-icons/hi2";
 import { PiReadCvLogo } from "react-icons/pi";
 import { IoMdNotifications } from "react-icons/io";
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 function BottomNavigation() {
   const location = useLocation();
@@ -19,19 +19,19 @@ function BottomNavigation() {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center text-xs py-2 md:flex lg:hidden z-50">
       {/* Home */}
-      <div
+      <NavLink to='/feed'
         className={`relative flex flex-col items-center cursor-pointer transition-transform duration-300 ${
           isFeed ? "scale-120 font-semibold border-b-1 border-black" : ""
         }`}
         onClick={() => navigate("/feed")}
       >
-        <FcHome size={20} />
-        <span>Home</span>
+        <FcHome onClick={() => navigate("/feed")} size={20} />
+        <span onClick={() => navigate("/feed")}>Home</span>
         
-      </div>
+      </NavLink>
 
       {/* My Network */}
-      <div
+      <NavLink to='/mynetwork'
         className={`relative flex flex-col items-center cursor-pointer transition-transform duration-300 ${
           isMyNetwork ? "scale-120 font-semibold border-b-1 border-black" : ""
         }`}
@@ -39,7 +39,7 @@ function BottomNavigation() {
       >
         <HiUserGroup size={20} />
         <span>Network</span>
-      </div>
+      </NavLink>
 
       {/* Resume */}
       <div
@@ -79,7 +79,7 @@ function BottomNavigation() {
         className={`relative flex flex-col items-center cursor-pointer transition-transform duration-300 ${
           isProfile ? "scale-120 font-semibold border-b-1 border-black" : ""
         }`}
-        onClick={() => navigate("/profile")}
+        onClick={() => navigate(`/profile/${123}`)}
       >
         <img
           src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"

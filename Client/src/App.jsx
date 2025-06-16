@@ -15,6 +15,8 @@ import ScrollToTop from "./utils/ScrollToTop";
 import { useSelector } from "react-redux";
 import Message from "./Pages/Message";
 import Profile from "./Pages/Profile";
+import Notifications from "./Pages/Notification";
+import PageTitleUpdater from "./utils/PageTitleUpdater";
 
 
 
@@ -49,6 +51,7 @@ function App() {
 
   return (
     <div className="select-none">
+    <PageTitleUpdater/>
       <ScrollToTop/>
       <Routes>
         {/* Initial auth-based redirect */}
@@ -83,12 +86,18 @@ function App() {
             <Message/>
           </ProtectedRoute>
         }/>
+        <Route path={`/notifications`} element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <Notifications/>
+          </ProtectedRoute>
+        }/>
 
         <Route path={`/profile/:id`} element={
           <ProtectedRoute isAuthenticated={isAuthenticated}>
             <Profile/>
           </ProtectedRoute>
         }/>
+
       </Routes>
     </div>
   );

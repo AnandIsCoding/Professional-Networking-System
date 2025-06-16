@@ -6,6 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import appStore from "./Redux/appStore.js";
 import { Provider } from "react-redux";
+import AppWrapper from "./AppWrapper.jsx";
+
 
 const clientID = import.meta.env.VITE_GOOGLE_AUTH_KEY;
 
@@ -13,7 +15,7 @@ createRoot(document.getElementById("root")).render(
   <Provider store={appStore}>
     <GoogleOAuthProvider clientId={clientID}>
       <BrowserRouter>
-        <App />
+        <AppWrapper />
       </BrowserRouter>
     </GoogleOAuthProvider>
   </Provider>

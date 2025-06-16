@@ -108,6 +108,7 @@ function UserNavbar() {
         </div>
 
         <div
+         onClick={()=>navigate('/notifications')}
           className={`flex relative flex-col items-center mx-4 cursor-pointer transition-transform duration-300 ${
             isNotifications
               ? "scale-110 font-semibold border-b-1 border-black"
