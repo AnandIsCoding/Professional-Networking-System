@@ -49,9 +49,9 @@ function Profile() {
               {/* edit icon */}
               <div
                 onClick={() => handleShowModal("editBanner")}
-                className="absolute right-2 top-2 cursor-pointer bg-gray-200 px-3 py-3 rounded-full overflow-hidden "
+                className="absolute right-2 top-2 cursor-pointer hover:bg-[#ffffff8e] px-3 py-3 rounded-full overflow-hidden "
               >
-                <MdModeEdit size={20} />
+                <MdModeEdit size={20} color={'blue'}/>
               </div>
             </div>
             <div className="pt-16 px-6 pb-6 relative">
@@ -90,7 +90,7 @@ function Profile() {
               {/* edit icon */}
               <div
                 onClick={() => handleShowModal("editInfo")}
-                className="absolute right-2 top-2 bg-gray-100 px-3 py-3 rounded-full overflow-hidden cursor-pointer"
+                className="absolute right-2 top-2 hover:bg-gray-100 px-3 py-3 rounded-full overflow-hidden cursor-pointer"
               >
                 <MdModeEdit size={20} />
               </div>
@@ -106,7 +106,7 @@ function Profile() {
                 {/* edit icon */}
                 <div
                   onClick={() => handleShowModal("editAbout")}
-                  className=" bg-gray-100 px-3 py-3 rounded-full overflow-hidden cursor-pointer"
+                  className=" hover:bg-[#ffffffcc] px-3 py-3 rounded-full overflow-hidden cursor-pointer"
                 >
                   <MdModeEdit size={20} />
                 </div>
@@ -214,7 +214,7 @@ function Profile() {
                   <p className="text-sm text-gray-500">Banglore, India</p>
                 </div>
                 {/* edit icon */}
-                <div className=" bg-gray-100 px-3 py-3 h-fit rounded-full overflow-hidden cursor-pointer">
+                <div className=" hover:bg-[#ffffff8e] px-3 py-3 h-fit rounded-full overflow-hidden cursor-pointer">
                   <MdModeEdit size={20} />
                 </div>
               </div>
