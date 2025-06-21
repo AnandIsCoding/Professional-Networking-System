@@ -9,13 +9,13 @@ const userSchema = new mongoose.Schema(
     fullName: {
       type: String,
       default: "",
-      trim: true
+      trim: true,
     },
     email: {
       type: String,
       unique: true,
       required: true,
-      trim: true
+      trim: true,
     },
     password: {
       type: String,
@@ -36,12 +36,12 @@ const userSchema = new mongoose.Schema(
     about: {
       type: String,
       default: "",
-      trim: true
+      trim: true,
     },
     headline: {
       type: String,
       default: "",
-      trim: true
+      trim: true,
     },
     currentCompany: {
       type: String,
@@ -83,13 +83,18 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    loginAttempts: {
+      type: Number,
+      default: 0,
+    },
+    lastLoginAttempt: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
 
-userSchema.index({ googleId: 1 }, { unique: true, sparse: true });
-userSchema.index({ email: 1 }, { unique: true });
-
+userSchema.index({ googleId: 1, email: 1 }, { unique: true, sparse: true });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;

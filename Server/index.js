@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 
 import connectToCloudinary from './configs/cloudinary.config.js';
 import connectToDb from './configs/database.config.js';
+import authRouter from './routes/auth.routes.js';
 dotenv.config()
 
 const app = express()
@@ -41,6 +42,11 @@ const corsOptions = {
     credentials: true,
 };
 app.use(cors(corsOptions));
+
+
+app.use('/api/v1/user/auth', authRouter) //     /api/v1/user/auth/register
+
+
 
 
 // database connection
