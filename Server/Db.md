@@ -63,7 +63,7 @@ Each item in the `experience` array contains the following fields:
 
 
 <!-- postSchema
-userId : mongoose.schema.types.objectId , ref : user
+userId : mongoose.schema.types.objectId , ref : User , at the time of getAllPost , populate('User', -password)
 description : string
 postImage : string 
 likes : [{type:mongoose.schema.types.objectId, ref:user}]
@@ -73,7 +73,7 @@ comments : number, default : 0 -->
 
 | Field Name   | Type                            | Required | Default Value | Description                               |
 |--------------|----------------------------------|----------|----------------|-------------------------------------------|
-| `userId`     | `ObjectId` (ref: User)           | ✅       | —              | Reference to the user who created the post |
+| `user`     | `ObjectId` (ref: User)           | ✅       | —              | Reference to the user who created the post |
 | `description`| `String`                         | ❌       | `''`           | Text content or caption of the post        |
 | `postImage`  | `String`                         | ❌       | `''`           | URL/path of the image uploaded in the post |
 | `likes`      | `Array<ObjectId>` (ref: User)    | ❌       | `[]`           | List of user IDs who liked the post        |

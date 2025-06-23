@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { registerWithGoogleController, userLoginController, userRegisterController } from '../controllers/auth.controller.js'
+import { getProfileByIdController, logoutController, registerWithGoogleController, updateUserController, userLoginController, userRegisterController } from '../controllers/auth.controller.js'
 import { isAuthenticated } from '../middlewares/authentication.middleware.js'
 
 const authRouter = Router()
@@ -24,6 +24,12 @@ authRouter.get('/profile', isAuthenticated, async (req, res) => {
     });
   }
 });
+
+authRouter.put('/update',isAuthenticated, updateUserController)
+
+authRouter.get('/profile/:id', isAuthenticated, getProfileByIdController)
+
+authRouter.delete('/logout', isAuthenticated, logoutController)
 
 
 export default authRouter

@@ -1,15 +1,16 @@
 import chalk from "chalk";
 import User from "../models/user.model.js";
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
-import pkg from 'google-auth-library';
+import pkg from "google-auth-library";
+import mongoose from "mongoose";
 const { OAuth2Client } = pkg;
 
-dotenv.config()
+dotenv.config();
 
-const client = new OAuth2Client(process.env.CLIENT_ID)
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 // user registration controller
 export const userRegisterController = async (req, res) => {
@@ -193,23 +194,23 @@ export const userLoginController = async (req, res) => {
 export const registerWithGoogleController = async (req, res) => {
   try {
     // access token from request body
-    const {token} = req.body
+    const { token } = req.body;
     const tocket = await client.verifyIdToken({
-      idToken : token,
-      audience: process.env.CLIENT_ID
-    })
-    const payload = LoginTicket.getPayload()
-    const {sub, name, email, picture } = payload
-    let user = await User.findOne({email})
-    if(!user){
+      idToken: token,
+      audience: process.env.CLIENT_ID,
+    });
+    const payload = LoginTicket.getPayload();
+    const { sub, name, email, picture } = payload;
+    let user = await User.findOne({ email });
+    if (!user) {
       user = await User.create({
-        googleId:sub,
+        googleId: sub,
         email,
-        fullName:name,
-        profilePic:picture
-      })
+        fullName: name,
+        profilePic: picture,
+      });
     }
-     // generate token
+    // generate token
     const userToken = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
       expiresIn: "7d",
     });
@@ -220,7 +221,9 @@ export const registerWithGoogleController = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       secure: process.env.NODE_ENV === "production",
     });
-    return res.status(200).json({success:true, message:'Login Successfull', user})
+    return res
+      .status(200)
+      .json({ success: true, message: "Login Successfull", user });
   } catch (error) {
     // Error handling, error response
     if (error.name === "ValidationError") {
@@ -246,3 +249,145 @@ export const registerWithGoogleController = async (req, res) => {
     });
   }
 };
+
+// Update User Controller
+export const updateUserController = async (req, res) => {
+  try {
+    const { user } = req.body;
+
+    // 1. Check if user is authenticated and exists
+    const userExists = await User.findById(req.user._id);
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: "User not found",
+      });
+    }
+
+    // 2. Update the user
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: user },
+      {
+        new: true, // return the updated document
+        runValidators: true, // run schema validation
+      }
+    ).select("-password"); // prevent password from being returned
+
+    // console.log(updatedUser);
+
+    // 3. Send response
+    return res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      console.error(chalk.bgRed("Validation Error =>>>"), messages);
+      return res.status(400).json({
+        success: false,
+        message: messages[0],
+        error: messages[0],
+      });
+    }
+
+    // Handle other errors
+    console.log(
+      chalk.bgRedBright(
+        "Error in updateUserController in auth.controller.js ---->> ",
+        error
+      )
+    );
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error !!",
+      error: "Error in updateUserController in auth.controller.js",
+    });
+  }
+};
+
+// get profile by id
+export const getProfileByIdController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id)
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "User not found ",
+          error: "Id not found",
+        });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid User ID", error:'Invalid User Id' });
+    }
+    const user = await User.findById(id);
+    if (!user)
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "User not found ",
+          error: "User not found",
+        });
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Profile successfully fetched by id",
+        user,
+      });
+  } catch (error) {
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      console.error(chalk.bgRed("Validation Error =>>>"), messages);
+      return res.status(400).json({
+        success: false,
+        message: messages[0],
+        error: messages[0],
+      });
+    }
+
+    // Handle other errors
+    console.log(
+      chalk.bgRedBright(
+        "Error in getProfileByIdController in auth.controller.js ---->> ",
+        error
+      )
+    );
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error !!",
+      error: "Error in getProfileByIdController in auth.controller.js",
+    });
+  }
+};
+
+
+// logout controller
+export const logoutController = async(req,res) =>{
+  try {
+    res.cookie('userToken', null,  { expires: new Date(Date.now()) })
+    return res.status(200).json({success:true, message:'User logout successfully'})
+  } catch (error) {
+    // Handle other errors
+    console.log(
+      chalk.bgRedBright(
+        "Error in logoutController in auth.controller.js ---->> ",
+        error
+      )
+    );
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error !!",
+      error: "Error in logoutController in auth.controller.js",
+    });
+  }
+}
