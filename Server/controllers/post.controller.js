@@ -219,7 +219,7 @@ export const getTop5PostsController = async (req, res) => {
   }
 };
 
-
+// get all post ofr user
 export const getAllPostOfUserController = async(req,res) =>{
     try {
         const { userId } = req.params;

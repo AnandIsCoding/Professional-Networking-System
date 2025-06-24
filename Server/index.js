@@ -8,6 +8,8 @@ import connectToCloudinary from './configs/cloudinary.config.js';
 import connectToDb from './configs/database.config.js';
 import authRouter from './routes/auth.routes.js';
 import postRouter from './routes/post.routes.js';
+import notificationRouter from './routes/notification.routes.js';
+import commentRouter from './routes/comment.routes.js';
 dotenv.config()
 
 const app = express()
@@ -47,6 +49,8 @@ app.use(cors(corsOptions));
 
 app.use('/api/v1/user/auth', authRouter) //     /api/v1/user/auth/register
 app.use('/api/v1/post', postRouter)
+app.use('/api/v1/notification', notificationRouter)
+app.use('/api/v1/comment', commentRouter)
 
 
 
