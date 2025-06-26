@@ -11,6 +11,8 @@ import postRouter from './routes/post.routes.js';
 import notificationRouter from './routes/notification.routes.js';
 import commentRouter from './routes/comment.routes.js';
 import userRouter from './routes/user.routes.js';
+import conversationRouter from './routes/conversation.routes.js';
+import messageRouter from './routes/message.routes.js';
 dotenv.config()
 
 const app = express()
@@ -53,6 +55,8 @@ app.use('/api/v1/post', postRouter)
 app.use('/api/v1/notification', notificationRouter)
 app.use('/api/v1/comment', commentRouter)
 app.use('/api/v1/user', userRouter)
+app.use('/api/v1/conversation', conversationRouter)
+app.use('/api/v1/message', messageRouter)
 
 
 
