@@ -5,7 +5,7 @@ import authReducer from '../Redux/Slices/auth.slice.js'
 const appStore = configureStore({
     reducer:{
         modal:modalReducer,
-        isAuthenticated:authReducer
+        user:authReducer
     }
 })
 

@@ -57,7 +57,7 @@ export const userRegisterController = async (req, res) => {
     // assign token in cookie
     res.cookie("userToken", userToken, {
       httpOnly: true,
-      sameSite: "None",
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       secure: process.env.NODE_ENV === "production",
     });
@@ -149,7 +149,7 @@ export const userLoginController = async (req, res) => {
     res
       .cookie("userToken", userToken, {
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         secure: process.env.NODE_ENV === "production",
       })

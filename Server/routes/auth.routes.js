@@ -8,7 +8,7 @@ authRouter.post('/register', userRegisterController)
 authRouter.post('/login',userLoginController)
 authRouter.post('/google', registerWithGoogleController)
 
-authRouter.get('/profile', isAuthenticated, async (req, res) => {
+authRouter.get('/profile', isAuthenticated, async(req, res) => {
   try {
     return res.status(200).json({
       success: true,
