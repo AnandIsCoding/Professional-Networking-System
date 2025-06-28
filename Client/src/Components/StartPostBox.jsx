@@ -3,9 +3,10 @@ import { MdPhotoLibrary, MdOndemandVideo, MdArticle } from 'react-icons/md';
 import ModalLayout from './modal/ModalLayout';
 import WritePostModal from './modal/WritePostModal';
 import { setShowModal } from '../Redux/Slices/modal.slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const StartPostBox = ({showModal}) => {
+   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch()
   const handleShowModel = () => {
       dispatch(setShowModal('writePost'));
@@ -19,7 +20,7 @@ const StartPostBox = ({showModal}) => {
       {/* Top: Avatar and Post Button */}
       <div className="flex items-center gap-3 mb-4">
         <img
-          src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
+          src={user?.profilePic}
           alt="User"
           className="w-10 h-10 rounded-full object-cover"
         />
@@ -30,15 +31,15 @@ const StartPostBox = ({showModal}) => {
 
       {/* Bottom: Post Options */}
       <div className="flex justify-between text-sm text-zinc-600 ">
-        <div className="flex items-center gap-1 cursor-pointer hover:text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full transition-all">
+        <div className="flex items-center gap-1 cursor-pointer hover:text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-xl transition-all">
           <MdPhotoLibrary className="text-blue-500 text-xl" />
           <span>Photo</span>
         </div>
-        <div className="flex items-center gap-1 cursor-pointer hover:text-green-600 hover:bg-green-100 px-4 py-2 rounded-full transition-all">
+        <div className="flex items-center gap-1 cursor-pointer hover:text-green-600 hover:bg-green-100 px-4 py-2 rounded-xl transition-all">
           <MdOndemandVideo className="text-green-500 text-xl" />
           <span>Video</span>
         </div>
-        <div className="flex items-center gap-1 cursor-pointer hover:text-orange-600 hover:bg-orange-100 px-4 py-2 rounded-full transition-all">
+        <div className="flex items-center gap-1 cursor-pointer hover:text-orange-600 hover:bg-orange-100 px-4 py-2 rounded-xl transition-all">
           <MdArticle className="text-orange-500 text-xl" />
           <span>Write article</span>
         </div>

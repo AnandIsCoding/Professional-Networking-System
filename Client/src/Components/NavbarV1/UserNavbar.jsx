@@ -6,10 +6,12 @@ import { FcVoicePresentation } from "react-icons/fc";
 import { IoMdNotifications } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function UserNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
+    const user = useSelector((state) => state.user.user);
   const [showSearchResult, setShowSearchResult] = useState(false);
   const isFeed = location.pathname === "/feed";
   const isMyNetwork = location.pathname === "/mynetwork";
@@ -129,7 +131,7 @@ function UserNavbar() {
           }`}
         >
           <img
-            src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
+            src={user?.profilePic}
             alt="user_image"
             className="w-5 h-5 rounded-full"
           />

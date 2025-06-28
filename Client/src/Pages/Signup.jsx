@@ -47,11 +47,11 @@ function Signup() {
       newErrors.fullName = "Full name must be at least 3 characters long";
     }
 
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(formData.email.trim())) {
       newErrors.email = "Invalid email format";
     }
 
-    if (!passwordRegex.test(formData.password)) {
+    if (!passwordRegex.test(formData.password.trim())) {
       newErrors.password =
         "Password must have at least 5 characters, one uppercase, one lowercase, one digit and one special character";
     }

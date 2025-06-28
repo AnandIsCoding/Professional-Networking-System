@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import pkg from "google-auth-library";
 import mongoose from "mongoose";
+import mailSender from "../utils/mailSender.utils.js";
+import userRegistrationSuccessEmail from "../mail/templates/userRegistrationSuccessEmail.js";
 const { OAuth2Client } = pkg;
 
 dotenv.config();
@@ -61,6 +63,20 @@ export const userRegisterController = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       secure: process.env.NODE_ENV === "production",
     });
+    // send registration mail to new user
+    try {
+      await mailSender(
+        user.email,
+        "Welcome to LinkedSphere 🎉",
+        userRegistrationSuccessEmail(user.fullName)
+      );
+    } catch (error) {
+      console.log(
+        chalk.bgRedBright(
+          "Error in sending mail to user in registerWithGoogleController"
+        )
+      );
+    }
     res.status(201).json({
       success: true,
       message: "User registered successfully !!",
@@ -195,7 +211,7 @@ export const registerWithGoogleController = async (req, res) => {
   try {
     // access token from request body
     const { token } = req.body;
-    const tocket = await client.verifyIdToken({
+    const LoginTicket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.CLIENT_ID,
     });
@@ -217,10 +233,24 @@ export const registerWithGoogleController = async (req, res) => {
     // assign token in cookie
     res.cookie("userToken", userToken, {
       httpOnly: true,
-      sameSite: "None",
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       secure: process.env.NODE_ENV === "production",
     });
+    // send registration mail to new user
+    try {
+      await mailSender(
+        user.email,
+        "Welcome to LinkedSphere 🎉",
+        userRegistrationSuccessEmail(user.fullName)
+      );
+    } catch (error) {
+      console.log(
+        chalk.bgRedBright(
+          "Error in sending mail to user in registerWithGoogleController"
+        )
+      );
+    }
     return res
       .status(200)
       .json({ success: true, message: "Login Successfull", user });
@@ -315,34 +345,30 @@ export const getProfileByIdController = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id)
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "User not found ",
-          error: "Id not found",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "User not found ",
+        error: "Id not found",
+      });
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid User ID", error:'Invalid User Id' });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid User ID",
+        error: "Invalid User Id",
+      });
     }
     const user = await User.findById(id);
     if (!user)
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "User not found ",
-          error: "User not found",
-        });
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Profile successfully fetched by id",
-        user,
+      return res.status(404).json({
+        success: false,
+        message: "User not found ",
+        error: "User not found",
       });
+    return res.status(200).json({
+      success: true,
+      message: "Profile successfully fetched by id",
+      user,
+    });
   } catch (error) {
     // Handle validation errors
     if (error.name === "ValidationError") {
@@ -370,12 +396,13 @@ export const getProfileByIdController = async (req, res) => {
   }
 };
 
-
 // logout controller
-export const logoutController = async(req,res) =>{
+export const logoutController = async (req, res) => {
   try {
-    res.cookie('userToken', null,  { expires: new Date(Date.now()) })
-    return res.status(200).json({success:true, message:'User logout successfully'})
+    res.cookie("userToken", null, { expires: new Date(Date.now()) });
+    return res
+      .status(200)
+      .json({ success: true, message: "User logout successfully" });
   } catch (error) {
     // Handle other errors
     console.log(
@@ -390,4 +417,4 @@ export const logoutController = async(req,res) =>{
       error: "Error in logoutController in auth.controller.js",
     });
   }
-}
+};

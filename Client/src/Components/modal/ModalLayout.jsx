@@ -4,6 +4,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { setShowModal } from "../../Redux/Slices/modal.slice";
 
 function ModalLayout(props) {
+     const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.modal.showModal);
   const modalRef = useRef();
@@ -47,7 +48,7 @@ function ModalLayout(props) {
           <div className="flex gap-2">
             <div className="h-14 w-14 rounded-full bg-white z-10">
               <img
-                src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
+                src={user?.profilePic}
                 alt="Profile_Banner"
                 className="w-full h-full object-cover rounded-full"
               />

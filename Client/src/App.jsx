@@ -1,8 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PublicNavbar from "./Components/NavbarV1/PublicNavbar";
 import LandingPage from "./Pages/LandingPage";
 import Footer from "./Components/Footer";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Signup from "./Pages/Signup";
 import UserNavbar from "./Components/NavbarV1/UserNavbar";
 import Feed from "./Pages/Feed";
@@ -22,8 +28,11 @@ import { setUser } from "./Redux/Slices/auth.slice";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function App() {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.user.user);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const fetchProfile = async () => {
     try {
@@ -33,7 +42,9 @@ function App() {
       const { data } = res; // return or use data as needed
       if (data.success) {
         dispatch(setUser(data?.user));
-        navigate("/feed");
+        if (location.pathname === "/" || location.pathname === "/signup") {
+          navigate("/feed");
+        }
       }
     } catch (error) {
       console.error("Error in fetchProfile in App.jsx --->>", error);
@@ -42,6 +53,8 @@ function App() {
         error.response?.data || error.message
       );
       return null;
+    } finally {
+      setIsCheckingAuth(false); // Done checking auth
     }
   };
   useEffect(() => {
@@ -73,8 +86,17 @@ function App() {
     fetchProfile();
   }, []);
 
-  const isAuthenticated = useSelector((state) => state.user.user);
-  // console.log(isAuthenticated);
+  if (isCheckingAuth) {
+    return (
+      <div className="fixed inset-0 bg-white flex justify-center items-center z-[9999]">
+        <img
+          src="/Loader.gif"
+          alt="Loading..."
+          className="w-[100px] h-[100px]"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="select-none">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StartPostBox from "../Components/StartPostBox";
 import MainLayout from "../layouts/MainLayout";
 import Card from "../Components/Cards/Card";
@@ -6,16 +6,45 @@ import ProfileCard from "../Components/Cards/ProfileCard";
 import AdvertisementCard from "../Components/AdvertisementCard";
 import Post from "../Components/Post/Post";
 import ModalLayout from "../Components/modal/ModalLayout";
+import ShimmerPost from "../Components/Post/ShimmerPost";
 import { useSelector } from "react-redux";
+import axios from "axios";
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Feed() {
-  const showModal = useSelector(state => state.modal.showModal)
+  const showModal = useSelector((state) => state.modal.showModal);
+  const user = useSelector((state) => state.user.user);
+  const [allPost, setAllpost] = useState([]);
+  const [isLoading, setIsloading] = useState(true);
+  // console.log(user)
+  const fetchPosts = async () => {
+    setIsloading(true);
+    try {
+      const res = await axios.get(`${baseUrl}/post/allpost`, {
+        withCredentials: true,
+      });
+      const { data } = res;
+      if (data?.success) {
+        setAllpost(data?.allPosts);
+      }
+    } catch (error) {
+      console.error("Error in fetching all posts ---->> ", error);
+      setIsloading(false);
+    } finally {
+      setIsloading(false);
+    }
+  };
+  console.log("allPosts --->> ", allPost);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   return (
     <MainLayout>
       <div className="flex flex-col lg:flex-row gap-4 w-full text-gray-800 ">
         {/* Left Sidebar */}
-        <div className="w-full lg:w-[25%] space-y-4 h-fit  ">
-          <ProfileCard />
+        <div className="w-full lg:w-[25%] space-y-4 h-fit ">
+          <ProfileCard user={user} />
           <Card padding={1}>
             <div className="flex justify-between text-sm">
               <span>Post Viewers</span>
@@ -29,12 +58,30 @@ function Feed() {
         </div>
 
         {/* Middle Feed */}
-        <div className="w-full lg:w-[50%] h-fit">
+        <div className="md:h-[100vh] w-full lg:w-[50%]  overflow-y-auto">
+          <div className=" h-fit">
           <StartPostBox showModal={showModal} />
           <br></br>
-          <Post/>
-          <br></br>
-          <Post/>
+          {isLoading ? (
+            Array(2)
+              .fill(0)
+              .map((item, index) => {
+                return (                    
+                    <ShimmerPost key={index} />
+                );
+              })
+          ) : allPost?.length < 1 ? (
+            <p>No post found 🥲</p>
+          ) : (
+            allPost?.map((item, index) => {
+              return (
+                <div key={item?._id} className="mb-6">
+                  <Post post={item} />
+                </div>
+              );
+            })
+          )}
+        </div>
         </div>
 
         {/* Right Sidebar */}
@@ -60,7 +107,6 @@ function Feed() {
           </div>
         </div>
       </div>
-     
     </MainLayout>
   );
 }

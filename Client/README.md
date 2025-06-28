@@ -1,7 +1,5 @@
 <small>
 
-
-
 ## 🔐 Authentication with Google
 
 ### 📦 Step 1: Install the package
@@ -15,18 +13,18 @@ npm install @react-oauth/google
 ### 🛠️ Step 2: Import in `main.jsx`
 
 ```js
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 ```
 
 ---
 
 ### ☁️ Step 3: Create a Google Project
 
-* Go to [Google Cloud Console](https://console.cloud.google.com/)
-* Navigate to **API & Services** → **Credentials**
-* Click **Create Credentials** → Choose **OAuth Client ID**
-* If prompted, configure the **OAuth consent screen** (choose **External/Public**)
-* After creation, copy the **Client ID**
+- Go to [Google Cloud Console](https://console.cloud.google.com/)
+- Navigate to **API & Services** → **Credentials**
+- Click **Create Credentials** → Choose **OAuth Client ID**
+- If prompted, configure the **OAuth consent screen** (choose **External/Public**)
+- After creation, copy the **Client ID**
 
 ---
 
@@ -66,7 +64,7 @@ function GoogleLoginComponent() {
       <GoogleLogin
         onSuccess={handleGoogleSuccess}
         onError={() => {
-          console.log("Login Failed");
+          console.log("Login Failed ");
         }}
         width="280"
       />
@@ -75,19 +73,17 @@ function GoogleLoginComponent() {
 }
 
 export default GoogleLoginComponent;
-
 ```
 
 ---
 
 ### ✅ Done!
 
-You now have a fully working Google Authentication setup in your React application. 
+You now have a fully working Google Authentication setup in your React application.
 
+---
 
---------------------------------------------------------------
---------------------------------------------------------------
-
+---
 
 ## 🔐 Google Authentication – Backend Setup (Node.js + Express + MongoDB)
 
@@ -129,35 +125,38 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 ```js
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  googleId: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-  fullName: {
-    type: String,
-    default: "",
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  password: {
-    type: String,
-    required: function () {
-      return !this.googleId;
+const userSchema = new mongoose.Schema(
+  {
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    fullName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: function () {
+        return !this.googleId;
+      },
+    },
+    profilePic: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/your-cloud/image/upload/v123456789/default_profile.jpg",
     },
   },
-  profilePic: {
-    type: String,
-    default:
-      "https://res.cloudinary.com/your-cloud/image/upload/v123456789/default_profile.jpg",
-  },
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;
@@ -200,7 +199,7 @@ export const registerWithGoogleController = async (req, res) => {
     });
   } catch (error) {
     if (error.name === "ValidationError") {
-      const messages = Object.values(error.errors).map(err => err.message);
+      const messages = Object.values(error.errors).map((err) => err.message);
       return res.status(400).json({
         success: false,
         message: messages[0],
@@ -252,14 +251,9 @@ Your backend now supports **Google OAuth Authentication**.
 
 ### 🔐 Optional Next Steps
 
-* Generate and send a JWT on successful login
-* Secure routes with middleware
-* Store session/token in cookies or localStorage
-* Add refresh token logic for longer sessions
-
-
-
-
-
+- Generate and send a JWT on successful login
+- Secure routes with middleware
+- Store session/token in cookies or localStorage
+- Add refresh token logic for longer sessions
 
 </small>

@@ -6,79 +6,89 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import { IoShareSocial } from "react-icons/io5";
 import { useLocation } from "react-router-dom";
 
-function Post() {
-  
+function Post({ post }) {
   const [showMore, setShowMore] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  const description = `It has just beena month since launch. 🚀
-We now have 100 questions on our 'Interview Practice Platform' at NamasteDev 🔥
-Everyday, we get thousands of submissions from students.
-So happy to see this new product getting so much love from students! ❤️, we get thousands of submissions from students.
-So happy to see this new product getting so much love from students! ❤️`;
+
+  const description = post?.description;
   // sendcomment handler function
   const sendComment = async (event) => {
     event.preventDefault();
   };
-  const localtion = useLocation()
-  const isProfilePage = location.pathname.startsWith('/profile')
+  const localtion = useLocation();
+  const isProfilePage = location.pathname.startsWith("/profile");
 
   return (
     <Card padding={0}>
-      <div className="px-8 py-4 flex gap-6 h-fit">
+      <div className="px-8 py-4 flex gap-6 h-fit ">
         <div className=" h-14 w-14 rounded-full p-[2px] bg-white z-10">
           <img
-            src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
+            src={post?.user?.profilePic}
             alt="Profile_Banner"
             className="w-full h-full object-cover rounded-full"
           />
         </div>
         {/* name */}
         <div className="text-gray-600">
-          <h1 className="text-xl text-black">Anand Jha</h1>
-          <p className="text-sm">Software Engireer SDE1</p>
+          <h1 className="text-xl text-black">{post?.user?.fullName}</h1>
+          <p className="text-sm">{post?.user?.headline}</p>
         </div>
       </div>
       {/* description */}
-      <div className="w-full px-8 py-2 text-gray-700">
-        <p>
+      {
+        description && <div className="w-full px-8 py-2 text-gray-700">
+        <p className="whitespace-pre-line text-gray-700">
           {showMore
             ? description
-            : description.split(" ").slice(0, 20).join(" ")}{" "}
-          <span
-            onClick={() => setShowMore((prev) => !prev)}
-            className="text-blue-500 cursor-pointer"
-          >
-            {showMore ? "See less" : "See more"}
-          </span>{" "}
+            : description?.split(" ").slice(0, 20).join(" ")}
+          {description?.split(" ").length > 20 && (
+            <span
+              onClick={() => setShowMore((prev) => !prev)}
+              className="text-blue-500 cursor-pointer"
+            >
+              {showMore ? " See less" : " See more"}
+            </span>
+          )}
         </p>
       </div>
+      }
+
       {/* image */}
-      <div className="w-full h-[300px] mt-4 ">
-        <img
-          src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Post_image"
-          className="w-full h-full object-cover"
-        />
-      </div>
+      {post?.postImage && (
+        <div className="w-full h-[300px] mt-4 ">
+          <img
+            src={post?.postImage}
+            alt="Post_image"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
       {/* number of likes and comment */}
       <div className="px-4 py-2 flex justify-between">
         <div className="flex gap-3">
           <AiFillLike size={20} color="blue" className="mt-[1px]" />
-          <p> 5 Likes</p>
+          <p> {post?.likes?.length}</p>
         </div>
         <div className="flex gap-3">
           {/* <FaRegCommentDots size={20}  className="mt-[1px]"/> */}
-          <p> 2 Comments</p>
+          <p> {post?.comments?.length} comment</p>
         </div>
       </div>
 
       {/* like comment share */}
-      <div className={`px-14 py-6 flex justify-between ${isProfilePage ? 'hidden' : ''}`}>
-        <div className="flex gap-3 cursor-pointer hover:bg-gray-50 px-3 py-1 rounded-full">
-          <AiFillLike size={22} color="blue" className="mt-[1px]" />
+      <div
+        className={`px-14 py-6 flex justify-between ${
+          isProfilePage ? "hidden" : ""
+        }`}
+      >
+        <div title='I like this' className="flex gap-3 cursor-pointer hover:bg-gray-50 px-3 py-1 rounded-full">
+          <AiFillLike  size={22} color="blue" className="mt-[1px]" />
           <p> Like</p>
         </div>
-        <div onClick={()=>setShowComments(prev => !prev)} className="flex gap-3 cursor-pointer hover:bg-gray-50 px-3 py-1 rounded-full">
+        <div
+          onClick={() => setShowComments((prev) => !prev)}
+          className="flex gap-3 cursor-pointer hover:bg-gray-50 px-3 py-1 rounded-full"
+        >
           <MdComment size={22} className="mt-[1px]" />
           <p> Comment</p>
         </div>
