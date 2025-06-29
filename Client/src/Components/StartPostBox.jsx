@@ -5,7 +5,7 @@ import WritePostModal from './modal/WritePostModal';
 import { setShowModal } from '../Redux/Slices/modal.slice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const StartPostBox = ({showModal}) => {
+const StartPostBox = ({showModal, allPost, setAllpost}) => {
    const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch()
   const handleShowModel = () => {
@@ -47,7 +47,7 @@ const StartPostBox = ({showModal}) => {
         {/* Modal for writing post */}
       {showModal === 'writePost' && (
         <ModalLayout title="Start Post" modalName="writePost" showImage={1}>
-          <WritePostModal />
+          <WritePostModal allPost={allPost} setAllpost={setAllpost} />
         </ModalLayout>
       )}
     </div>

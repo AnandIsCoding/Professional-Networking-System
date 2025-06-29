@@ -33,8 +33,10 @@ export const addCommentController = async (req, res) => {
       post:postId,
       comment,
     });
-
+    await newComment.populate('user', 'fullName headline profilePic');
     post.totalComments = post.totalComments + 1
+    post.comments.push(newComment._id);
+
     await post.save()
 
     // now we need to populate user of new comment, because notification content will contain fullname of user

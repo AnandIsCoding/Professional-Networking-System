@@ -9,7 +9,7 @@ function AppWrapper() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowMinLoader(false);
-    }, 400); // Show for at least 0.4s
+    }, 100); // Show for at least 0.1s
 
     return () => clearTimeout(timer);
   }, []);

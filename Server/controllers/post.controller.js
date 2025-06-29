@@ -41,6 +41,7 @@ export const addPostController = async (req, res) => {
       description: description || "",
       postImage: imageUrl || "",
     });
+    await newPost.populate("user", "fullName headline profilePic");
     res.status(201).json({
       success: true,
       message: "Post created successfully!",
@@ -115,7 +116,12 @@ export const getAllPostController = async (req, res) => {
   try {
     const post = await Post.find()
       .sort({ createdAt: -1 })
-      .populate("user", "-password");
+      .populate("user", "-password")
+      .populate({
+        path: "comments",
+        populate: { path: "user", select: "fullName profilePic headline" },
+      });
+
     return res.status(200).json({
       success: true,
       message: "Post fetched successfully",
@@ -142,31 +148,25 @@ export const getPostByIdController = async (req, res) => {
   try {
     const { postId } = req.params;
     if (!postId) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Post not found",
-          error: "PostId incorrect or not found",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+        error: "PostId incorrect or not found",
+      });
     }
     const post = await Post.findById(postId).populate("user", "-password");
     if (!post) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Post not found",
-          error: "Post not found",
-        });
-    }
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Post fetched by id successfullly",
-        post,
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+        error: "Post not found",
       });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Post fetched by id successfullly",
+      post,
+    });
   } catch (error) {
     // Handle  errors
     console.log(
@@ -188,21 +188,25 @@ export const getTop5PostsController = async (req, res) => {
   try {
     const { userId } = req.params;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ success: false, message: "userId Invalid" });
+      return res
+        .status(400)
+        .json({ success: false, message: "userId Invalid" });
     }
     if (!userId) {
-      return res
-        .status(404)
-        .json({ success: false, message: "userId not found", error: "userId not found" });
-    }
-    const posts = await Post.find({ user: userId }).sort({createdAt:-1}).limit(5) ;
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Top 5 Posts fetched successfully",
-        posts,
+      return res.status(404).json({
+        success: false,
+        message: "userId not found",
+        error: "userId not found",
       });
+    }
+    const posts = await Post.find({ user: userId })
+      .sort({ createdAt: -1 })
+      .limit(5);
+    return res.status(200).json({
+      success: true,
+      message: "Top 5 Posts fetched successfully",
+      posts,
+    });
   } catch (error) {
     // Handle  errors
     console.log(
@@ -220,27 +224,29 @@ export const getTop5PostsController = async (req, res) => {
 };
 
 // get all post ofr user
-export const getAllPostOfUserController = async(req,res) =>{
-    try {
-        const { userId } = req.params;
+export const getAllPostOfUserController = async (req, res) => {
+  try {
+    const { userId } = req.params;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ success: false, message: "userId Invalid" });
+      return res
+        .status(400)
+        .json({ success: false, message: "userId Invalid" });
     }
     if (!userId) {
-      return res
-        .status(404)
-        .json({ success: false, message: "userId not found", error: "userId not found" });
-    }
-    const posts = await Post.find({ user: userId }).sort({createdAt:-1}) ;
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "All posts fetched successfully",
-        posts,
+      return res.status(404).json({
+        success: false,
+        message: "userId not found",
+        error: "userId not found",
       });
-    } catch (error) {
-        // Handle  errors
+    }
+    const posts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+    return res.status(200).json({
+      success: true,
+      message: "All posts fetched successfully",
+      posts,
+    });
+  } catch (error) {
+    // Handle  errors
     console.log(
       chalk.bgRedBright(
         "Error in getAllPostOfUserController in post.controller.js ---->> ",
@@ -252,5 +258,5 @@ export const getAllPostOfUserController = async(req,res) =>{
       message: "Internal Server Error !!",
       error: "Error in getAllPostOfUserController in post.controller.js",
     });
-    }
-}
+  }
+};

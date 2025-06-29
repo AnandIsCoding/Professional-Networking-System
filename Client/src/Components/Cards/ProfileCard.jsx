@@ -2,6 +2,7 @@ import React from 'react'
 import Card from './Card'
 
 function ProfileCard({user}) {
+  // console.log(user.profilePic)
   
   return (
   <Card padding={0}>

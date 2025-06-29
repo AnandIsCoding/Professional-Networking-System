@@ -35,10 +35,11 @@ function Feed() {
       setIsloading(false);
     }
   };
-  console.log("allPosts --->> ", allPost);
+  // console.log("allPosts --->> ", allPost);
   useEffect(() => {
     fetchPosts();
   }, []);
+  
   return (
     <MainLayout>
       <div className="flex flex-col lg:flex-row gap-4 w-full text-gray-800 ">
@@ -58,9 +59,9 @@ function Feed() {
         </div>
 
         {/* Middle Feed */}
-        <div className="md:h-[100vh] w-full lg:w-[50%]  overflow-y-auto">
+        <div className="md:h-[100vh] w-full lg:w-[50%]  overflow-y-auto ">
           <div className=" h-fit">
-          <StartPostBox showModal={showModal} />
+          <StartPostBox showModal={showModal} allPost={allPost} setAllpost={setAllpost} />
           <br></br>
           {isLoading ? (
             Array(2)
