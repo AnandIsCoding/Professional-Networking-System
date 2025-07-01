@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { getProfileByIdController, logoutController, registerWithGoogleController, updateUserController, userLoginController, userRegisterController } from '../controllers/auth.controller.js'
 import { isAuthenticated } from '../middlewares/authentication.middleware.js'
+import upload from '../configs/multer.config.js'
 
 const authRouter = Router()
 
@@ -25,7 +26,17 @@ authRouter.get('/profile', isAuthenticated, async(req, res) => {
   }
 });
 
-authRouter.put('/update',isAuthenticated, updateUserController)
+authRouter.put(
+  '/update',
+  upload.fields([
+    { name: 'profileBanner', maxCount: 1 },
+    { name: 'profilePic', maxCount: 1 },
+    { name : 'resume', maxCount:1}
+  ]),
+  isAuthenticated,
+  updateUserController
+);
+
 
 authRouter.get('/profile/:id', isAuthenticated, getProfileByIdController)
 

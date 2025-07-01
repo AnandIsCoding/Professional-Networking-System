@@ -85,7 +85,7 @@ function Feed() {
         </div>
         </div>
 
-        {/* Right Sidebar */}
+        
         {/* Right Sidebar */}
         <div className="w-full lg:w-[25%] flex flex-col space-y-4 h-fit ">
           <Card padding={1}>

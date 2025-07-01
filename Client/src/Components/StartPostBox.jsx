@@ -5,6 +5,7 @@ import WritePostModal from './modal/WritePostModal';
 import { setShowModal } from '../Redux/Slices/modal.slice';
 import { useDispatch, useSelector } from 'react-redux';
 
+
 const StartPostBox = ({showModal, allPost, setAllpost}) => {
    const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch()
@@ -14,6 +15,7 @@ const StartPostBox = ({showModal, allPost, setAllpost}) => {
     useEffect(()=>{
       dispatch(setShowModal(null));
     },[])
+    
   return (
     <div className="bg-white border border-zinc-200 p-4 rounded-md md:col-span-3 md:col-start-2 md:row-start-1">
       

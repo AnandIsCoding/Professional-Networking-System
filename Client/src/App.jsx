@@ -25,6 +25,8 @@ import Notifications from "./Pages/Notification";
 import PageTitleUpdater from "./utils/PageTitleUpdater";
 import axios from "axios";
 import { setUser } from "./Redux/Slices/auth.slice";
+import Activities from "./Pages/Activities";
+import SingleActivity from "./Pages/SingleActivity";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.user.user);
+  const user = useSelector(state => state.user.user)
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const fetchProfile = async () => {
@@ -162,6 +165,24 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={`/profile/:id/activities`}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Activities />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={`/post/:id`}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <SingleActivity />
             </ProtectedRoute>
           }
         />

@@ -4,10 +4,12 @@ import { HiUserGroup } from "react-icons/hi2";
 import { PiReadCvLogo } from "react-icons/pi";
 import { IoMdNotifications } from "react-icons/io";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function BottomNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
+  const user = useSelector(state => state.user.user)
 
   const isFeed = location.pathname === "/feed";
   const isMyNetwork = location.pathname === "/mynetwork";
@@ -79,7 +81,7 @@ function BottomNavigation() {
         className={`relative flex flex-col items-center cursor-pointer transition-transform duration-300 ${
           isProfile ? "scale-120 font-semibold border-b-1 border-black" : ""
         }`}
-        onClick={() => navigate(`/profile/${123}`)}
+        onClick={() => navigate(`/profile/${user?._id}`)}
       >
         <img
           src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"

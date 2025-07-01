@@ -1,5 +1,6 @@
 import {Router} from 'express'
 import { isAuthenticated } from '../middlewares/authentication.middleware.js'
+
 import { acceptFriendRequestController, getMyFriendsController, getMyPendingFriendRequests, removeFriendController, searchUserController, sendFriendRequestController } from '../controllers/user.controller.js'
 
 const userRouter = Router()

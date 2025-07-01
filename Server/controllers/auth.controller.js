@@ -8,6 +8,7 @@ import pkg from "google-auth-library";
 import mongoose from "mongoose";
 import mailSender from "../utils/mailSender.utils.js";
 import userRegistrationSuccessEmail from "../mail/templates/userRegistrationSuccessEmail.js";
+import { isFileTypeSupported, uploadFileToCloudinary } from "../utils/helpers.utils.js";
 const { OAuth2Client } = pkg;
 
 dotenv.config();
@@ -218,6 +219,7 @@ export const registerWithGoogleController = async (req, res) => {
     const payload = LoginTicket.getPayload();
     const { sub, name, email, picture } = payload;
     let user = await User.findOne({ email });
+    let userExists = await User.findOne({ email });
     if (!user) {
       user = await User.create({
         googleId: sub,
@@ -239,11 +241,13 @@ export const registerWithGoogleController = async (req, res) => {
     });
     // send registration mail to new user
     try {
-      await mailSender(
-        user.email,
-        "Welcome to LinkedSphere 🎉",
-        userRegistrationSuccessEmail(user.fullName)
-      );
+      if (!userExists) {
+        await mailSender(
+          user.email,
+          "Welcome to LinkedSphere 🎉",
+          userRegistrationSuccessEmail(user.fullName)
+        );
+      }
     } catch (error) {
       console.log(
         chalk.bgRedBright(
@@ -285,7 +289,6 @@ export const updateUserController = async (req, res) => {
   try {
     const { user } = req.body;
 
-    // 1. Check if user is authenticated and exists
     const userExists = await User.findById(req.user._id);
     if (!userExists) {
       return res.status(404).json({
@@ -295,29 +298,82 @@ export const updateUserController = async (req, res) => {
       });
     }
 
-    // 2. Update the user
+    const supportedTypes = ["jpeg", "jpg", "png", "pdf"];
+    const updatedFields = {};
+
+    // ✅ Handle profilePic upload
+    if (req.files?.profilePic) {
+      const file = req.files.profilePic[0];
+      const fileType = file.originalname.split(".").pop().toLowerCase();
+
+      if (!["jpeg", "jpg", "png"].includes(fileType)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid file type for profile picture. Only jpg, jpeg, png allowed.",
+        });
+      }
+
+      const response = await uploadFileToCloudinary(file.path, "My-LinkedIn");
+      updatedFields.profilePic = response.secure_url;
+    }
+
+    // ✅ Handle profileBanner upload
+    if (req.files?.profileBanner) {
+      const file = req.files.profileBanner[0];
+      const fileType = file.originalname.split(".").pop().toLowerCase();
+
+      if (!["jpeg", "jpg", "png"].includes(fileType)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid file type for profile banner. Only jpg, jpeg, png allowed.",
+        });
+      }
+
+      const response = await uploadFileToCloudinary(file.path, "My-LinkedIn");
+      updatedFields.profileBanner = response.secure_url;
+    }
+
+    // ✅ Handle resume upload (PDF only)
+    if (req.files?.resume) {
+      const file = req.files.resume[0];
+      const fileType = file.originalname.split(".").pop().toLowerCase();
+
+      if (fileType !== "pdf") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid file type for resume. Only PDF files are allowed.",
+        });
+      }
+
+      const response = await uploadFileToCloudinary(file.path, "My-LinkedIn");
+      updatedFields.resume = response.secure_url;
+    }
+
+    // ✅ Merge additional text fields from req.body.user
+    if (user && typeof user === "object") {
+      Object.assign(updatedFields, user);
+    }
+
+    // ✅ Now update the user
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      { $set: user },
+      { $set: updatedFields },
       {
-        new: true, // return the updated document
-        runValidators: true, // run schema validation
+        new: true,
+        runValidators: true,
       }
-    ).select("-password"); // prevent password from being returned
+    ).select("-password");
+    // console.log('User ---> ',updatedUser)
 
-    // console.log(updatedUser);
-
-    // 3. Send response
     return res.status(200).json({
       success: true,
       message: "User updated successfully",
       user: updatedUser,
     });
   } catch (error) {
-    // Handle validation errors
     if (error.name === "ValidationError") {
       const messages = Object.values(error.errors).map((err) => err.message);
-      console.error(chalk.bgRed("Validation Error =>>>"), messages);
+      console.error("Validation Error =>>>", messages);
       return res.status(400).json({
         success: false,
         message: messages[0],
@@ -325,13 +381,7 @@ export const updateUserController = async (req, res) => {
       });
     }
 
-    // Handle other errors
-    console.log(
-      chalk.bgRedBright(
-        "Error in updateUserController in auth.controller.js ---->> ",
-        error
-      )
-    );
+    console.error("Error in updateUserController:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error !!",
@@ -339,6 +389,7 @@ export const updateUserController = async (req, res) => {
     });
   }
 };
+
 
 // get profile by id
 export const getProfileByIdController = async (req, res) => {

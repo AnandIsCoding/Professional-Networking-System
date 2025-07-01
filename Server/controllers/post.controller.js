@@ -201,7 +201,7 @@ export const getTop5PostsController = async (req, res) => {
     }
     const posts = await Post.find({ user: userId })
       .sort({ createdAt: -1 })
-      .limit(5);
+      .limit(5).populate('user','fullName profilePic headline');
     return res.status(200).json({
       success: true,
       message: "Top 5 Posts fetched successfully",
@@ -239,7 +239,7 @@ export const getAllPostOfUserController = async (req, res) => {
         error: "userId not found",
       });
     }
-    const posts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+    const posts = await Post.find({ user: userId }).sort({ createdAt: -1 }).populate('user','profilePic headline about fullName');
     return res.status(200).json({
       success: true,
       message: "All posts fetched successfully",

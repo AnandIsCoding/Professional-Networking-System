@@ -125,7 +125,7 @@ function UserNavbar() {
         </div>
 
         <div
-         onClick={()=>navigate(`/profile/${123}`)}
+         onClick={()=>navigate(`/profile/${user?._id}`)}
           className={`flex relative flex-col items-center mx-4 cursor-pointer transition-transform duration-300 ${
             isProfile ? "scale-110 font-semibold border-b-1 border-black" : ""
           }`}

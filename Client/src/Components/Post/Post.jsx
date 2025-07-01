@@ -4,22 +4,26 @@ import { AiFillLike } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { IoShareSocial } from "react-icons/io5";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineLike } from "react-icons/ai";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import ShareDialog from "../modal/ShareDialog";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Post({ post }) {
   const [showMore, setShowMore] = useState(false);
   const user = useSelector((state) => state.user.user);
+  const navigate = useNavigate()
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsliked] = useState(false);
   const [comments, setComments] = useState([]);
+  const [showShareDialog, setShowshareDialog] = useState(false)
   const [commentText, setCommenttext] = useState("");
   const [commentCount, setCommentCount] = useState(post?.totalComments || 0);
+  const [likeCount, setLikecount] = useState(post?.likes?.length || 0)
 
 
   useEffect(() => {
@@ -28,13 +32,13 @@ function Post({ post }) {
       setIsliked(liked);
     }
 
-  }, [post.likes, user]);
+  }, [post?.likes, user]);
 
 
   const description = post?.description;
 
   const localtion = useLocation();
-  const isProfilePage = location.pathname.startsWith("/profile");
+  const isProfilePage = /^\/profile\/[^\/]+$/.test(location.pathname);
   // api call on click of like btn, signle api for like dislike
   const handleLike = async () => {
     try {
@@ -48,6 +52,7 @@ function Post({ post }) {
       // console.log(isLiked);
       if (data.success) {
         setIsliked((prev) => !prev); // Optimistic update
+        isLiked ? setLikecount(prev => --prev) : setLikecount(prev => ++prev)
       }
       // toast.success(data?.message);
     } catch (error) {
@@ -99,12 +104,16 @@ function Post({ post }) {
       console.log("Error in fetching comments ---> ", error);
     }
   };
-  // console.log('Post is ',post)
+  //  console.log('Post is ',post)
 
   return (
-    <Card padding={0}>
-      <div className="px-8 py-4 flex gap-6 h-fit ">
-        <div className=" h-14 w-14 rounded-full p-[2px] bg-white z-10">
+    <Card  padding={0}>
+     <div  className="cursor-pointer">
+       <div  className="px-8 py-4 flex gap-6 h-fit ">
+        <div onClick={(event)=>{
+            event.stopPropagation()
+            navigate(`/profile/${post?.user?._id}`)
+        }} className=" h-14 w-14 cursor-pointer rounded-full p-[2px] bg-white z-10">
           <img
             src={post?.user?.profilePic}
             alt="Profile_Banner"
@@ -112,7 +121,10 @@ function Post({ post }) {
           />
         </div>
         {/* name */}
-        <div className="text-gray-600">
+        <div onClick={(event)=>{
+            event.stopPropagation()
+            navigate(`/profile/${post?.user?._id}`)
+        }} className="text-gray-600">
           <h1 className="text-xl text-black">{post?.user?.fullName}</h1>
           <p className="text-sm">{post?.user?.headline}</p>
         </div>
@@ -138,7 +150,7 @@ function Post({ post }) {
 
       {/* image */}
       {post?.postImage && (
-        <div className="w-full h-[300px] mt-4 ">
+        <div onClick={()=>navigate(`/post/${post?._id}`)} className="w-full h-[300px] mt-4 ">
           <img
             src={post?.postImage}
             alt="Post_image"
@@ -149,10 +161,10 @@ function Post({ post }) {
       {/* number of likes and comment */}
       <div className="px-4 py-2 flex justify-between">
         <div className="flex gap-3">
-          <p> {post?.likes?.length} &nbsp; Like</p>
+          <p> {likeCount} &nbsp; Like</p>
         </div>
         <div className="flex gap-3">
-          <p> {commentCount} &nbsp; comment</p>
+          <p> {commentCount} &nbsp; Comment</p>
         </div>
       </div>
 
@@ -184,7 +196,7 @@ function Post({ post }) {
           <MdComment size={22} className="mt-[1px]" />
           <p> Comment</p>
         </div>
-        <div className="flex gap-3 cursor-pointer hover:bg-gray-50 px-3 py-1 rounded-full">
+        <div onClick={()=>setShowshareDialog(true)} className="flex gap-3 cursor-pointer hover:bg-gray-50 px-3 py-1 rounded-full">
           <IoShareSocial size={22} className="mt-[1px]" />
           <p>Share</p>
         </div>
@@ -250,6 +262,11 @@ function Post({ post }) {
           </div>
         </>
       )}
+     </div>
+     {/* share dialog open */}
+     {
+      showShareDialog && <ShareDialog showShareDialog={showShareDialog} setShowshareDialog={setShowshareDialog}/>
+     }
     </Card>
   );
 }
