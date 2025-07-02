@@ -20,18 +20,22 @@ function ModalLayout(props) {
   }, [showModal]);
 
   // Close modal on outside click
-  useEffect(() => {
-    function handleOutsideClick(event) {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        dispatch(setShowModal(null));
-      }
-    }
+useEffect(() => {
+  function handleOutsideClick(event) {
+    const isInsideModal = modalRef.current && modalRef.current.contains(event.target);
+    const isInsideSwal = event.target.closest(".swal2-container");
 
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [dispatch]);
+    if (!isInsideModal && !isInsideSwal) {
+      dispatch(setShowModal(null));
+    }
+  }
+
+  document.addEventListener("mousedown", handleOutsideClick);
+  return () => {
+    document.removeEventListener("mousedown", handleOutsideClick);
+  };
+}, [dispatch]);
+
 
   const handleCloseModal = () => {
     dispatch(setShowModal(null));

@@ -16,7 +16,7 @@ function BottomNavigation() {
   const isResume = location.pathname === "/resume";
   const isMessage = location.pathname === "/message";
   const isNotifications = location.pathname === "/notifications";
-  const isProfile = location.pathname === "/profile";
+   const isProfile = location.pathname.startsWith("/profile");
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center text-xs py-2 md:flex lg:hidden z-50">

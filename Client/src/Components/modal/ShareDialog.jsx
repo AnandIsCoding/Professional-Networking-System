@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { FaWhatsapp, FaInstagram, FaTimes } from "react-icons/fa";
 
-function ShareDialog({ showShareDialog, setShowshareDialog }) {
+function ShareDialog({ showShareDialog, setShowshareDialog, heading }) {
   if (!showShareDialog) return null;
 
   const currentURL = encodeURIComponent(window.location.href);
@@ -22,7 +22,7 @@ function ShareDialog({ showShareDialog, setShowshareDialog }) {
     }, [showShareDialog]);
 
   return (
-    <div  className="fixed inset-0 z-50 bg-black bg-opacity-30 flex justify-center items-center px-4">
+    <div  className="fixed inset-0 z-50 bg-[#0000009f] bg-opacity-30 flex justify-center items-center px-4">
       <div ref={modalRef} className="relative w-full max-w-md bg-white rounded-xl shadow-2xl p-6 animate-fadeIn">
         {/* Close Button */}
         <button
@@ -34,7 +34,7 @@ function ShareDialog({ showShareDialog, setShowshareDialog }) {
 
         {/* Heading */}
         <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-          Share this post
+          Share this {heading}
         </h2>
 
         {/* Share Buttons */}
@@ -44,7 +44,7 @@ function ShareDialog({ showShareDialog, setShowshareDialog }) {
             href={`https://wa.me/?text=${currentURL}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-full transition shadow"
+            className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow"
           >
             <FaWhatsapp size={20} />
             <span className="hidden sm:inline">WhatsApp</span>
@@ -55,7 +55,7 @@ function ShareDialog({ showShareDialog, setShowshareDialog }) {
             href={`https://www.instagram.com/?url=${currentURL}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:opacity-90 text-white px-5 py-2.5 rounded-full transition shadow"
+            className="flex items-center gap-2 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:opacity-90 text-white px-5 py-2.5 rounded-xl transition shadow"
           >
             <FaInstagram size={20} />
             <span className="hidden sm:inline">Instagram</span>

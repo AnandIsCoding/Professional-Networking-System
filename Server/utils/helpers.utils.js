@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-
+import fs from 'node:fs'
 // helper function to upload file to cloudinary
 export const uploadFileToCloudinary = async (imagePath, folder) => {
     const options = { folder };
@@ -10,3 +10,19 @@ export const uploadFileToCloudinary = async (imagePath, folder) => {
 export const isFileTypeSupported = (type, supportedTypes) =>{
     return supportedTypes.includes(type) 
 }
+
+export const uploadPdfToCloudinary = async (filePath, folder) => {
+  try {
+    const result = await cloudinary.uploader.upload(filePath, {
+  folder,
+  resource_type: "raw", // ✅ very important
+});
+
+
+    fs.unlinkSync(filePath);
+    return result;
+  } catch (error) {
+    fs.unlinkSync(filePath);
+    throw error;
+  }
+};

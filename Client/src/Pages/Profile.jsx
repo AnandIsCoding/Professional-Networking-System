@@ -3,7 +3,9 @@ import MainLayout from "../layouts/MainLayout";
 import Card from "../Components/Cards/Card";
 import AdvertisementCard from "../Components/AdvertisementCard";
 import { GrEdit } from "react-icons/gr";
+import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
+
 import Post from "../Components/Post/Post";
 import { IoAddSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,11 +20,15 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ShareDialog from "../Components/modal/ShareDialog";
+import Swal from "sweetalert2";
+import { setUser } from "../Redux/Slices/auth.slice";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Profile() {
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.modal.showModal);
+  const [showShareDialog, setShowshareDialog] = useState(false);
   const user = useSelector((state) => state.user.user); // subscribe to user
   const { id } = useParams();
   const navigate = useNavigate();
@@ -31,6 +37,18 @@ function Profile() {
   };
   const [userData, setUserdata] = useState([]);
   const [top5Posts, setTop5posts] = useState([]);
+  const [expanded, setExpanded] = useState(false);
+  const [editIndex, setEditIndex] = useState(null); // or use _id instead
+  const [editExperience, setEditExperience] = useState({
+    designation: "",
+    companyName: "",
+    duration: "",
+    location: "",
+  });
+
+  const MAX_LINES = 4;
+  const toggleExpand = () => setExpanded((prev) => !prev);
+  
   const fetchUserdata = async () => {
     try {
       const res = await axios.get(`${baseUrl}/user/auth/profile/${id}`, {
@@ -47,6 +65,7 @@ function Profile() {
       toast.error(error.response?.data?.message || "Something went wrong!");
     }
   };
+  // top 5 posts that will be displayed in Activities section
   const fetchTop5Posts = async () => {
     try {
       const res = await axios.get(`${baseUrl}/post/top5/${id}`, {
@@ -63,11 +82,49 @@ function Profile() {
       console.log("Error in fetching top 5 posts ----> ", error);
     }
   };
+
+  // delete a particular experience, receives id exp._id
+  const handleDeleteExperience = async (expId) => {
+    const confirmed = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this experience?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!confirmed.isConfirmed) return;
+
+    try {
+      const res = await axios.put(
+        `${baseUrl}/user/auth/update`,
+        {
+          user: {
+            deleteExperienceId: expId, // 👈 Backend will use this to delete
+          },
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res?.data?.success) {
+        Swal.fire("Deleted!", "Experience removed.", "success");
+        dispatch(setUser(res?.data?.user));
+      } else {
+        Swal.fire("Error", "Something went wrong", "error");
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Failed to delete experience", "error");
+    }
+  };
+
   useEffect(() => {
     fetchUserdata();
     fetchTop5Posts();
-  }, []);
-  
+  }, [user]);
 
   return (
     <MainLayout>
@@ -78,20 +135,25 @@ function Profile() {
           <Card padding={0}>
             <div className="relative ">
               <img
-                src={userData?.profileBanner}
+                src={
+                  userData?.profileBanner ||
+                  "https://res.cloudinary.com/dm0rlehq8/image/upload/v1750167749/default_banner_r0agoh.jpg"
+                }
                 alt="Profile_Banner"
-                className="w-full h-40 object-cover rounded-t-md"
+                className="w-full h-52 object-cover rounded-t-md"
               />
               <div
                 onClick={() => {
-                  id === user._id && handleShowModal("editProfileImage")
+                  id === user._id && handleShowModal("editProfileImage");
                 }}
-                className="absolute left-6 bottom-[-3rem] w-24 h-24 rounded-full border-4 border-white overflow-hidden cursor-pointer! "
+                className="absolute left-6 bottom-[-3rem] w-32 h-32 rounded-full border-4 border-white overflow-hidden cursor-pointer! "
               >
                 <img
-                  src={user?.profilePic || userData?.profilePic}
+                  src={userData?.profilePic}
                   alt="Profile"
-                  className={`w-full ${id !== user?._id ? 'cursor-pointer' : ''} h-full object-cover`}
+                  className={`w-full ${
+                    id !== user?._id ? "cursor-pointer" : ""
+                  } h-full object-cover`}
                 />
               </div>
               {/* edit icon */}
@@ -106,32 +168,51 @@ function Profile() {
             </div>
             <div className="pt-16 px-6 pb-6 relative">
               <h1 className="text-2xl font-bold">{userData?.fullName}</h1>
-              <p className="text-sm text-gray-600 mt-1">{userData?.about}</p>
+
               <p className="text-sm text-gray-600 mt-1">
+                {userData?.friends?.length} &nbsp; Connections
+              </p>
+              <p className="text-md text-gray-600 mt-1">{userData?.headline}</p>
+              <p className="text-sm text-gray-700 mt-1">
                 {userData?.currentCompany}
               </p>
               <p className="text-sm text-gray-600 mt-1">
                 {userData?.currentLocation}
               </p>
-              <p className="text-sm text-gray-600 mt-1">
-                {userData?.friends?.length} &nbsp; Connections
+              <p
+                className={`whitespace-pre-line transition-all duration-200 ${
+                  expanded ? "" : "line-clamp-4"
+                }`}
+              >
+                {userData?.about}
               </p>
-              <p className="text-sm text-gray-600 mt-1">{userData?.headline}</p>
+
+              {userData?.about?.split("\n").length > MAX_LINES && (
+                <button
+                  onClick={toggleExpand}
+                  className="mt-2 text-blue-600 hover:underline font-medium"
+                >
+                  {expanded ? "See less" : "See more"}
+                </button>
+              )}
               <div className="mt-4 flex flex-wrap gap-3 md:justify-between">
                 <div className="flex gap-3">
-                  {
-                    id !== user?._id && <button
-                    onClick={() => handleShowModal("editAbout")}
-                    title="Open Edit About Pop Up"
-                    className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
-                  >
-                    Edit Profile
-                  </button>
-                  }
+                  {id === user?._id && (
+                    <button
+                      onClick={() => handleShowModal("editAbout")}
+                      title="Open Edit About Pop Up"
+                      className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
+                    >
+                      Edit Profile
+                    </button>
+                  )}
                   <button className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer">
                     Add To
                   </button>
-                  <button className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer">
+                  <button
+                    onClick={() => setShowshareDialog((prev) => !prev)}
+                    className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
+                  >
                     Share Profile
                   </button>
                 </div>
@@ -145,9 +226,11 @@ function Profile() {
                       Message
                     </button>
                   )}
-                  <button className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer">
-                    Connect
-                  </button>
+                  {user?._id !== id && (
+                    <button className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer">
+                      Connect
+                    </button>
+                  )}
                 </div>
               </div>
               {/* edit icon */}
@@ -179,9 +262,22 @@ function Profile() {
                 )}
               </div>
 
-              <p className="text-sm text-gray-700 leading-relaxed">
+              <p
+                className={`whitespace-pre-line transition-all duration-200 ${
+                  expanded ? "" : "line-clamp-4"
+                }`}
+              >
                 {userData?.about}
               </p>
+
+              {userData?.about?.split("\n").length > MAX_LINES && (
+                <button
+                  onClick={toggleExpand}
+                  className="mt-2 text-blue-600 hover:underline font-medium"
+                >
+                  {expanded ? "See less" : "See more"}
+                </button>
+              )}
             </div>
           </Card>
 
@@ -258,24 +354,30 @@ function Profile() {
               </div>
 
               {/* actual experience with edit icon */}
-              <div className="w-full flex justify-between border-t border-gray-200 py-2 ">
-                <div>
-                  <h2 className="text-gray-900">
-                    Sr Software Engineer | Full stack Devloper | Cloud Engineer
-                  </h2>
-                  <p className="text- text-gray-500">Uber</p>
-                  <p className="text-sm text-gray-500">
-                    January 2024 - Present
-                  </p>
-                  <p className="text-sm text-gray-500">Banglore, India</p>
-                </div>
-                {/* edit icon */}
-                {user?._id === userData?._id && (
-                  <div className=" hover:bg-[#ffffff8e] px-3 py-3 h-fit rounded-full overflow-hidden cursor-pointer">
-                    <MdModeEdit size={20} />
+              {userData?.experience?.map((exp, index) => {
+                return (
+                  <div
+                    key={exp._id}
+                    className="w-full flex justify-between border-t border-gray-200 py-2 "
+                  >
+                    <div>
+                      <h2 className="text-gray-900">{exp?.designation}</h2>
+                      <p className="text- text-gray-500">{exp?.companyName}</p>
+                      <p className="text-sm text-gray-500">{exp?.duration}</p>
+                      <p className="text-sm text-gray-500">{exp?.location}</p>
+                    </div>
+                    {/* edit icon */}
+                    {user?._id === userData?._id && (
+                      <div
+                        onClick={() => handleDeleteExperience(exp._id)}
+                        className=" hover:bg-[#ffffff8e] px-3 py-3 h-fit text-pink-300 hover:text-[red] rounded-full overflow-hidden cursor-pointer"
+                      >
+                        <MdDelete size={20} />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                );
+              })}
             </Card>
           </div>
         </div>
@@ -335,6 +437,15 @@ function Profile() {
         <ModalLayout title="Message" modalName="message" showImage={1}>
           <Message banner={0} />
         </ModalLayout>
+      )}
+
+      {/* share profile */}
+      {showShareDialog && (
+        <ShareDialog
+          heading="Profile"
+          showShareDialog={showShareDialog}
+          setShowshareDialog={setShowshareDialog}
+        />
       )}
     </MainLayout>
   );

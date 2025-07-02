@@ -39,8 +39,8 @@ function ProfileCard({ user }) {
 
       <div className="p-4">
         <h1 className="text-xl font-medium">{user?.fullName}</h1>
-        <p className="text-xs">{user?.headline}</p>
-        <p className="text-xs">{user?.currentLocation}</p>
+        <p className="text-xs text-gray-500">{user?.headline}</p>
+        <p className="text-xs mt-1">{user?.currentLocation}</p>
         <p className="text-xs md:mt-2">{user?.currentCompany}</p>
       </div>
     </Card>

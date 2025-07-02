@@ -2,8 +2,10 @@ import React from "react";
 import ProfileCard from "../Components/Cards/ProfileCard";
 import AdvertisementCard from "../Components/AdvertisementCard";
 import MainLayout from "../layouts/MainLayout";
+import { useSelector } from "react-redux";
 
 function Notifications() {
+  const user = useSelector(state => state.user.user)
   const notifications = [
     { id: 1, title: "John Doe commented on your post.", time: "9h" },
     { id: 2, title: "Alex Roy sent you a friend request.", time: "14h" },
@@ -26,7 +28,7 @@ function Notifications() {
         <div className="grid grid-cols-1 md:grid-cols-12 h-full">
           {/* Left - ProfileCard */}
           <div className="md:col-span-3 h-fit hidden md:block overflow-hidden  px-2 py-4">
-            <ProfileCard />
+            <ProfileCard user={user} />
           </div>
 
           {/* Center - Scrollable Notifications */}

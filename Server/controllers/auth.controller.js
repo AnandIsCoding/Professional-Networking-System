@@ -8,8 +8,14 @@ import pkg from "google-auth-library";
 import mongoose from "mongoose";
 import mailSender from "../utils/mailSender.utils.js";
 import userRegistrationSuccessEmail from "../mail/templates/userRegistrationSuccessEmail.js";
-import { isFileTypeSupported, uploadFileToCloudinary } from "../utils/helpers.utils.js";
+import {
+  isFileTypeSupported,
+  uploadFileToCloudinary,
+  uploadPdfToCloudinary,
+} from "../utils/helpers.utils.js";
+import cloudinary from "cloudinary";
 const { OAuth2Client } = pkg;
+
 
 dotenv.config();
 
@@ -287,7 +293,18 @@ export const registerWithGoogleController = async (req, res) => {
 // Update User Controller
 export const updateUserController = async (req, res) => {
   try {
-    const { user } = req.body;
+    let { user } = req.body;
+
+    if (typeof user === "string") {
+      try {
+        user = JSON.parse(user); // ✅ convert to object if sent as JSON string
+      } catch (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid user data format",
+        });
+      }
+    }
 
     const userExists = await User.findById(req.user._id);
     if (!userExists) {
@@ -309,7 +326,8 @@ export const updateUserController = async (req, res) => {
       if (!["jpeg", "jpg", "png"].includes(fileType)) {
         return res.status(400).json({
           success: false,
-          message: "Invalid file type for profile picture. Only jpg, jpeg, png allowed.",
+          message:
+            "Invalid file type for profile picture. Only jpg, jpeg, png allowed.",
         });
       }
 
@@ -325,7 +343,8 @@ export const updateUserController = async (req, res) => {
       if (!["jpeg", "jpg", "png"].includes(fileType)) {
         return res.status(400).json({
           success: false,
-          message: "Invalid file type for profile banner. Only jpg, jpeg, png allowed.",
+          message:
+            "Invalid file type for profile banner. Only jpg, jpeg, png allowed.",
         });
       }
 
@@ -345,13 +364,41 @@ export const updateUserController = async (req, res) => {
         });
       }
 
-      const response = await uploadFileToCloudinary(file.path, "My-LinkedIn");
+      const response = await uploadPdfToCloudinary(file.path, "My-LinkedIn");
       updatedFields.resume = response.secure_url;
     }
 
     // ✅ Merge additional text fields from req.body.user
     if (user && typeof user === "object") {
       Object.assign(updatedFields, user);
+    }
+    if (user?.skills && typeof user?.skills === "string") {
+      user.skills = JSON.parse(user.skills);
+    }
+    if (Array.isArray(user?.experience)) {
+      const existingExperience = userExists?.experience || [];
+
+      // Filter out duplicates
+      const newExperience = user?.experience?.filter(
+        (newExp) =>
+          !existingExperience.some(
+            (oldExp) =>
+              oldExp.designation === newExp.designation &&
+              oldExp.companyName === newExp.companyName &&
+              oldExp.duration === newExp.duration
+          )
+      );
+
+      updatedFields.experience = [...existingExperience, ...newExperience];
+    }
+    if (user?.deleteExperienceId) {
+      const expIdToDelete = user.deleteExperienceId;
+
+      userExists.experience = userExists.experience.filter(
+        (exp) => exp._id.toString() !== expIdToDelete
+      );
+
+      updatedFields.experience = userExists.experience;
     }
 
     // ✅ Now update the user
@@ -389,7 +436,6 @@ export const updateUserController = async (req, res) => {
     });
   }
 };
-
 
 // get profile by id
 export const getProfileByIdController = async (req, res) => {

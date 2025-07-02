@@ -64,10 +64,10 @@ function Banner({ banner }) {
 
     if (result.isConfirmed) {
       // Upload logic placeholder
-      console.log(
-        `Uploading ${banner === 1 ? "banner" : "profile pic"}:`,
-        bannerImage
-      );
+      // console.log(
+      //   `Uploading ${banner === 1 ? "banner" : "profile pic"}:`,
+      //   bannerImage
+      // );
       const formData = new FormData();
       if (banner === 1) {
         formData.append("profileBanner", bannerImage);
