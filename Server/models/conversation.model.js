@@ -13,4 +13,4 @@ const Conversation = mongoose.models.Conversation || mongoose.model('Conversatio
 export default Conversation
 
 
-// List of users participating in the conversation
+// List of users participating in the conversation , 2 members , not more than that , for now only chat, no group chat

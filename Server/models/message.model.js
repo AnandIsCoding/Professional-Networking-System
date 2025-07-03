@@ -25,6 +25,13 @@ const messageSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    // ✅ TTL expiry field (automatically deletes after 30 days)
+    expiresAt: {
+      type: Date,
+      default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+      expires: 0, // TTL activates here
+    },
   },
   {
     timestamps: true,
@@ -41,7 +48,9 @@ messageSchema.pre("validate", function (next) {
 
 const Message =
   mongoose.models.Message || mongoose.model("Message", messageSchema);
+
 export default Message;
+
 
 // conversationId ==> ID of the conversation to which this message belongs
 // sender ==> 	ID of the user who sent the message

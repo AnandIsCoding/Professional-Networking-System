@@ -28,7 +28,7 @@ export const createConversationController = async(req,res) =>{
                 message
             })
         }
-        return res.status(201).json({success:false, message:'Message sent successfully'})
+        return res.status(201).json({success:true, message:'Message sent successfully'})
     } catch (error) {
         // Handle other errors
     console.log(

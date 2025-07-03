@@ -18,12 +18,13 @@ export const searchUserController = async (req, res) => {
     // console.log("Query received:", query);
 
     const users = await User.find({
-      _id: { $ne: new mongoose.Types.ObjectId(req.user._id) },
-      $or: [
-        { fullName: { $regex: new RegExp(query, "i") } },
-        { email: { $regex: new RegExp(query, "i") } },
-      ],
-    }).limit(50);
+  _id: { $ne: new mongoose.Types.ObjectId(req.user._id) },
+  $or: [
+    { fullName: { $regex: query, $options: "i" } },
+    { email: { $regex: query, $options: "i" } },
+  ],
+}).limit(50);
+
 
     // console.log("Users found:", users); 
 

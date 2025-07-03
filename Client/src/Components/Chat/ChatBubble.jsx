@@ -53,7 +53,7 @@ function ChatBubble({ type, name, message, image, profile }) {
       )}
 
       {showModal === "chatImage" && activeImage && (
-        <ImageModal imageUrl={activeImage} />
+        <ImageModal imageUrl={activeImage} setActiveimage={setActiveimage} />
       )}
     </div>
   );

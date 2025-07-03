@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcHome } from "react-icons/fc";
 import { HiUserGroup } from "react-icons/hi2";
 import { PiReadCvLogo } from "react-icons/pi";
 import { FcVoicePresentation } from "react-icons/fc";
 import { IoMdNotifications } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 function UserNavbar() {
   const location = useLocation();
@@ -19,6 +21,43 @@ function UserNavbar() {
   const isNotifications = location.pathname === "/notifications";
   const isMessage = location.pathname === "/message";
   const isProfile = location.pathname.startsWith("/profile");
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchresults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  const fetchSearchedUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${baseUrl}/user/search?query=${search}`, {
+        withCredentials: true,
+      });
+      const { data } = res;
+      if (data?.success) {
+        setShowSearchResult(true);
+        setSearchresults(data?.users);
+      } else {
+        toast.error("Something went wrong in search");
+      }
+    } catch (error) {
+      setLoading(false);
+      setShowSearchResult(false);
+      console.log(error?.response?.data.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      if (search.trim() !== "") {
+        fetchSearchedUsers();
+      } else {
+        setSearchresults([]); // Clear results if search is empty
+      }
+    }, 500); // wait 500ms after the last keystroke
+
+    return () => clearTimeout(debounceTimer); // cleanup
+  }, [search]);
 
   return (
     <div className="sticky bg-white top-0 left-0 right-0  z-[999] w-full px-4 xl:px-48 py-1  flex items-center justify-between flex-wrap backdrop-blur-lg">
@@ -40,27 +79,51 @@ function UserNavbar() {
           {/* Search Input */}
           <input
             type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onBlur={(e)=>setShowSearchResult(false)}
             placeholder="Search..."
             className="w-full px-4 py-2 border rounded-md searchuserbox"
           />
 
           {/* Search Results Dropdown */}
           {showSearchResult && (
-            <div className="absolute top-full left-0 w-full mt-2 bg-white shadow-md rounded-md max-h-96 overflow-y-auto z-50">
-              {/* Scrollable Child Items */}
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-                <div
-                  key={index}
-                  className="w-full px-2 py-1 cursor-pointer  border-b-1 bg-zinc-100 border-zinc-300 flex gap-14 mt-1 rounded-lg"
-                >
-                  <img
-                    src="https://picsum.photos/id/237/536/354"
-                    alt="user_image"
-                    className="w-10 h-10 rounded-lg"
-                  />
-                  <h1 className="text-center mt-2 font-medium">Anand Jha</h1>
-                </div>
-              ))}
+            <div className="absolute top-full left-0 w-full mt-2 bg-white shadow-xl rounded-xl max-h-96 custom-scrollbar overflow-y-auto z-50 border border-gray-200">
+              {loading ? (
+                <p className="px-6 py-4 text-gray-500 text-center animate-pulse">
+                  Searching users 🔎 ...
+                </p>
+              ) : searchResults.length < 1 ? (
+                <p className="px-6 py-4 text-gray-500 text-center">
+                  No User Found
+                </p>
+              ) : (
+                searchResults.map((item,index) => (
+                  <NavLink
+                    key={item?._id}
+                    to={`/profile/${item?._id}`}
+                    className="flex items-center gap-4 px-4 py-3  hover:bg-blue-50 transition-all duration-200 cursor-pointer"
+                  >
+                    <img
+                      src={
+                        item?.profilePic ||
+                        "https://picsum.photos/id/237/536/354"
+                      }
+                      alt="user"
+                      className="w-10 h-10 rounded-full object-cover border border-gray-300"
+                    />
+                    <div className="flex flex-col" onClick={()=>navigate(`/profile/${item?._id}`)}>
+                    
+                      <span className="font-semibold text-gray-800">
+                        {item?.fullName}
+                      </span>
+                      <span className={`text-sm text-gray-500 ${item?.currentCompany ? '' : 'hidden'}`}>
+                        @{item?.currentCompany}
+                      </span>
+                    </div>
+                  </NavLink>
+                ))
+              )}
             </div>
           )}
         </div>

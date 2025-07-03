@@ -160,15 +160,18 @@ function Profile() {
           id: toastId,
         });
         dispatch(setUser(data?.user));
+        dispatch(setShowModal(null))
         // console.log("data of sending friend request ---> ", data);
       }else {
         toast.error(data.message || "Something went wrong", {
           id: toastId,
         });
+        dispatch(setShowModal(null))
       }
     } catch (error) {
       console.log("Error in sending friend requetst ---->> ", error);
       toast.error(error?.response?.data?.message || "Something went wrong",{id: toastId});
+      dispatch(setShowModal(null))
     }
   };
 
@@ -187,15 +190,18 @@ function Profile() {
           id: toastId,
         });
         dispatch(setUser(data?.user));
+        dispatch(setShowModal(null))
         // console.log("data of accepting friend request ---> ", data);
       }else {
         toast.error(data.message || "Something went wrong", {
           id: toastId,
         });
+        dispatch(setShowModal(null))
       }
     } catch (error) {
       console.log("Error in accepting friend requetst ---->> ", error);
       toast.error(error?.response?.data?.message || "Something went wrong",{id: toastId});
+      dispatch(setShowModal(null))
     }
   };
 
@@ -238,11 +244,13 @@ const handleIgnore = async () => {
         id: toastId,
       });
       dispatch(setUser(data?.user));
+      dispatch(setShowModal(null))
       // console.log("Disconnected from friend --->", data);
     } else {
       toast.error(data?.message || "Something went wrong", {
         id: toastId,
       });
+      dispatch(setShowModal(null))
     }
   } catch (error) {
     console.error("Error in disconnecting friend --->", error);
@@ -250,6 +258,7 @@ const handleIgnore = async () => {
       error?.response?.data?.message || "Something went wrong",
       { id: toastId }
     );
+    dispatch(setShowModal(null))
   }
 };
 
@@ -611,14 +620,14 @@ const handleIgnore = async () => {
       {/* edit info */}
       {showModal === "editInfo" && (
         <ModalLayout title="Edit Info" modalName="editInfo" showImage={1}>
-          <Info banner={0} />
+          <Info />
         </ModalLayout>
       )}
 
       {/* message model */}
       {showModal === "message" && (
         <ModalLayout title="Message" modalName="message" showImage={1}>
-          <Message banner={0} />
+          <Message userData={userData} />
         </ModalLayout>
       )}
 

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
 import { setShowModal } from "../../Redux/Slices/modal.slice";
+import { FaTimes } from "react-icons/fa";
 
 function ModalLayout(props) {
      const user = useSelector((state) => state.user.user);
@@ -60,7 +61,7 @@ useEffect(() => {
             <h1 className="text-xl text-gray-700 pt-3 px-3">{props?.title}</h1>
           </div>
           <div onClick={handleCloseModal}>
-            <AiOutlineClose size={30} className="cursor-pointer" />
+            <FaTimes size={28} className="hover:text-[red] cursor-pointer"/>
           </div>
         </div>
 

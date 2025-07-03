@@ -1,30 +1,40 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { setShowModal } from "../../Redux/Slices/modal.slice";
+import { FaTimes } from "react-icons/fa";
 
-function ImageModal({ imageUrl }) {
+function ImageModal({ imageUrl, setActiveimage }) {
   const dispatch = useDispatch();
 
   const handleClose = () => {
     dispatch(setShowModal(null));
+    setActiveimage("");
   };
 
   return (
     <div
       onClick={handleClose}
-      className="fixed inset-0 z-[999] bg-black/40 flex items-center justify-center"
+      className="fixed inset-0 z-[999] bg-black/60 backdrop-blur-sm flex items-center justify-center"
     >
-      <img
-        src={imageUrl}
-        alt="chat_image"
-        onClick={(e) => e.stopPropagation()} // prevent closing on image click
-        className="rounded-md shadow-lg object-contain
-          max-h-[90vh] max-w-[90vw]
-          sm:max-w-[80vw] sm:max-h-[80vh]
-          md:max-w-[60vw] md:max-h-[70vh]
-          lg:max-w-[50vw] lg:max-h-[70vh]
-        "
-      />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative bg-white rounded-xl overflow-hidden shadow-2xl animate-zoomIn p-2 max-w-[90vw] max-h-[90vh] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-[50vw]"
+      >
+        {/* Close Button */}
+        <button
+          onClick={handleClose}
+          className="absolute top-4 right-4 text-red-400 hover:text-red-600 z-10 cursor-pointer"
+        >
+          <FaTimes size={24} />
+        </button>
+
+        {/* Image */}
+        <img
+          src={imageUrl}
+          alt="chat_image"
+          className="w-full h-full object-contain rounded-lg"
+        />
+      </div>
     </div>
   );
 }
