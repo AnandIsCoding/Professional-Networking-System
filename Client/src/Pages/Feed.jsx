@@ -59,7 +59,7 @@ function Feed() {
         </div>
 
         {/* Middle Feed */}
-        <div className="md:h-[100vh] w-full lg:w-[50%]  overflow-y-auto ">
+        <div className=" lg:h-[100vh] custom-scrollbar w-full lg:w-[50%]  overflow-y-auto ">
           <div className=" h-fit">
           <StartPostBox showModal={showModal} allPost={allPost} setAllpost={setAllpost} />
           <br></br>

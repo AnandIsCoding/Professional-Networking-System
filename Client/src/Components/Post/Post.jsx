@@ -132,8 +132,17 @@ function Post({ post }) {
             className="text-gray-600 pl-1"
           >
             <h1 className="text-xl text-black">{post?.user?.fullName}</h1>
-            <p className="text-sm text-gray-500">{post?.user?.headline}</p>
-            <p className="text-md text-gray-600">{post?.user?.currentCompany}</p>
+            {post?.user?.headline?.split(" ").length > 13 ? (
+              <p className="text-sm text-gray-500">
+                {post?.user?.headline?.split(" ")?.slice(0, 16)?.join(" ")}{" "}
+                &nbsp;...
+              </p>
+            ) : (
+              <p className="text-sm text-gray-500">{post?.user?.headline}</p>
+            )}
+            <p className="text-md text-gray-600">
+              {post?.user?.currentCompany}
+            </p>
           </div>
         </div>
         {/* description */}
@@ -253,18 +262,27 @@ function Post({ post }) {
                 comments?.map((item, index) => {
                   return (
                     <div key={index} className="px-14 py-2 h-fit">
-                      <div className=" h-10 w-10 rounded-full p-[2px] bg-white z-10">
+                      <div
+                        onClick={() => navigate(`/profile/${post?.user?._id}`)}
+                        className=" h-10 w-10 rounded-full p-[2px] bg-white z-10"
+                      >
                         <img
                           src={item?.user?.profilePic}
                           alt="Profile_Banner"
                           className="w-full h-full object-cover rounded-full"
                         />
                       </div>
-                      <div>
+                      <div
+                        onClick={() => navigate(`/profile/${post?.user?._id}`)}
+                      >
                         <h1>{item?.user?.fullName}</h1>
                         <p className="text-sm text-gray-600 ">
                           {" "}
-                          {item?.user?.headline}
+                          {item?.user?.headline
+                            ?.split(" ")
+                            ?.slice(0, 10)
+                            ?.join(" ")}
+                          ...
                         </p>
                       </div>
                       {/* actual comment */}

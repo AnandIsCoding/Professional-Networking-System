@@ -84,8 +84,8 @@ function BottomNavigation() {
         onClick={() => navigate(`/profile/${user?._id}`)}
       >
         <img
-          src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
-          alt="user"
+          src={user?.profilePic}
+          alt="profilePic_user"
           className="w-5 h-5 rounded-full"
         />
         <span>Me</span>

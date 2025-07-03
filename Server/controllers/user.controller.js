@@ -71,10 +71,9 @@ export const sendFriendRequestController = async(req,res) =>{
       receiver,
       content,
       notificationType:'friendRequest',
-
     })
 
-    return res.status(201).json({success:true, message:'Request sent successfully'})
+    return res.status(201).json({success:true, message:'Request sent successfully',user:req.user})
   } catch (error) {
     console.log(
       chalk.bgRedBright("Error in sendFriendRequestController in user.controller.js --->>", error)
@@ -114,7 +113,7 @@ export const acceptFriendRequestController = async(req,res) =>{
 
     await req.user.save()
     await friendData.save()
-     return res.status(200).json({success:true, message:'Friend request accepted successfully'})
+     return res.status(200).json({success:true, message:'Friend request accepted successfully', user:req.user})
 
   } catch (error) {
      console.log(
@@ -182,7 +181,7 @@ export const removeFriendController = async(req,res) =>{
     }
     await user.save()
     await friendData.save()
-    return res.status(200).json({success:false, message:'Unfriend successfully'})
+    return res.status(200).json({success:false, message:'Unfriend successfully', user:req.user})
   } catch (error) {
     console.log(
       chalk.bgRedBright("Error in removeFriendController in user.controller.js --->>", error)

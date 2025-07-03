@@ -48,10 +48,13 @@ function MyNetwork() {
     }
   };
   useEffect(() => {
-    fetchFriends();
-    fetchPendingrequests()
-  }, []);
-  console.log("friends ---->> ", friends);
+     if(headingText === 'Catch up with Friends'){
+      fetchFriends()
+     }else{
+      fetchPendingrequests()
+     }
+  }, [headingText]);
+  // console.log("friends ---->> ", friends);
 
   return (
     <MainLayout>
@@ -89,7 +92,7 @@ function MyNetwork() {
           : pendingRequests.length < 1 && <p>No Pending Request found</p>}
         {headingText === "Catch up with Friends"
           ? friends.map((item, idx) => <ProfileCard user={item} key={item._id} />)
-          : pendingRequests.map((item, index) => {
+          : pendingRequests?.map((item, index) => {
               return <ProfileCard user={item} key={item._id} />;
             })}
       </div>

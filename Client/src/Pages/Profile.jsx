@@ -23,10 +23,12 @@ import toast from "react-hot-toast";
 import ShareDialog from "../Components/modal/ShareDialog";
 import Swal from "sweetalert2";
 import { setUser } from "../Redux/Slices/auth.slice";
+import { useLogoutHandler } from "../utils/logoutHandler";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Profile() {
   const dispatch = useDispatch();
+  const logout = useLogoutHandler();
   const showModal = useSelector((state) => state.modal.showModal);
   const [showShareDialog, setShowshareDialog] = useState(false);
   const user = useSelector((state) => state.user.user); // subscribe to user
@@ -38,17 +40,13 @@ function Profile() {
   const [userData, setUserdata] = useState([]);
   const [top5Posts, setTop5posts] = useState([]);
   const [expanded, setExpanded] = useState(false);
-  const [editIndex, setEditIndex] = useState(null); // or use _id instead
-  const [editExperience, setEditExperience] = useState({
-    designation: "",
-    companyName: "",
-    duration: "",
-    location: "",
-  });
+  const [isFriend, setIsFriend] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+  const [isInMypending, setIsInmypending] = useState(false);
 
   const MAX_LINES = 4;
   const toggleExpand = () => setExpanded((prev) => !prev);
-  
+
   const fetchUserdata = async () => {
     try {
       const res = await axios.get(`${baseUrl}/user/auth/profile/${id}`, {
@@ -126,6 +124,136 @@ function Profile() {
     fetchTop5Posts();
   }, [user]);
 
+  useEffect(() => {
+    if (userData && user?._id) {
+      setIsFriend(
+        userData?.friends?.some(
+          (friendId) => String(friendId) === String(user._id)
+        )
+      );
+
+      setIsPending(
+        userData?.pendingRequest?.some(
+          (requestId) => String(requestId) === String(user._id)
+        )
+      );
+      setIsInmypending(
+        user?.pendingRequest?.some(
+          (requestId) => String(requestId) === String(userData?._id)
+        )
+      );
+    }
+  }, [userData, user?._id, user]);
+
+  const handleConnect = async () => {
+    // Send connect request logic
+    const toastId = toast.loading("Please wait ...");
+    try {
+      const res = await axios.post(
+        `${baseUrl}/user/sendfriendrequest`,
+        { receiver: userData?._id },
+        { withCredentials: true }
+      );
+      const { data } = res;
+      if (data.success) {
+        toast.success(data?.message || "Friend request sent", {
+          id: toastId,
+        });
+        dispatch(setUser(data?.user));
+        // console.log("data of sending friend request ---> ", data);
+      }else {
+        toast.error(data.message || "Something went wrong", {
+          id: toastId,
+        });
+      }
+    } catch (error) {
+      console.log("Error in sending friend requetst ---->> ", error);
+      toast.error(error?.response?.data?.message || "Something went wrong",{id: toastId});
+    }
+  };
+
+  const handleAccept = async () => {
+    // Accept request logic 
+    const toastId = toast.loading("Please wait ...");
+    try {
+      const res = await axios.post(
+        `${baseUrl}/user/acceptfriendrequest`,
+        { requesterId: userData?._id },
+        { withCredentials: true }
+      );
+      const { data } = res;
+      if (data?.success) {
+        toast.success(data?.message || "Friend request accepted", {
+          id: toastId,
+        });
+        dispatch(setUser(data?.user));
+        // console.log("data of accepting friend request ---> ", data);
+      }else {
+        toast.error(data.message || "Something went wrong", {
+          id: toastId,
+        });
+      }
+    } catch (error) {
+      console.log("Error in accepting friend requetst ---->> ", error);
+      toast.error(error?.response?.data?.message || "Something went wrong",{id: toastId});
+    }
+  };
+
+  // ignore a particular connection request, api not devloped just btn added, (future scope)
+const handleIgnore = async () => {
+  await Swal.fire({
+    title: "🚫 Feature Under Construction",
+    text: "As of now, you can't ignore a connection request.",
+    icon: "info",
+    confirmButtonText: "Okay",
+    confirmButtonColor: "#2563EB", // Tailwind blue-600
+  });
+};
+
+
+  // disconnect friend
+  const handleDisconnect = async () => {
+  const confirmed = await Swal.fire({
+    title: "Are you sure?",
+    text: "Do you want to remove this connection?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, disconnect",
+    cancelButtonText: "Cancel",
+  });
+
+  if (!confirmed.isConfirmed) return;
+
+  const toastId = toast.loading("Disconnecting...");
+
+  try {
+    const res = await axios.delete(
+      `${baseUrl}/user/removefriend/${userData?._id}`,
+      { withCredentials: true }
+    );
+
+    const { data } = res;
+    if (data?.success) {
+      toast.success(data?.message || "Disconnected successfully", {
+        id: toastId,
+      });
+      dispatch(setUser(data?.user));
+      // console.log("Disconnected from friend --->", data);
+    } else {
+      toast.error(data?.message || "Something went wrong", {
+        id: toastId,
+      });
+    }
+  } catch (error) {
+    console.error("Error in disconnecting friend --->", error);
+    toast.error(
+      error?.response?.data?.message || "Something went wrong",
+      { id: toastId }
+    );
+  }
+};
+
+
   return (
     <MainLayout>
       <div className="flex flex-col lg:flex-row gap-4 mt-4 pb-14">
@@ -190,7 +318,7 @@ function Profile() {
               {userData?.about?.split("\n").length > MAX_LINES && (
                 <button
                   onClick={toggleExpand}
-                  className="mt-2 text-blue-600 hover:underline font-medium"
+                  className="mt-2 text-blue-600 hover:underline font-medium cursor-pointer "
                 >
                   {expanded ? "See less" : "See more"}
                 </button>
@@ -206,9 +334,11 @@ function Profile() {
                       Edit Profile
                     </button>
                   )}
-                  <button className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer">
-                    Add To
-                  </button>
+                  {user?._id === userData._id && (
+                    <button className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer">
+                      Add To
+                    </button>
+                  )}
                   <button
                     onClick={() => setShowshareDialog((prev) => !prev)}
                     className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
@@ -218,17 +348,68 @@ function Profile() {
                 </div>
                 {/* show message only on other user's profile , not on my */}
                 <div className="flex gap-3">
-                  {id !== user?._id && (
-                    <button
-                      onClick={() => handleShowModal("message")}
-                      className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
-                    >
-                      Message
-                    </button>
+                  {user?._id !== userData?._id && (
+                    <>
+                      {isFriend ? (
+                        <>
+                          <button
+                            onClick={() => handleShowModal("message")}
+                            className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
+                          >
+                            Message
+                          </button>
+                          <button
+                            className="px-5 py-2 text-sm bg-green-600 text-white hover:bg-green-700 rounded-xl transition cursor-default"
+                            disabled
+                          >
+                            Connected
+                          </button>
+                          <button
+                            onClick={handleDisconnect}
+                            className="px-5 py-2  text-sm bg-red-500 text-white hover:bg-red-700 rounded-xl transition cursor-pointer"
+                          >
+                            Disconnect 
+                          </button>
+                        </>
+                      ) : isInMypending ? (
+                        <>
+                          <button
+                            onClick={handleAccept}
+                            className="px-5 py-2 text-sm bg-green-600 text-white hover:bg-green-700 rounded-xl transition cursor-pointer"
+                          >
+                            Accept Connection
+                          </button>
+                          <button
+                            onClick={handleIgnore}
+                            className="px-5 py-2 text-sm bg-gray-500 text-white hover:bg-gray-600 rounded-xl transition cursor-pointer"
+                          >
+                            Ignore Connection
+                          </button>
+                        </>
+                      ) : isPending ? (
+                        <button
+                          disabled
+                          className="px-5 py-2 text-sm bg-gray-400 text-white opacity-50 rounded-xl cursor-not-allowed"
+                        >
+                          Request Sent
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleConnect}
+                          className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
+                        >
+                          Connect
+                        </button>
+                      )}
+                    </>
                   )}
-                  {user?._id !== id && (
-                    <button className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer">
-                      Connect
+
+                  {user?._id === userData?._id && (
+                    <button
+                      onClick={logout}
+                      className="px-5 py-2 text-sm bg-red-400 text-white hover:bg-red-700 rounded-xl transition cursor-pointer"
+                    >
+                      Logout
                     </button>
                   )}
                 </div>
@@ -273,7 +454,7 @@ function Profile() {
               {userData?.about?.split("\n").length > MAX_LINES && (
                 <button
                   onClick={toggleExpand}
-                  className="mt-2 text-blue-600 hover:underline font-medium"
+                  className="mt-2 text-blue-600 hover:underline font-medium cursor-pointer "
                 >
                   {expanded ? "See less" : "See more"}
                 </button>
@@ -326,7 +507,8 @@ function Profile() {
               </div>
               {/* button to show all posts */}
               <div className="flex justify-center items-center">
-                <button
+                {
+                  top5Posts?.length && <button
                   onClick={() => navigate(`/profile/${id}/activities`)}
                   title="Show All Posts"
                   className="px-5 mt-2 py-2  flex justify-between text-sm bg-blue-300 text-black hover:bg-blue-200 rounded-xl transition cursor-pointer"
@@ -334,6 +516,7 @@ function Profile() {
                   <span>Show All Posts </span>
                   <FaArrowRightLong className="mt-1 mx-3" />
                 </button>
+                }
               </div>
             </Card>
           </div>

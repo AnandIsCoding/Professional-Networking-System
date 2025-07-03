@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setShowModal } from "../../Redux/Slices/modal.slice";
+import ImageModal from "./ImageModal";
 
 function ChatBubble({ type, name, message, image, profile }) {
+  const dispatch = useDispatch();
+  const showModal = useSelector((state) => state.modal.showModal);
+  const [activeImage, setActiveimage] = useState("");
+
   const isIncoming = type === "incoming";
+
+  const handleImageClick = (image) => {
+    setActiveimage(image);
+    dispatch(setShowModal("chatImage"));
+  };
 
   return (
     <div
@@ -28,8 +40,9 @@ function ChatBubble({ type, name, message, image, profile }) {
         {image && (
           <img
             src={image}
+            onClick={() => handleImageClick(image)}
             alt="chat"
-            className="rounded-lg mt-2 max-w-full object-contain"
+            className="rounded-lg md:h-[14vw] mt-2 max-w-full object-contain cursor-pointer"
           />
         )}
       </div>
@@ -37,6 +50,10 @@ function ChatBubble({ type, name, message, image, profile }) {
       {/* Profile image on right if outgoing */}
       {!isIncoming && (
         <img src={profile} alt="profile" className="h-8 w-8 rounded-full" />
+      )}
+
+      {showModal === "chatImage" && activeImage && (
+        <ImageModal imageUrl={activeImage} />
       )}
     </div>
   );

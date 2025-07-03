@@ -45,21 +45,24 @@ function UserNavbar() {
           />
 
           {/* Search Results Dropdown */}
-          {
-            showSearchResult && <div className="absolute top-full left-0 w-full mt-2 bg-white shadow-md rounded-md max-h-96 overflow-y-auto z-50">
-            {/* Scrollable Child Items */}
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-              <div key={index} className="w-full px-2 py-1 cursor-pointer  border-b-1 bg-zinc-100 border-zinc-300 flex gap-14 mt-1 rounded-lg">
-                <img
-                  src="https://picsum.photos/id/237/536/354"
-                  alt="user_image"
-                  className="w-10 h-10 rounded-lg"
-                />
-                <h1 className="text-center mt-2 font-medium">Anand Jha</h1>
-              </div>
-            ))}
-          </div>
-          }
+          {showSearchResult && (
+            <div className="absolute top-full left-0 w-full mt-2 bg-white shadow-md rounded-md max-h-96 overflow-y-auto z-50">
+              {/* Scrollable Child Items */}
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                <div
+                  key={index}
+                  className="w-full px-2 py-1 cursor-pointer  border-b-1 bg-zinc-100 border-zinc-300 flex gap-14 mt-1 rounded-lg"
+                >
+                  <img
+                    src="https://picsum.photos/id/237/536/354"
+                    alt="user_image"
+                    className="w-10 h-10 rounded-lg"
+                  />
+                  <h1 className="text-center mt-2 font-medium">Anand Jha</h1>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

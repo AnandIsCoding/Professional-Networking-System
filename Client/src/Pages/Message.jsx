@@ -14,9 +14,9 @@ function Message() {
       <div className="w-full ">
         <Card padding={0}>
           {/* Sticky chat container */}
-          <div className="sticky top-20 md:top-24 bg-white z-10 rounded-md shadow-md h-[85vh] md:h-[600px] overflow-hidden ">
+          <div className="sticky top-20 md:top-0 bg-white z-10 rounded-md shadow-md h-[85vh] md:h-[650px] md:mt-[-13px] overflow-hidden ">
             {/* Header */}
-            <div className="w-full px-4 py-2 text-xl font-semibold text-gray-800 border-b border-zinc-200">
+            <div className="w-full px-4 py-2 text-lg font-semibold text-gray-800 border-b border-zinc-200">
               Messaging
             </div>
 
@@ -29,7 +29,7 @@ function Message() {
                 <UserContactsPanel />
               </div>
               {/* Chat view */}
-              <div className=" w-[70%] sm:w-[60%]   px-4 overflow-y-auto text-black">
+              <div className=" w-[70%] sm:w-[60%]   px-4 overflow-y-auto text-black custom-scrollbar">
                 {/* sticky user name and 3 dots top section */}
                 <div className="text-lg font-semibold sticky top-0 z-[999] bg-white py-3 flex justify-between border-b-1 border-zinc-300">
                   <div>
@@ -61,28 +61,21 @@ function Message() {
                 </div>
 
                 {/* All Chats */}
-                <div className="space-y-4 ">
+                <div className="space-y-4  ">
+
+                  <ChatBubble
+                    type="outgoing"
+                    name="Anand Jha"
+                    image="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    profile="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
+                  />
+
                   <ChatBubble
                     type="incoming"
                     name="Sarang Tadaskar"
                     message="This is dummy incoming message"
                     profile="https://imgs.search.brave.com/m3AjEyYqrqs66D2V3HzEOVsAP9yRCKGsKsLCf-_NFgo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzYyLzYzLzY1/LzM2MF9GXzQ2MjYz/NjUwMl85Y0RBWXV5/VnZCWTRxWUpsSGpX/N3ZxYXI1SFlTOGg4/eC5qcGc"
                   />
-
-                  <ChatBubble
-                    type="incoming"
-                    name="Sarang Tadaskar"
-                    image="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    profile="https://imgs.search.brave.com/m3AjEyYqrqs66D2V3HzEOVsAP9yRCKGsKsLCf-_NFgo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzYyLzYzLzY1/LzM2MF9GXzQ2MjYz/NjUwMl85Y0RBWXV5/VnZCWTRxWUpsSGpX/N3ZxYXI1SFlTOGg4/eC5qcGc"
-                  />
-
-                  <ChatBubble
-                    type="outgoing"
-                    name="Anand Jha"
-                    message="This is dummy outgoing message. Bye 👋"
-                    profile="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
-                  />
-
                   <ChatBubble
                     type="outgoing"
                     name="Anand Jha"
