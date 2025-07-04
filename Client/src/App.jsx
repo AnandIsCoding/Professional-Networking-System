@@ -25,6 +25,7 @@ import Notifications from "./Pages/Notification";
 import PageTitleUpdater from "./utils/PageTitleUpdater";
 import axios from "axios";
 import { setUser } from "./Redux/Slices/auth.slice";
+import {setNotificationCount} from './Redux/Slices/notification.slice'
 import Activities from "./Pages/Activities";
 import SingleActivity from "./Pages/SingleActivity";
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -35,6 +36,7 @@ function App() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.user.user);
   const user = useSelector(state => state.user.user)
+  const notificationCount = useSelector(state => state.notification.count)
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const fetchProfile = async () => {
@@ -60,6 +62,26 @@ function App() {
       setIsCheckingAuth(false); // Done checking auth
     }
   };
+  
+
+  const fetchActiveNotifications = async() =>{
+    try {
+      const res = await axios.get(`${baseUrl}/notification/active`, {
+        withCredentials: true,
+      });
+      const {data} = res
+      if(data?.success){
+        // console.log(data?.count)
+        dispatch(setNotificationCount(data?.count))
+      }else{
+        console.log('Something went wrong in fetching notifications count')
+        console.log(res)
+      }
+    } catch (error) {
+      console.log(error?.response?.data?.message || 'Something went wrong in fetching active notifications count ---->> ',error)
+    }
+  }
+
   useEffect(() => {
     const disableContextMenu = (e) => {
       e.preventDefault();
@@ -87,6 +109,7 @@ function App() {
 
   useEffect(() => {
     fetchProfile();
+    fetchActiveNotifications()
   }, []);
 
   if (isCheckingAuth) {

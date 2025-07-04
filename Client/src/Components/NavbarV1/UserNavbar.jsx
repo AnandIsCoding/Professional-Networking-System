@@ -14,6 +14,7 @@ function UserNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
+  const notificationCount = useSelector(state => state.notification.count)
   const [showSearchResult, setShowSearchResult] = useState(false);
   const isFeed = location.pathname === "/feed";
   const isMyNetwork = location.pathname === "/mynetwork";
@@ -180,8 +181,8 @@ function UserNavbar() {
           }`}
         >
           <IoMdNotifications size={20} />
-          <span className="absolute -top-1 -right-0 px-1.5 py-0.5 text-[10px] font-bold bg-red-600 text-white rounded-full leading-none">
-            1
+          <span className={`absolute -top-0.5 -right-0 px-1 py-1 text-[10px] font-bold ${notificationCount === 0 ? '' : 'bg-red-600'} text-white rounded-full leading-none`}>
+            {notificationCount !== 0 && notificationCount}
           </span>
           <span>Notifications</span>
         </div>

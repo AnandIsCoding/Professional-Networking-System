@@ -43,7 +43,6 @@ export const getActiveNotificationController = async (req, res) => {
       .json({
         success: true,
         message: "Active notifications fetched successfully",
-        notification,
         count:notification.length
       });
   } catch (error) {
@@ -65,10 +64,13 @@ export const getActiveNotificationController = async (req, res) => {
 
 export const updateIsReadController = async (req, res) => {
   try {
-    const notificationId = req.body
+    const {notificationId} = req.body
+    const userId = req?.user?._id
     const notification = await Notification.findByIdAndUpdate(notificationId, {isRead:true})
     if(!notification) return res.status(404).json({success:false, message:'Notification not found'})
-    return res.status(200).json({success:true, message:'Notification read successfully', notification})
+      const activeNotification = await Notification.find({ receiver: userId , isRead:false})
+      .sort({ createdAt: -1 })
+    return res.status(200).json({success:true, message:'Notification read successfully', activeNotificationCount:activeNotification.length})
   } catch (error) {
     // Handle other errors
     console.log(

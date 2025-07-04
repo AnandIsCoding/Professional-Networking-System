@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import modalReducer from '../redux/slices/modal.slice.js'
+import modalReducer from '../Redux/Slices/modal.slice.js'
 import authReducer from '../Redux/Slices/auth.slice.js'
+import notificationReducer from '../Redux/Slices/notification.slice.js'
 
 const appStore = configureStore({
     reducer:{
         modal:modalReducer,
-        user:authReducer
+        user:authReducer,
+        notification:notificationReducer
     }
 })
 

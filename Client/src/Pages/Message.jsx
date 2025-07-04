@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import Card from "../Components/Cards/Card";
 import UserContactsPanel from "../Components/Chat/UserContactsPanel";
@@ -7,8 +7,88 @@ import ChatBubble from "../Components/Chat/ChatBubble";
 import ScrollChatToBottom from "../utils/ScrollChatToBottom";
 import { FcGallery } from "react-icons/fc";
 import { IoMdSend } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 function Message() {
+  const [message, setMessage] = useState("");
+  const [image, setImage] = useState("");
+  const [preview, setPreview] = useState("");
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      Swal.fire(
+        "Unsupported file",
+        "Only .jpg, .jpeg, .png are allowed",
+        "error"
+      );
+      return;
+    }
+
+    const generatedUrl = URL.createObjectURL(file);
+
+    Swal.fire({
+      title: "Preview Image",
+      imageUrl: generatedUrl,
+      imageAlt: "Selected image",
+      showCancelButton: true,
+      confirmButtonText: "Send",
+      cancelButtonText: "Cancel",
+      customClass: {
+        popup: "rounded-xl",
+        confirmButton:
+          "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700",
+        cancelButton:
+          "bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300",
+      },
+      preConfirm: () => {
+        Swal.showLoading();
+      },
+    }).then((result) => {
+      URL.revokeObjectURL(generatedUrl); // Always clean up
+      if (result.isConfirmed) {
+        handleSendMessage(message, file); // ✅ call directly with current message + file
+      }
+    });
+  };
+
+  const handleSendMessage = async (msg = message, img = image) => {
+    if ((msg?.trim?.().length || 0) === 0 && !img) return;
+
+    try {
+      console.log("message is -->", msg);
+      console.log("image is -->", img);
+      // Add your axios logic here
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setImage("");
+      setMessage("");
+    }
+  };
+
+  // Cleanup if needed elsewhere (not required with above revoke)
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
+  // Cleanup object URL
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
   return (
     <MainLayout>
       <div className="w-full ">
@@ -25,7 +105,7 @@ function Message() {
               {" "}
               {/* 3rem ~ header height */}
               {/* User list */}
-              <div className=" w-[30%] sm:w-[40%] border-r border-zinc-300 overflow-y-auto">
+              <div className=" w-[30%] sm:w-[40%] border-r border-zinc-300 overflow-y-auto custom-scrollbar">
                 <UserContactsPanel />
               </div>
               {/* Chat view */}
@@ -62,7 +142,6 @@ function Message() {
 
                 {/* All Chats */}
                 <div className="space-y-4  ">
-
                   <ChatBubble
                     type="outgoing"
                     name="Anand Jha"
@@ -103,11 +182,19 @@ function Message() {
                       >
                         <FcGallery size={24} />
                       </label>
-                      <input type="file" id="imageUpload" className="hidden" />
+                      <input
+                        type="file"
+                        id="imageUpload"
+                        className="hidden"
+                        onChange={handleFileChange}
+                        accept=".jpg,.jpeg,.png"
+                      />
 
                       {/* Message input */}
                       <input
                         type="text"
+                        value={message}
+                        onChange={(event) => setMessage(event.target.value)}
                         placeholder="Type a message..."
                         className="flex-1 min-w-[150px] px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
                       />
@@ -115,6 +202,7 @@ function Message() {
                       {/* Send button */}
                       <button
                         type="button"
+                        onClick={() => handleSendMessage()}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-all duration-200 flex items-center justify-center"
                       >
                         <IoMdSend size={20} className="sm:size-5" />

@@ -10,6 +10,8 @@ function BottomNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const user = useSelector(state => state.user.user)
+    const notificationCount = useSelector(state => state.notification.count)
+    
 
   const isFeed = location.pathname === "/feed";
   const isMyNetwork = location.pathname === "/mynetwork";
@@ -73,6 +75,9 @@ function BottomNavigation() {
         onClick={() => navigate("/notifications")}
       >
         <IoMdNotifications size={20} />
+        <span className={`absolute -top-2 -right-2 px-1.5 py-1 text-[10px] font-bold ${notificationCount === 0 ? '' : 'bg-red-600'}  text-white rounded-full leading-none`}>
+            {notificationCount !== 0 && notificationCount}
+          </span>
         <span>Alerts</span>
       </div>
 
