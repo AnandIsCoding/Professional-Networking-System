@@ -3,9 +3,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import GoogleLoginComponent from "../utils/GoogleLoginComponent";
 import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setShowModal } from "../Redux/Slices/modal.slice";
+import PrivacyPolicyModal from "../Components/modal/PrivacyPolicyModal";
 function LandingPage() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const showModal = useSelector(state => state?.modal?.showModal)
   return (
     <div>
       <div className="w-screen h-screen flex flex-col md:flex-row items-center md:fixed">
@@ -38,18 +42,18 @@ function LandingPage() {
           Sign in with Email
         </button>
 
-        <p className="text-sm text-center text-gray-600 px-4 mt-4">
+        <p onClick={()=>dispatch(setShowModal('privacyPolicy'))} className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4">
           By clicking <span className="font-medium">Continue</span> to join or
           sign in, you agree to LinkedIn’s&nbsp;
-          <a href="#" className="text-blue-600 hover:underline">
+          <a className="text-blue-600 hover:underline">
             User Agreement
           </a>
           ,&nbsp;
-          <a href="#" className="text-blue-600 hover:underline">
+          <a className="text-blue-600 hover:underline">
             Privacy Policy
           </a>
           , and&nbsp;
-          <a href="#" className="text-blue-600 hover:underline">
+          <a className="text-blue-600 hover:underline">
             Cookie Policy
           </a>
           .
@@ -73,6 +77,9 @@ function LandingPage() {
       </div>
      
     </div>
+    {
+      showModal === 'privacyPolicy' && <PrivacyPolicyModal/>
+    }
     </div>
   );
 }

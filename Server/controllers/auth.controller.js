@@ -14,7 +14,10 @@ import {
   uploadPdfToCloudinary,
 } from "../utils/helpers.utils.js";
 import cloudinary from "cloudinary";
+import Otp from '../models/otp.model.js'
 const { OAuth2Client } = pkg;
+import otpGenerator from 'otp-generator'
+import otpVerificationEmail from "../mail/templates/otpVerificationEmail.js";
 
 
 dotenv.config();
@@ -53,42 +56,60 @@ export const userRegisterController = async (req, res) => {
     //hash the password
     const encryptedPassword = await bcrypt.hash(password, 10);
     // create a new user
-    const user = await User.create({
-      email,
-      password: encryptedPassword,
-      fullName,
+    // const user = await User.create({
+    //   email,
+    //   password: encryptedPassword,
+    //   fullName,
+    // });
+
+    // // generate token
+    // const userToken = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
+    //   expiresIn: "7d",
+    // });
+    // // assign token in cookie
+    // res.cookie("userToken", userToken, {
+    //   httpOnly: true,
+    //   sameSite: "strict",
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    //   secure: process.env.NODE_ENV === "production",
+    // });
+    // // send registration mail to new user
+    // try {
+    //   await mailSender(
+    //     user.email,
+    //     "Welcome to LinkedSphere 🎉",
+    //     userRegistrationSuccessEmail(user.fullName)
+    //   );
+    // } catch (error) {
+    //   console.log(
+    //     chalk.bgRedBright(
+    //       "Error in sending mail to user in registerWithGoogleController"
+    //     )
+    //   );
+    // }
+    // res.status(201).json({
+    //   success: true,
+    //   message: "User registered successfully !!",
+    //   user: user,
+    //   userToken: userToken,
+    // });
+    const otp = otpGenerator.generate(6, {
+      digits: true,
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
     });
 
-    // generate token
-    const userToken = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
-      expiresIn: "7d",
-    });
-    // assign token in cookie
-    res.cookie("userToken", userToken, {
-      httpOnly: true,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      secure: process.env.NODE_ENV === "production",
-    });
-    // send registration mail to new user
-    try {
-      await mailSender(
-        user.email,
-        "Welcome to LinkedSphere 🎉",
-        userRegistrationSuccessEmail(user.fullName)
-      );
-    } catch (error) {
-      console.log(
-        chalk.bgRedBright(
-          "Error in sending mail to user in registerWithGoogleController"
-        )
-      );
-    }
-    res.status(201).json({
+    // remove any previous OTPs for this email
+    await Otp.deleteMany({ email });
+
+    await Otp.create({ email, fullName, password: encryptedPassword, otp });
+
+    await mailSender(email, "Verify your LinkedSphere account", otpVerificationEmail(fullName, otp));
+
+    return res.status(200).json({
       success: true,
-      message: "User registered successfully !!",
-      user: user,
-      userToken: userToken,
+      message: "OTP sent to your email. Please verify to complete registration.",
     });
   } catch (error) {
     // Error handling, error response
@@ -113,6 +134,68 @@ export const userRegisterController = async (req, res) => {
       message: "Internal Server Error !!",
       error: "Error in userRegisterController in auth.controller.js",
     });
+  }
+};
+
+export const verifyOtpController = async (req, res) => {
+  try {
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({ success: false, message: "OTP is required" });
+    }
+
+    const otpRecord = await Otp.findOne({ otp }).sort({ createdAt: -1 });
+
+    if (!otpRecord) {
+      return res.status(400).json({ success: false, message: "Invalid or expired OTP" });
+    }
+
+    const { email, fullName, password } = otpRecord;
+
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(409).json({ success: false, message: "User already registered" });
+    }
+
+    const newUser = await User.create({ email, fullName, password });
+
+    const token = jwt.sign({ _id: newUser._id }, process.env.SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
+    res.cookie("userToken", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    await Otp.deleteMany({ email }); // cleanup used OTPs
+
+    try {
+      await mailSender(
+        newUser?.email,
+        "Welcome to LinkedSphere 🎉",
+        userRegistrationSuccessEmail(newUser?.fullName)
+      );
+    } catch (error) {
+      console.log(
+        chalk.bgRedBright(
+          "Error in sending mail to user in registerWithGoogleController"
+        )
+      );
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "User registered and verified successfully",
+      user: newUser,
+      userToken:token,
+    });
+  } catch (error) {
+    console.error(chalk.bgRed("Error in verifyOtpController:"), error);
+    return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 

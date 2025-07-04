@@ -28,6 +28,7 @@ import { setUser } from "./Redux/Slices/auth.slice";
 import {setNotificationCount} from './Redux/Slices/notification.slice'
 import Activities from "./Pages/Activities";
 import SingleActivity from "./Pages/SingleActivity";
+import Verify from "./Pages/Verify";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function App() {
@@ -140,6 +141,12 @@ function App() {
           path="/signup"
           element={
             isAuthenticated ? <Navigate to="/feed" replace /> : <Signup />
+          }
+        />
+        <Route
+          path="/verify"
+          element={
+            isAuthenticated ? <Navigate to="/feed" replace /> : <Verify />
           }
         />
         <Route

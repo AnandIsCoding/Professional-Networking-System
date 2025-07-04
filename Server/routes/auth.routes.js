@@ -1,11 +1,12 @@
 import { Router } from 'express'
-import { getProfileByIdController, logoutController, registerWithGoogleController, updateUserController, userLoginController, userRegisterController } from '../controllers/auth.controller.js'
+import { getProfileByIdController, logoutController, registerWithGoogleController, updateUserController, userLoginController, userRegisterController, verifyOtpController } from '../controllers/auth.controller.js'
 import { isAuthenticated } from '../middlewares/authentication.middleware.js'
 import upload from '../configs/multer.config.js'
 
 const authRouter = Router()
 
 authRouter.post('/register', userRegisterController)
+authRouter.post('/verify',verifyOtpController)
 authRouter.post('/login',userLoginController)
 authRouter.post('/google', registerWithGoogleController)
 

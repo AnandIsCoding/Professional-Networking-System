@@ -77,11 +77,11 @@ function Signup() {
       );
       const { data } = res;
       if (data?.success) {
-        toast.success(data.message || "User registered successfully", {
+        toast.success(data.message || "Otp sent to the email successfully", {
           id: toastId,
         });
-        dispatch(setUser(data.user));
-        navigate("/feed");
+        // dispatch(setUser(data.user));
+         navigate("/verify");
       } else {
         toast.error(data.message || "User registration failed", {
           id: toastId,
