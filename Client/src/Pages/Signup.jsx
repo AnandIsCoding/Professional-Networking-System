@@ -6,9 +6,11 @@ import Footer from "../Components/Footer";
 import GoogleLoginComponent from "../utils/GoogleLoginComponent";
 import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../Redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
+import PrivacyPolicyModal from "../Components/modal/PrivacyPolicyModal";
+import { setShowModal } from "../Redux/Slices/modal.slice";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
@@ -19,7 +21,8 @@ function Signup() {
   const [showPassword, setShowPassowrd] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
+    const dispatch = useDispatch()
+  const showModal = useSelector(state => state?.modal?.showModal)
   const [formData, setFormdata] = useState({
     fullName: "",
     email: "",
@@ -130,7 +133,7 @@ function Signup() {
   return (
     <>
       <PublicNavbar />
-      <div className=" flex items-center justify-center   px-1 md:px-4 py-8">
+      <div className=" flex items-center justify-center   px-1 md:px-4 ">
         <form
           onSubmit={(event) =>
             isSignupMode ? handleSignup(event) : handleSignin(event)
@@ -233,7 +236,28 @@ function Signup() {
               {isSignupMode ? "SignIn" : "SignUp"}
             </span>{" "}
           </p>
+          <br></br>
+           <p onClick={()=>dispatch(setShowModal('privacyPolicy'))} className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4">
+                    By clicking <span className="font-medium">Continue</span> to join or
+                    sign in, you agree to LinkedIn’s&nbsp;
+                    <a className="text-blue-600 hover:underline">
+                      User Agreement
+                    </a>
+                    ,&nbsp;
+                    <a className="text-blue-600 hover:underline">
+                      Privacy Policy
+                    </a>
+                    , and&nbsp;
+                    <a className="text-blue-600 hover:underline">
+                      Cookie Policy
+                    </a>
+                    .
+                  </p>
+
         </form>
+        {
+      showModal === 'privacyPolicy' && <PrivacyPolicyModal/>
+    }
       </div>
     </>
   );
