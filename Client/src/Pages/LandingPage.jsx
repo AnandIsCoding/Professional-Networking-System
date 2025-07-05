@@ -42,7 +42,7 @@ function LandingPage() {
           Sign in with Email
         </button>
 
-        <p onClick={()=>dispatch(setShowModal('privacyPolicy'))} className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4">
+        <p onClick={()=>dispatch(setShowModal('privacyPolicy'))} title='Click me' className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4">
           By clicking <span className="font-medium">Continue</span> to join or
           sign in, you agree to LinkedIn’s&nbsp;
           <a className="text-blue-600 hover:underline">
