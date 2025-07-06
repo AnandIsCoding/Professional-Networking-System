@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-function UserContactsPanel() {
+function UserContactsPanel({setActive,activeConversationId,item}) {
+  
+  const [friend, setFriend] = useState([])
+  const user = useSelector(state => state?.user?.user)
+  useEffect(()=>{
+    let value = item.members.filter((i) => i._id !== user?._id)
+    setFriend(value[0])
+  },[])
   return (
-    <div className="flex flex-col sm:flex-row sm:gap-2 border-b-1 border-l-0 border-r-0 border-zinc-300 hover:bg-blue-50 p-2 cursor-pointer">
+    <div onClick={()=>setActive(item?._id,friend)} key={item?._id} className={`flex flex-col sm:flex-row sm:gap-2 border-b-1 border-l-0 border-r-0 border-zinc-300 hover:bg-blue-50 p-2 cursor-pointer ${activeConversationId === friend._id ? 'bg-blue-50' : ''} `}>
       {/* user's profile picture */}
       <img
-        src="https://imgs.search.brave.com/m3AjEyYqrqs66D2V3HzEOVsAP9yRCKGsKsLCf-_NFgo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzYyLzYzLzY1/LzM2MF9GXzQ2MjYz/NjUwMl85Y0RBWXV5/VnZCWTRxWUpsSGpX/N3ZxYXI1SFlTOGg4/eC5qcGc"
+        src={friend?.profilePic}
         alt="user's_profile_image"
         className="h-14 w-14 rounded-full"
       />
       {/* user's name and occupation etc */}
       <div className="flex flex-col sm:pt-1 ">
-        <h1>Sarang Tadaskar</h1>
-        <p className="text-gray-600 text-sm">Btech Graduate</p>
+        <h1>{friend?.fullName}</h1>
+        <p className="text-gray-600 text-sm">{friend?.headline}</p>
       </div>
     </div>
   );

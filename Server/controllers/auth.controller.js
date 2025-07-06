@@ -105,7 +105,7 @@ export const userRegisterController = async (req, res) => {
 
     await Otp.create({ email, fullName, password: encryptedPassword, otp });
 
-    await mailSender(email, "Verify your LinkedSphere account", otpVerificationEmail(fullName, otp));
+    await mailSender(email, "Verify your DevLinked account", otpVerificationEmail(fullName, otp));
 
     return res.status(200).json({
       success: true,
@@ -176,7 +176,7 @@ export const verifyOtpController = async (req, res) => {
     try {
       await mailSender(
         newUser?.email,
-        "Welcome to LinkedSphere 🎉",
+        "Welcome to DevLinked 🎉",
         userRegistrationSuccessEmail(newUser?.fullName)
       );
     } catch (error) {

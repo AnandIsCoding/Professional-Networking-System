@@ -4,7 +4,7 @@ const userRegistrationSuccessEmail = (name) => {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Welcome to LinkedSphere</title>
+    <title>Welcome to Devlinked</title>
     <style>
       body {
         background-color: #e6f2ff;
@@ -98,8 +98,8 @@ const userRegistrationSuccessEmail = (name) => {
   <body>
     <div class="container">
       <div class="header">
-        <img src="https://i.ibb.co/ZKq2MRW/linkedin-icon.png" alt="LinkedSphere Logo" />
-        <div class="title">Welcome to LinkedSphere, ${name}!</div>
+        <img src="https://res.cloudinary.com/dm0rlehq8/image/upload/v1751744657/DevlinkedLogo_mnxc0n.png" alt="Devlinked Logo" />
+        <div class="title">Welcome to Devlinked, ${name}!</div>
       </div>
 
       <div class="content">
@@ -116,7 +116,7 @@ const userRegistrationSuccessEmail = (name) => {
           </ul>
         </div>
 
-        <a class="cta" href="https://yourdomain.com/profile">Complete My Profile</a>
+        <a class="cta"  href="https://yourdomain.com/profile">Complete My Profile</a>
       </div>
 
       <div class="footer">

@@ -212,7 +212,7 @@ function Signup() {
 
           {/* signup signin btn */}
           <button
-            title={isSignupMode ? "Register to LinkedIn" : "SignIn to LinkedIn"}
+            title={isSignupMode ? "Register to Devlinked" : "SignIn toDevlinked"}
             className="w-full text-white bg-blue-600 hover:bg-blue-700 rounded-md my-1 text-base font-medium py-2 cursor-pointer"
           >
             {isSignupMode ? "Register" : "SignIn"}
@@ -227,7 +227,7 @@ function Signup() {
 
           <p className="text-center mt-0">
             {" "}
-            {isSignupMode ? "Already on LinkedIn ?  " : "New To linkedIn ?  "}
+            {isSignupMode ? "Already on Devlinked ?  " : "New To Devlinked ?  "}
             <span
               onClick={() => setIsSignupMode((prev) => !prev)}
               className="text-blue-700 cursor-pointer"
@@ -239,7 +239,7 @@ function Signup() {
           <br></br>
            <p onClick={()=>dispatch(setShowModal('privacyPolicy'))} className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4">
                     By clicking <span className="font-medium">Continue</span> to join or
-                    sign in, you agree to LinkedIn’s&nbsp;
+                    sign in, you agree to Devlinked’s&nbsp;
                     <a className="text-blue-600 hover:underline">
                       User Agreement
                     </a>

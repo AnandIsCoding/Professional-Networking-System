@@ -44,7 +44,7 @@ function LandingPage() {
 
         <p onClick={()=>dispatch(setShowModal('privacyPolicy'))} title='Click me' className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4">
           By clicking <span className="font-medium">Continue</span> to join or
-          sign in, you agree to LinkedIn’s&nbsp;
+          sign in, you agree to Devlinked’s&nbsp;
           <a className="text-blue-600 hover:underline">
             User Agreement
           </a>
@@ -60,7 +60,7 @@ function LandingPage() {
         </p>
 
         <p className="text-sm text-center text-gray-600 px-4 mt-4">
-          New to LinkedIn?{" "}
+          New to Devlinked?{" "}
           <NavLink to='/signup' className="text-blue-600 hover:underline">
             Join now
           </NavLink>{" "}

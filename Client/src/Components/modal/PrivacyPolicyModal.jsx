@@ -57,7 +57,7 @@ const PrivacyPolicyModal = () => {
           {activeTab === "Privacy Policy" && (
             <>
               <p>
-                At <strong>LinkedSphere</strong>, we are committed to protecting your personal
+                At <strong>Devlinked</strong>, we are committed to protecting your personal
                 information and your right to privacy. This privacy notice describes how we might
                 collect, use, and store your information when you use our platform.
               </p>
@@ -90,7 +90,7 @@ const PrivacyPolicyModal = () => {
             <>
               <h3 className="text-lg font-semibold text-gray-900">Introduction</h3>
               <p>
-                These Terms of Use govern your access to and use of LinkedSphere. By using the
+                These Terms of Use govern your access to and use of Devlinked. By using the
                 platform, you agree to comply with these terms.
               </p>
 
@@ -103,7 +103,7 @@ const PrivacyPolicyModal = () => {
 
               <h3 className="text-lg font-semibold text-gray-900">Limitation of Liability</h3>
               <p>
-                LinkedSphere is not responsible for user-generated content or third-party links. We
+                Devlinked is not responsible for user-generated content or third-party links. We
                 strive for accuracy, but make no guarantees regarding information completeness.
               </p>
             </>

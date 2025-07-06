@@ -67,16 +67,16 @@ function UserNavbar() {
         {/* Logo */}
         <div
           onClick={() => navigate("/feed")}
-          className="w-28 h-[2vw] cursor-pointer"
+          className="w-28 h-full cursor-pointer"
         >
           <img
-            src="/LinkedIn_logo.png"
+            src="/DevlinkedLogo.png"
             alt="LinkedIn Logo"
             className=" h-10 object-contain"
           />
         </div>
         {/* search box */}
-        <div className="w-full max-w-md mx-auto relative">
+        <div className="w-full max-w-md mx-auto relative ml-4">
           {/* Search Input */}
           <input
             type="text"

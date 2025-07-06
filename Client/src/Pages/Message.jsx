@@ -10,11 +10,18 @@ import { IoMdSend } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import axios from "axios";
+import toast from "react-hot-toast";
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Message() {
+  const user = useSelector((state) => state.user.user);
   const [message, setMessage] = useState("");
   const [image, setImage] = useState("");
   const [preview, setPreview] = useState("");
+  const [conversations, setConversations] = useState([]);
+  const [activeConversationId, setActiveConversationId] = useState(null);
+  const [activeConversationUser, setActiveConversationUser] = useState(null);
+  const [allMessages, setAllMessages] = useState([]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -56,20 +63,41 @@ function Message() {
     });
   };
 
-  const handleSendMessage = async (msg = message, img = image) => {
-    if ((msg?.trim?.().length || 0) === 0 && !img) return;
+  const handleSendMessage = async (msg = message, img) => {
+  if ((msg?.trim?.().length || 0) === 0 && !img) return;
 
-    try {
-      console.log("message is -->", msg);
-      console.log("image is -->", img);
-      // Add your axios logic here
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setImage("");
-      setMessage("");
+  try {
+    const formData = new FormData();
+    formData.append("message", msg);
+    formData.append("conversationId", activeConversationId);
+    if (img) {
+      formData.append("image", img); // ✅ Append file properly
     }
-  };
+
+    const res = await axios.post(`${baseUrl}/message/new`, formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data", // ✅ Required
+      },
+    });
+
+    const { data } = res;
+    if (data?.success) {
+      console.log(`${img ? 'Image' : 'Message'} sent successfully`);
+      setAllMessages((prev) => [...prev, data.newMessage]); // optional: update chat immediately
+    } else {
+      console.log("Something went wrong in sending message");
+      toast.error(data?.message || "Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error in sending message --->>", error);
+    toast.error(error?.response?.data?.message || "Something went wrong");
+  } finally {
+    setImage("");
+    setMessage("");
+  }
+};
+
 
   // Cleanup if needed elsewhere (not required with above revoke)
   useEffect(() => {
@@ -89,6 +117,60 @@ function Message() {
     };
   }, [preview]);
 
+  const fetchConversationMembers = async () => {
+    try {
+      const res = await axios.get(`${baseUrl}/conversation/all`, {
+        withCredentials: true,
+      });
+      const { data } = res;
+      if (data?.success) {
+        setConversations(data?.conversations);
+      } else {
+        console.log("data.success is false ----> and response is ---> ", res);
+      }
+    } catch (error) {
+      console.log(
+        "something went wrong in fetching conversations ---->> ",
+        error
+      );
+    }
+  };
+  useEffect(() => {
+    fetchConversationMembers();
+  }, []);
+
+  const setActive = (id, details) => {
+    setActiveConversationId(id);
+    setActiveConversationUser(details);
+  };
+
+  const fetchAllMessagesPerActiveId = async () => {
+    try {
+      const res = await axios.get(
+        `${baseUrl}/message/${activeConversationId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const { data } = res;
+      if (data?.success) {
+        console.log(data.messages)
+        setAllMessages(data.messages);
+      } else {
+        console.log("⚠️ Unexpected API structure:", res);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      console.log("❌ Error in fetching messages per id:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (activeConversationId) {
+      fetchAllMessagesPerActiveId();
+    }
+  }, [activeConversationId]);
+
   return (
     <MainLayout>
       <div className="w-full ">
@@ -106,76 +188,93 @@ function Message() {
               {/* 3rem ~ header height */}
               {/* User list */}
               <div className=" w-[30%] sm:w-[40%] border-r border-zinc-300 overflow-y-auto custom-scrollbar">
-                <UserContactsPanel />
+                <div className="space-y-0">
+                  {/* map previous conversations */}
+                  {conversations?.length < 1 ? (
+                    <div className="text-center text-gray-600 py-10">
+                      <p className="text-lg font-medium">
+                        No Previous Conversations Found 😥
+                      </p>
+                      <p className="text-sm text-gray-500 mt-4 md:mt-1">
+                        Start a new chat to see it here.
+                      </p>
+                      <p className="text-sm text-gray-500 mt-4 md:mt-1">
+                        Go to Friend's profile just message them to start
+                        Chatting.
+                      </p>
+                    </div>
+                  ) : (
+                    conversations.map((item, index) => (
+                      <UserContactsPanel
+                        setActive={setActive}
+                        activeConversationId={activeConversationId}
+                        item={item}
+                        key={item._id || index}
+                      />
+                    ))
+                  )}
+                </div>
               </div>
               {/* Chat view */}
-              <div className=" w-[70%] sm:w-[60%]   px-4 overflow-y-auto text-black custom-scrollbar">
-                {/* sticky user name and 3 dots top section */}
-                <div className="text-lg font-semibold sticky top-0 z-[999] bg-white py-3 flex justify-between border-b-1 border-zinc-300">
-                  <div>
-                    <h1>Chat with Sarang Tadaskar</h1>
-                    <p className="text-gray-500 text-sm">User 1</p>
-                  </div>
-
-                  <div className="cursor-pointer">
-                    {" "}
-                    <HiOutlineDotsHorizontal size={24} />{" "}
-                  </div>
+              {/* Chat view */}
+              <div className="w-[70%] sm:w-[60%] flex flex-col h-full max-h-[650px]">
+                {/* Chat header */}
+                <div className="px-4 py-3 border-b border-zinc-300 flex justify-between items-center text-lg font-semibold text-gray-800 bg-white sticky top-0 z-10">
+                  {activeConversationId && (
+                    <h1>Chat with {activeConversationUser?.fullName}</h1>
+                  )}
+                  <HiOutlineDotsHorizontal
+                    size={24}
+                    className="cursor-pointer"
+                  />
                 </div>
 
-                {/* Selected User details */}
-                <div className="flex flex-col  sm:gap-2 border-b-1 border-l-0 border-r-0 border-zinc-300  p-2 mb-2">
-                  {/* user's profile picture */}
-                  <img
-                    src="https://imgs.search.brave.com/m3AjEyYqrqs66D2V3HzEOVsAP9yRCKGsKsLCf-_NFgo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzYyLzYzLzY1/LzM2MF9GXzQ2MjYz/NjUwMl85Y0RBWXV5/VnZCWTRxWUpsSGpX/N3ZxYXI1SFlTOGg4/eC5qcGc"
-                    alt="user's_profile_image"
-                    className="h-16 w-16 rounded-full"
-                  />
-                  {/* user's name and occupation etc */}
-                  <div className="flex flex-col ">
-                    <h1>Sarang Tadaskar</h1>
-                    <p className="text-gray-500 text-sm">
-                      Btech Graduate, Maharastra India
-                    </p>
+                {/* User details */}
+                {activeConversationUser ? (
+                  <div className="flex flex-col gap-2 border-b border-zinc-300 px-4 py-2 bg-white">
+                    <img
+                      src={activeConversationUser?.profilePic}
+                      alt="user profile"
+                      className="h-16 w-16 rounded-full"
+                    />
+                    <div>
+                      <h1>{activeConversationUser?.fullName}</h1>
+                      <p className="text-gray-500 text-sm">
+                        {activeConversationUser?.headline
+                          .split(" ")
+                          .slice(0, 5)
+                          .join(" ")}
+                        ...
+                      </p>
+                    </div>
                   </div>
-                </div>
+                ) : (<p className="px-10 py-4">Select a Conversation to start Chatting</p>)}
 
-                {/* All Chats */}
-                <div className="space-y-4  ">
-                  <ChatBubble
-                    type="outgoing"
-                    name="Anand Jha"
-                    image="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    profile="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
-                  />
-
-                  <ChatBubble
-                    type="incoming"
-                    name="Sarang Tadaskar"
-                    message="This is dummy incoming message"
-                    profile="https://imgs.search.brave.com/m3AjEyYqrqs66D2V3HzEOVsAP9yRCKGsKsLCf-_NFgo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzYyLzYzLzY1/LzM2MF9GXzQ2MjYz/NjUwMl85Y0RBWXV5/VnZCWTRxWUpsSGpX/N3ZxYXI1SFlTOGg4/eC5qcGc"
-                  />
-                  <ChatBubble
-                    type="outgoing"
-                    name="Anand Jha"
-                    image="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    profile="https://res.cloudinary.com/dm0rlehq8/image/upload/v1734635541/Tinder/jonmvwzqgpscaw1lazgz.jpg"
-                  />
-
-                  <ChatBubble
-                    type="incoming"
-                    name="Sarang Tadaskar"
-                    message="This is dummy incoming message"
-                    profile="https://imgs.search.brave.com/m3AjEyYqrqs66D2V3HzEOVsAP9yRCKGsKsLCf-_NFgo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzYyLzYzLzY1/LzM2MF9GXzQ2MjYz/NjUwMl85Y0RBWXV5/VnZCWTRxWUpsSGpX/N3ZxYXI1SFlTOGg4/eC5qcGc"
-                  />
-                  {/* scroll to last message on each render */}
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 custom-scrollbar">
+                  {(activeConversationId && allMessages.length < 1) ? (
+                    <p className="text-sm text-gray-500">No messages yet.</p>
+                  ) : (
+                    allMessages.map((item, index) => (
+                      <ChatBubble
+                        key={index}
+                        type={
+                          item?.sender?._id === user._id ? "outgoing" : "incoming"
+                        }
+                        name={item?.sender?.fullName}
+                        image={item?.image}
+                        message={item?.message}
+                        profile={item?.sender?.profilePic}
+                      />
+                    ))
+                  )}
                   <ScrollChatToBottom />
+                </div>
 
-                  {/* input box */}
-                  {/* Message Input Section */}
-                  <div className="sticky bottom-0 left-0 bg-white w-full pt-2 pb-1 border-t border-zinc-200 px-2">
-                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
-                      {/* Image upload icon */}
+                {/* Input Box */}
+                {activeConversationUser && (
+                  <div className="border-t border-zinc-200 bg-white px-3 py-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <label
                         htmlFor="imageUpload"
                         className="cursor-pointer text-gray-600 hover:text-blue-500"
@@ -209,7 +308,7 @@ function Message() {
                       </button>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

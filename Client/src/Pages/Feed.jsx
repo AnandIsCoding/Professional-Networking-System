@@ -90,7 +90,7 @@ function Feed() {
         <div className="w-full lg:w-[25%] flex flex-col space-y-4 h-fit ">
           <Card padding={1}>
             <h1 className="text-xl font-semibold text-gray-700">
-              LinkedIn News
+              Devlinked News
             </h1>
             <h2 className="text-md font-semibold text-gray-500">Top Stories</h2>
             <div className="text-sm text-gray-500 space-y-1 mt-2">

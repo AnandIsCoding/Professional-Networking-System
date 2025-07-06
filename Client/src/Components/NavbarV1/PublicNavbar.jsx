@@ -8,8 +8,8 @@ function PublicNavbar() {
       {/* Logo */}
       <div onClick={()=>navigate('/')} className="w-28 h-auto cursor-pointer">
         <img
-          src="https://static.vecteezy.com/system/resources/thumbnails/014/018/583/small/linkedin-logo-on-transparent-background-free-vector.jpg"
-          alt="LinkedIn Logo"
+          src="/DevlinkedLogo.png"
+          alt="Devlinked Logo"
           className="object-contain"
         />
       </div>
