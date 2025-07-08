@@ -29,6 +29,7 @@ import {setNotificationCount} from './Redux/Slices/notification.slice'
 import Activities from "./Pages/Activities";
 import SingleActivity from "./Pages/SingleActivity";
 import Verify from "./Pages/Verify";
+import Error from "./Pages/Error";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -217,6 +218,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+        
+        <Route path='*' element={<Error/>} />
+
       </Routes>
     </div>
   );
