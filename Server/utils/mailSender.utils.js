@@ -1,13 +1,13 @@
-import nodemailer from 'nodemailer';
-import chalk from 'chalk';
-import dotenv from 'dotenv';
+import nodemailer from "nodemailer";
+import chalk from "chalk";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const mailSender = async (email, title, body) => {
   try {
     if (!email || !title || !body) {
-      throw new Error('Email, title, and body are required to send an email.');
+      throw new Error("Email, title, and body are required to send an email.");
     }
 
     let transporter = nodemailer.createTransport({
@@ -33,7 +33,10 @@ const mailSender = async (email, title, body) => {
 
     return info;
   } catch (error) {
-    console.error(chalk.bgRed.white('❌ Error in mailSender:'), chalk.red(error.message));
+    console.error(
+      chalk.bgRed.white("❌ Error in mailSender:"),
+      chalk.red(error.message)
+    );
   }
 };
 

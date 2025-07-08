@@ -51,7 +51,6 @@ const Message =
 
 export default Message;
 
-
 // conversationId ==> ID of the conversation to which this message belongs
 // sender ==> 	ID of the user who sent the message
 // message ==>  Text content of the message

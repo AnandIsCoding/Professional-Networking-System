@@ -102,8 +102,6 @@ function ShareDialog({ showShareDialog, setShowshareDialog, heading }) {
             <FaTwitter size={18} />
             <span className="hidden sm:inline">Twitter</span>
           </a>
-
-          
         </div>
       </div>
     </div>

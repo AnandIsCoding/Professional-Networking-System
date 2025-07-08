@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import ShareDialog from "../modal/ShareDialog";
-import {setShowModal } from "../../Redux/Slices/modal.slice";
+import { setShowModal } from "../../Redux/Slices/modal.slice";
 import ImageModal from "../Chat/ImageModal";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -18,9 +18,9 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 function Post({ post }) {
   const [showMore, setShowMore] = useState(false);
   const user = useSelector((state) => state.user.user);
-    const showModal = useSelector((state) => state.modal.showModal);
-    const dispatch = useDispatch()
-    const [activeImage, setActiveimage] = useState("");
+  const showModal = useSelector((state) => state.modal.showModal);
+  const dispatch = useDispatch();
+  const [activeImage, setActiveimage] = useState("");
   const navigate = useNavigate();
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsliked] = useState(false);
@@ -111,9 +111,9 @@ function Post({ post }) {
   };
   // console.log('Post is ',post)
   const handleImageClick = (image) => {
-      setActiveimage(image);
-      dispatch(setShowModal("chatImage"));
-    };
+    setActiveimage(image);
+    dispatch(setShowModal("chatImage"));
+  };
 
   return (
     <Card padding={0}>
@@ -175,9 +175,7 @@ function Post({ post }) {
 
         {/* image */}
         {post?.postImage && (
-          <div
-            className="w-full h-[300px] mt-4 "
-          >
+          <div className="w-full h-[300px] mt-4 ">
             <img
               src={post?.postImage}
               alt="Post_image"

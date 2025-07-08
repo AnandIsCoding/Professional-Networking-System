@@ -25,7 +25,7 @@ import Notifications from "./Pages/Notification";
 import PageTitleUpdater from "./utils/PageTitleUpdater";
 import axios from "axios";
 import { setUser } from "./Redux/Slices/auth.slice";
-import {setNotificationCount} from './Redux/Slices/notification.slice'
+import { setNotificationCount } from "./Redux/Slices/notification.slice";
 import Activities from "./Pages/Activities";
 import SingleActivity from "./Pages/SingleActivity";
 import Verify from "./Pages/Verify";
@@ -38,8 +38,8 @@ function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.user.user);
-  const user = useSelector(state => state.user.user)
-  const notificationCount = useSelector(state => state.notification.count)
+  const user = useSelector((state) => state.user.user);
+  const notificationCount = useSelector((state) => state.notification.count);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const fetchProfile = async () => {
@@ -65,25 +65,28 @@ function App() {
       setIsCheckingAuth(false); // Done checking auth
     }
   };
-  
 
-  const fetchActiveNotifications = async() =>{
+  const fetchActiveNotifications = async () => {
     try {
       const res = await axios.get(`${baseUrl}/notification/active`, {
         withCredentials: true,
       });
-      const {data} = res
-      if(data?.success){
+      const { data } = res;
+      if (data?.success) {
         // console.log(data?.count)
-        dispatch(setNotificationCount(data?.count))
-      }else{
-        console.log('Something went wrong in fetching notifications count')
-        console.log(res)
+        dispatch(setNotificationCount(data?.count));
+      } else {
+        console.log("Something went wrong in fetching notifications count");
+        console.log(res);
       }
     } catch (error) {
-      console.log(error?.response?.data?.message || 'Something went wrong in fetching active notifications count ---->> ',error)
+      console.log(
+        error?.response?.data?.message ||
+          "Something went wrong in fetching active notifications count ---->> ",
+        error
+      );
     }
-  }
+  };
 
   useEffect(() => {
     const disableContextMenu = (e) => {
@@ -112,7 +115,7 @@ function App() {
 
   useEffect(() => {
     fetchProfile();
-    fetchActiveNotifications()
+    fetchActiveNotifications();
   }, []);
 
   if (isCheckingAuth) {
@@ -218,9 +221,8 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
-        <Route path='*' element={<Error/>} />
 
+        <Route path="*" element={<Error />} />
       </Routes>
     </div>
   );

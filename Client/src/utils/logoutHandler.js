@@ -28,7 +28,11 @@ export const useLogoutHandler = () => {
       const { success, message } = res?.data;
 
       if (success) {
-        Swal.fire("Logged Out", message || "Successfully logged out.", "success");
+        Swal.fire(
+          "Logged Out",
+          message || "Successfully logged out.",
+          "success"
+        );
         dispatch(setUser(null));
         // Optionally redirect
         // window.location.href = "/login";

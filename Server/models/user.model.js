@@ -66,9 +66,10 @@ const userSchema = new mongoose.Schema(
     resume: {
       type: String,
       default: "",
-    },skills:{
-      type:[String],
-      default:[]
+    },
+    skills: {
+      type: [String],
+      default: [],
     },
     experience: [
       {

@@ -89,7 +89,7 @@ function Message() {
       if (data?.success) {
         // setAllMessages((prev) => [...prev, data.newMessage]);
         if (img) toast.success("Image sent successfully", { id: toastId });
-        socket.emit('sendMessage',activeConversationId, data)
+        socket.emit("sendMessage", activeConversationId, data);
       } else {
         if (img)
           toast.error(data?.message || "Failed to send image", { id: toastId });
@@ -149,7 +149,7 @@ function Message() {
   // setactive conversation id with socket
   const setActive = (id, details) => {
     setActiveConversationId(id);
-    socket.emit('joinConversation',id)
+    socket.emit("joinConversation", id);
     setActiveConversationUser(details);
   };
 
@@ -180,11 +180,11 @@ function Message() {
     }
   }, [activeConversationId]);
 
-  useEffect(()=>{
-      socket.on('receiveMessage',(response)=>{
-        setAllMessages([...allMessages,response?.newMessage])
-      })
-  },[allMessages])
+  useEffect(() => {
+    socket.on("receiveMessage", (response) => {
+      setAllMessages([...allMessages, response?.newMessage]);
+    });
+  }, [allMessages]);
 
   return (
     <MainLayout>
@@ -242,10 +242,7 @@ function Message() {
                     size={24}
                     className="cursor-pointer"
                   />
-                  
                 </div>
-
-              
 
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 custom-scrollbar z-[999]">

@@ -5,7 +5,7 @@ import { FaTimes } from "react-icons/fa";
 
 function ImageModal({ imageUrl, setActiveimage }) {
   const dispatch = useDispatch();
-  
+
   const handleClose = () => {
     dispatch(setShowModal(null));
     setActiveimage("");

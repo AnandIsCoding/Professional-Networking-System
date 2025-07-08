@@ -1,9 +1,9 @@
 import React from "react";
 import Card from "./Cards/Card";
-import {useSelector} from 'react-redux'
+import { useSelector } from "react-redux";
 
 function AdvertisementCard() {
-  const user = useSelector(state => state.user.user)
+  const user = useSelector((state) => state.user.user);
   // console.log(user)
   return (
     <div className="">
@@ -26,13 +26,18 @@ function AdvertisementCard() {
         </div>
         {/* some details */}
         <div className="p-4">
-            <h1 className="text-center text-lg text-gray-700 mt-2 ">{user?.fullName}</h1>
-        <p className="text-center text-sm text-zinc-600">Get the latest job and industry news</p>
-        <div className="flex justify-center pt-2">
-            <button className="px-10 w-fit text-sm border-blue-950 py-2 bg-blue-700 hover:bg-blue-800 rounded-2xl cursor-pointer text-white">Buy Premium &nbsp; ✨</button>
+          <h1 className="text-center text-lg text-gray-700 mt-2 ">
+            {user?.fullName}
+          </h1>
+          <p className="text-center text-sm text-zinc-600">
+            Get the latest job and industry news
+          </p>
+          <div className="flex justify-center pt-2">
+            <button className="px-10 w-fit text-sm border-blue-950 py-2 bg-blue-700 hover:bg-blue-800 rounded-2xl cursor-pointer text-white">
+              Buy Premium &nbsp; ✨
+            </button>
+          </div>
         </div>
-        </div>
-        
       </Card>
     </div>
   );

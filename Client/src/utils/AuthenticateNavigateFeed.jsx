@@ -2,7 +2,11 @@
 import { Navigate } from "react-router-dom";
 
 const AuthenticateNavigateFeed = ({ isAuthenticated }) => {
-  return isAuthenticated ? <Navigate to="/feed" replace /> : <Navigate to="/" replace />;
+  return isAuthenticated ? (
+    <Navigate to="/feed" replace />
+  ) : (
+    <Navigate to="/" replace />
+  );
 };
 
 export default AuthenticateNavigateFeed;

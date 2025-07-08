@@ -1,7 +1,7 @@
-import React, { useEffect, useState, lazy } from 'react';
-import Swal from 'sweetalert2';
+import React, { useEffect, useState, lazy } from "react";
+import Swal from "sweetalert2";
 
-const App = lazy(() => import('./App'));
+const App = lazy(() => import("./App"));
 
 function AppWrapper() {
   const [showMinLoader, setShowMinLoader] = useState(true);
@@ -48,38 +48,37 @@ function AppWrapper() {
   //   return () => clearInterval(interval);
   // }, [isOffline]);
   useEffect(() => {
-  const handleOnline = () => {
-    if (isOffline) {
+    const handleOnline = () => {
+      if (isOffline) {
+        Swal.fire({
+          icon: "success",
+          title: "Back Online",
+          text: "Your internet connection has been restored.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        setIsOffline(false);
+      }
+    };
+
+    const handleOffline = () => {
       Swal.fire({
-        icon: 'success',
-        title: 'Back Online',
-        text: 'Your internet connection has been restored.',
-        timer: 2000,
-        showConfirmButton: false,
+        icon: "error",
+        title: "You are Offline",
+        text: "Your internet connection appears to be lost.",
+        allowOutsideClick: false,
       });
-      setIsOffline(false);
-    }
-  };
+      setIsOffline(true);
+    };
 
-  const handleOffline = () => {
-    Swal.fire({
-      icon: 'error',
-      title: 'You are Offline',
-      text: 'Your internet connection appears to be lost.',
-      allowOutsideClick: false,
-    });
-    setIsOffline(true);
-  };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
-  window.addEventListener('online', handleOnline);
-  window.addEventListener('offline', handleOffline);
-
-  return () => {
-    window.removeEventListener('online', handleOnline);
-    window.removeEventListener('offline', handleOffline);
-  };
-}, [isOffline]);
-
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [isOffline]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -90,11 +89,7 @@ function AppWrapper() {
 
   const Loader = () => (
     <div className="fixed inset-0 bg-white flex justify-center items-center z-[9999]">
-      <img
-        src="/Loader.gif"
-        alt="Loading..."
-        className="w-[100px] h-[100px]"
-      />
+      <img src="/Loader.gif" alt="Loading..." className="w-[100px] h-[100px]" />
     </div>
   );
 

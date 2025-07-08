@@ -14,7 +14,7 @@ function UserNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
-  const notificationCount = useSelector(state => state.notification.count)
+  const notificationCount = useSelector((state) => state.notification.count);
   const [showSearchResult, setShowSearchResult] = useState(false);
   const isFeed = location.pathname === "/feed";
   const isMyNetwork = location.pathname === "/mynetwork";
@@ -82,7 +82,7 @@ function UserNavbar() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            onBlur={(e)=>setShowSearchResult(false)}
+            onBlur={(e) => setShowSearchResult(false)}
             placeholder="Search..."
             className="w-full px-4 py-2 border rounded-md searchuserbox"
           />
@@ -99,7 +99,7 @@ function UserNavbar() {
                   No User Found
                 </p>
               ) : (
-                searchResults.map((item,index) => (
+                searchResults.map((item, index) => (
                   <NavLink
                     key={item?._id}
                     to={`/profile/${item?._id}`}
@@ -113,12 +113,18 @@ function UserNavbar() {
                       alt="user"
                       className="w-10 h-10 rounded-full object-cover border border-gray-300"
                     />
-                    <div className="flex flex-col" onClick={()=>navigate(`/profile/${item?._id}`)}>
-                    
+                    <div
+                      className="flex flex-col"
+                      onClick={() => navigate(`/profile/${item?._id}`)}
+                    >
                       <span className="font-semibold text-gray-800">
                         {item?.fullName}
                       </span>
-                      <span className={`text-sm text-gray-500 ${item?.currentCompany ? '' : 'hidden'}`}>
+                      <span
+                        className={`text-sm text-gray-500 ${
+                          item?.currentCompany ? "" : "hidden"
+                        }`}
+                      >
                         @{item?.currentCompany}
                       </span>
                     </div>
@@ -181,7 +187,11 @@ function UserNavbar() {
           }`}
         >
           <IoMdNotifications size={20} />
-          <span className={`absolute -top-0.5 -right-0 px-1 py-1 text-[10px] font-bold ${notificationCount === 0 ? '' : 'bg-red-600'} text-white rounded-full leading-none`}>
+          <span
+            className={`absolute -top-0.5 -right-0 px-1 py-1 text-[10px] font-bold ${
+              notificationCount === 0 ? "" : "bg-red-600"
+            } text-white rounded-full leading-none`}
+          >
             {notificationCount !== 0 && notificationCount}
           </span>
           <span>Notifications</span>

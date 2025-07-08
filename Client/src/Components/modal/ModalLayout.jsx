@@ -5,7 +5,7 @@ import { setShowModal } from "../../Redux/Slices/modal.slice";
 import { FaTimes } from "react-icons/fa";
 
 function ModalLayout(props) {
-     const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.modal.showModal);
   const modalRef = useRef();
@@ -21,22 +21,22 @@ function ModalLayout(props) {
   }, [showModal]);
 
   // Close modal on outside click
-useEffect(() => {
-  function handleOutsideClick(event) {
-    const isInsideModal = modalRef.current && modalRef.current.contains(event.target);
-    const isInsideSwal = event.target.closest(".swal2-container");
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      const isInsideModal =
+        modalRef.current && modalRef.current.contains(event.target);
+      const isInsideSwal = event.target.closest(".swal2-container");
 
-    if (!isInsideModal && !isInsideSwal) {
-      dispatch(setShowModal(null));
+      if (!isInsideModal && !isInsideSwal) {
+        dispatch(setShowModal(null));
+      }
     }
-  }
 
-  document.addEventListener("mousedown", handleOutsideClick);
-  return () => {
-    document.removeEventListener("mousedown", handleOutsideClick);
-  };
-}, [dispatch]);
-
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [dispatch]);
 
   const handleCloseModal = () => {
     dispatch(setShowModal(null));
@@ -61,7 +61,7 @@ useEffect(() => {
             <h1 className="text-xl text-gray-700 pt-3 px-3">{props?.title}</h1>
           </div>
           <div onClick={handleCloseModal}>
-            <FaTimes size={28} className="hover:text-[red] cursor-pointer"/>
+            <FaTimes size={28} className="hover:text-[red] cursor-pointer" />
           </div>
         </div>
 

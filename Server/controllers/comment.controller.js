@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import Comment from "../models/comment.model.js";
 import Notification from "../models/notification.model.js";
-import Post from '../models/post.model.js'
+import Post from "../models/post.model.js";
 import chalk from "chalk";
 
-// add comment to the post , accepts postId and comment from request body 
+// add comment to the post , accepts postId and comment from request body
 export const addCommentController = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -17,38 +17,50 @@ export const addCommentController = async (req, res) => {
       });
     }
 
-    if(!mongoose.Types.ObjectId.isValid(postId)){
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
       return res.status(400).json({
         success: false,
         message: "PostId isn't a valid ObjectId",
       });
     }
-    const post = await Post.findById({_id:postId}).populate("user", "-password")
-    if(!post){
-      return res.status(404).json({success:false, message:'Post not found', error:'Post not found'})
+    const post = await Post.findById({ _id: postId }).populate(
+      "user",
+      "-password"
+    );
+    if (!post) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "Post not found",
+          error: "Post not found",
+        });
     }
 
     const newComment = await Comment.create({
-      user:userId,
-      post:postId,
+      user: userId,
+      post: postId,
       comment,
     });
-    await newComment.populate('user', 'fullName headline profilePic');
-    post.totalComments = post.totalComments + 1
+    await newComment.populate("user", "fullName headline profilePic");
+    post.totalComments = post.totalComments + 1;
     post.comments.push(newComment._id);
 
-    await post.save()
+    await post.save();
 
     // now we need to populate user of new comment, because notification content will contain fullname of user
-    const populatedComment = await Comment.findById(newComment._id).populate('user', 'fullName email profilePic about headline')
-    const content = `${populatedComment.user.fullName} has commented on your post`
+    const populatedComment = await Comment.findById(newComment._id).populate(
+      "user",
+      "fullName email profilePic about headline"
+    );
+    const content = `${populatedComment.user.fullName} has commented on your post`;
     const notification = await Notification.create({
-      sender:userId,
-      receiver:post.user._id,
+      sender: userId,
+      receiver: post.user._id,
       content,
-      notificationType:'comment',
-      postId
-    })
+      notificationType: "comment",
+      postId,
+    });
 
     return res.status(201).json({
       success: true,
@@ -70,12 +82,10 @@ export const addCommentController = async (req, res) => {
   }
 };
 
-
-
 // get all comment of the particular post, get comments by postId
-export const getCommentByPostIdController = async(req,res) =>{
+export const getCommentByPostIdController = async (req, res) => {
   try {
-    const {postId} = req.params
+    const { postId } = req.params;
     if (!postId) {
       return res.status(400).json({
         success: false,
@@ -83,14 +93,22 @@ export const getCommentByPostIdController = async(req,res) =>{
       });
     }
 
-    if(!mongoose.Types.ObjectId.isValid(postId)){
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
       return res.status(400).json({
         success: false,
         message: "PostId isn't a valid ObjectId",
       });
     }
-    const comments = await Comment.find({post:postId}).sort({createdAt:-1}).populate('user', 'fullName email profilePic headline about')
-    return res.status(201).json({success:true, message:'Comments fetched by id successfully', comments})
+    const comments = await Comment.find({ post: postId })
+      .sort({ createdAt: -1 })
+      .populate("user", "fullName email profilePic headline about");
+    return res
+      .status(201)
+      .json({
+        success: true,
+        message: "Comments fetched by id successfully",
+        comments,
+      });
   } catch (error) {
     console.log(
       chalk.bgRedBright(
@@ -104,4 +122,4 @@ export const getCommentByPostIdController = async(req,res) =>{
       error: "Error in getCommentByPostIdController in comment.controller.js",
     });
   }
-}
+};

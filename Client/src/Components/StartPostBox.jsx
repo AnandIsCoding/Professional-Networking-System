@@ -1,24 +1,22 @@
-import React, { useEffect } from 'react';
-import { MdPhotoLibrary, MdOndemandVideo, MdArticle } from 'react-icons/md';
-import ModalLayout from './modal/ModalLayout';
-import WritePostModal from './modal/WritePostModal';
-import { setShowModal } from '../Redux/Slices/modal.slice';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from "react";
+import { MdPhotoLibrary, MdOndemandVideo, MdArticle } from "react-icons/md";
+import ModalLayout from "./modal/ModalLayout";
+import WritePostModal from "./modal/WritePostModal";
+import { setShowModal } from "../Redux/Slices/modal.slice";
+import { useDispatch, useSelector } from "react-redux";
 
-
-const StartPostBox = ({showModal, allPost, setAllpost}) => {
-   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch()
+const StartPostBox = ({ showModal, allPost, setAllpost }) => {
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const handleShowModel = () => {
-      dispatch(setShowModal('writePost'));
-    };
-    useEffect(()=>{
-      dispatch(setShowModal(null));
-    },[])
-    
+    dispatch(setShowModal("writePost"));
+  };
+  useEffect(() => {
+    dispatch(setShowModal(null));
+  }, []);
+
   return (
     <div className="bg-white border border-zinc-200 p-4 rounded-md md:col-span-3 md:col-start-2 md:row-start-1">
-      
       {/* Top: Avatar and Post Button */}
       <div className="flex items-center gap-3 mb-4">
         <img
@@ -26,7 +24,10 @@ const StartPostBox = ({showModal, allPost, setAllpost}) => {
           alt="User"
           className="w-10 h-10 rounded-full object-cover"
         />
-        <button onClick={handleShowModel} className="flex-grow md:font-bold cursor-pointer text-left px-4 py-2 border border-zinc-300 rounded-full text-zinc-600 bg-white hover:bg-zinc-100 outline-none">
+        <button
+          onClick={handleShowModel}
+          className="flex-grow md:font-bold cursor-pointer text-left px-4 py-2 border border-zinc-300 rounded-full text-zinc-600 bg-white hover:bg-zinc-100 outline-none"
+        >
           Write a post
         </button>
       </div>
@@ -46,8 +47,8 @@ const StartPostBox = ({showModal, allPost, setAllpost}) => {
           <span>Write article</span>
         </div>
       </div>
-        {/* Modal for writing post */}
-      {showModal === 'writePost' && (
+      {/* Modal for writing post */}
+      {showModal === "writePost" && (
         <ModalLayout title="Start Post" modalName="writePost" showImage={1}>
           <WritePostModal allPost={allPost} setAllpost={setAllpost} />
         </ModalLayout>

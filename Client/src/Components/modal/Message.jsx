@@ -6,65 +6,63 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { setUser } from "../../Redux/Slices/auth.slice";
 import { setShowModal } from "../../Redux/Slices/modal.slice";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-function Message({userData}) {
-  const navigate = useNavigate()
+function Message({ userData }) {
+  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
 
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (message.trim().length < 1) return;
 
-const handleSend = async (e) => {
-  e.preventDefault();
-  if (message.trim().length < 1) return;
+    const toastId = toast.loading("Sending message...");
 
-  const toastId = toast.loading("Sending message...");
+    try {
+      const res = await axios.post(
+        `${baseUrl}/conversation/new`,
+        { receiverId: userData?._id, message },
+        { withCredentials: true }
+      );
+      const { data } = res;
 
-  try {
-    const res = await axios.post(
-      `${baseUrl}/conversation/new`,
-      { receiverId: userData?._id, message },
-      { withCredentials: true }
-    );
-    const { data } = res;
+      if (data?.success) {
+        toast.dismiss(toastId);
+        setMessage("");
+        dispatch(setShowModal(null));
 
-    if (data?.success) {
-      toast.dismiss(toastId);
+        // SweetAlert2 with redirect after confirm
+        await Swal.fire({
+          icon: "success",
+          title: "Message Sent!",
+          html: `<strong>For future chatting</strong>, go to the <b>Message</b> tab and continue your conversation.`,
+          confirmButtonText: "Go to Messages",
+          confirmButtonColor: "#2563eb",
+          background: "#fff",
+          customClass: {
+            popup: "rounded-xl shadow-md",
+          },
+        });
+
+        // Redirect after user clicks OK
+        navigate("/message");
+      } else {
+        toast.error(data?.message || "Something went wrong", { id: toastId });
+        console.log(res);
+        dispatch(setShowModal(null));
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong", {
+        id: toastId,
+      });
+      console.log(error);
       setMessage("");
       dispatch(setShowModal(null));
-
-      // SweetAlert2 with redirect after confirm
-      await Swal.fire({
-        icon: "success",
-        title: "Message Sent!",
-        html: `<strong>For future chatting</strong>, go to the <b>Message</b> tab and continue your conversation.`,
-        confirmButtonText: "Go to Messages",
-        confirmButtonColor: "#2563eb",
-        background: "#fff",
-        customClass: {
-          popup: "rounded-xl shadow-md",
-        },
-      });
-
-      // Redirect after user clicks OK
-      navigate("/message");
-
-    } else {
-      toast.error(data?.message || "Something went wrong", { id: toastId });
-      console.log(res)
-      dispatch(setShowModal(null));
     }
-
-  } catch (error) {
-    toast.error(error?.response?.data?.message || "Something went wrong", { id: toastId });
-    console.log(error)
-    setMessage("");
-    dispatch(setShowModal(null));
-  }
-};
-
+  };
 
   return (
     <div className="w-full mx-auto pt-8 md:pt-0">

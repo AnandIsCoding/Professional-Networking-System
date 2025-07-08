@@ -37,10 +37,7 @@ const Error = () => {
           <h1>404</h1>
           <hr />
           <div>Page Not Found</div>
-          <button
-            onClick={() => navigate("/")}
-            className="home-button"
-          >
+          <button onClick={() => navigate("/")} className="home-button">
             ⬅ Back to Home
           </button>
         </div>

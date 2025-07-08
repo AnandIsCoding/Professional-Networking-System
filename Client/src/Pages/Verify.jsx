@@ -86,7 +86,9 @@ const Verify = () => {
         setVerified(true);
         setTimeout(() => navigate("/feed"), 1500);
       } else {
-        toast.error(data?.message || "OTP verification failed", { id: toastId });
+        toast.error(data?.message || "OTP verification failed", {
+          id: toastId,
+        });
       }
     } catch (error) {
       console.error("Verify.jsx -> handleSubmit error", error);
@@ -165,7 +167,8 @@ const Verify = () => {
                 <div className="mt-6 text-center text-sm text-gray-500 space-y-1">
                   <p>
                     Code is valid for{" "}
-                    <span className="text-gray-700 font-medium">5 minutes</span>.
+                    <span className="text-gray-700 font-medium">5 minutes</span>
+                    .
                   </p>
                   {timer > 0 ? (
                     <p>

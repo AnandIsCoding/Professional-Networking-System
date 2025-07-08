@@ -10,11 +10,10 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Notifications() {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
-  
 
   const fetchNotifications = async () => {
     setLoading(true); // start loading
@@ -35,8 +34,8 @@ function Notifications() {
           "Something went wrong in fetching active notifications---->> ",
         error
       );
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,7 +55,7 @@ function Notifications() {
       );
       const { data } = res;
       if (data?.success) {
-        dispatch(setNotificationCount(data?.activeNotificationCount))
+        dispatch(setNotificationCount(data?.activeNotificationCount));
         if (notificationType === "comment") {
           navigate(`/post/${postId}`);
         } else if (notificationType === "like") {
@@ -91,69 +90,73 @@ function Notifications() {
             <ProfileCard user={user} />
           </div>
 
-        {/* Center - Scrollable Notifications */}
-<div className="md:col-span-6 h-full overflow-y-auto px-4 py-5 space-y-4">
-  {loading ? (
-    <div className="flex justify-center items-center h-32">
-      <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-      <span className="ml-3 text-sm text-gray-600">Loading notifications...</span>
-    </div>
-  ) : notifications?.length > 0 ? (
-    notifications.map((item) => (
-      <div
-        key={item._id}
-        onClick={() =>
-          handleNotificationClick(
-            item?.notificationType,
-            item?._id,
-            item?.postId,
-            item?.sender?._id
-          )
-        }
-        className={`${
-          item?.isRead ? "bg-white" : "bg-blue-50"
-        } p-4 flex items-start border-b border-gray-300 space-x-4 cursor-pointer rounded-md hover:shadow-sm transition-all`}
-      >
-        {/* Profile Image */}
-        <img
-          src={item?.sender?.profilePic}
-          alt="User"
-          className="w-10 h-10 rounded-full object-cover"
-        />
+          {/* Center - Scrollable Notifications */}
+          <div className="md:col-span-6 h-full overflow-y-auto px-4 py-5 space-y-4">
+            {loading ? (
+              <div className="flex justify-center items-center h-32">
+                <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="ml-3 text-sm text-gray-600">
+                  Loading notifications...
+                </span>
+              </div>
+            ) : notifications?.length > 0 ? (
+              notifications.map((item) => (
+                <div
+                  key={item._id}
+                  onClick={() =>
+                    handleNotificationClick(
+                      item?.notificationType,
+                      item?._id,
+                      item?.postId,
+                      item?.sender?._id
+                    )
+                  }
+                  className={`${
+                    item?.isRead ? "bg-white" : "bg-blue-50"
+                  } p-4 flex items-start border-b border-gray-300 space-x-4 cursor-pointer rounded-md hover:shadow-sm transition-all`}
+                >
+                  {/* Profile Image */}
+                  <img
+                    src={item?.sender?.profilePic}
+                    alt="User"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
 
-        {/* Notification Text */}
-        <div className="flex-1">
-          <p className="text-sm text-gray-800 font-medium">
-            {item?.sender?.fullName}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">{item?.content}</p>
-          <p className="text-xs text-gray-500 mt-1">
-            {new Date(item?.updatedAt).toLocaleTimeString("en-IN", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-            })}
-            ,{" "}
-            {new Date(item?.updatedAt).toLocaleDateString("en-IN", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })}
-          </p>
-        </div>
-      </div>
-    ))
-  ) : (
-    <div className="flex flex-col items-center justify-center h-32 text-gray-500">
-      <img
-        src="https://static.thenounproject.com/png/4462572-200.png"
-        alt="no-notification"
-        className="w-12 h-12 opacity-50"
-      />
-      <p className="mt-2 text-sm">No notifications found</p>
-    </div>
-  )}
-</div>
+                  {/* Notification Text */}
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-800 font-medium">
+                      {item?.sender?.fullName}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {item?.content}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {new Date(item?.updatedAt).toLocaleTimeString("en-IN", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                      ,{" "}
+                      {new Date(item?.updatedAt).toLocaleDateString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center h-32 text-gray-500">
+                <img
+                  src="https://static.thenounproject.com/png/4462572-200.png"
+                  alt="no-notification"
+                  className="w-12 h-12 opacity-50"
+                />
+                <p className="mt-2 text-sm">No notifications found</p>
+              </div>
+            )}
+          </div>
 
           {/* Right - AdvertisementCard */}
           <div className="md:col-span-3 hidden md:block overflow-hidden  px-2 py-4">

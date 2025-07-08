@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function ProfileCard({ user }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const profileImage =
     user?.profilePic && user.profilePic.startsWith("http")
       ? user.profilePic
@@ -14,8 +14,11 @@ function ProfileCard({ user }) {
 
   return (
     <Card padding={0}>
-      <div className="h-22 w-full relative rounded-md cursor-pointer" onClick={()=>navigate(`/profile/${user?._id}`)}>
-        <div className="relative w-full h-18 rounded-t-md" >
+      <div
+        className="h-22 w-full relative rounded-md cursor-pointer"
+        onClick={() => navigate(`/profile/${user?._id}`)}
+      >
+        <div className="relative w-full h-18 rounded-t-md">
           <img
             src={user?.profileBanner}
             alt="Profile_Banner"
@@ -31,7 +34,6 @@ function ProfileCard({ user }) {
           <img
             src={user?.profilePic || profileImage}
             alt="Profile_Pic"
-           
             className="w-full h-full object-cover rounded-full"
           />
         </div>

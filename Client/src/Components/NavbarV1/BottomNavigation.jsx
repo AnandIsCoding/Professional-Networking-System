@@ -9,21 +9,21 @@ import { useSelector } from "react-redux";
 function BottomNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
-  const user = useSelector(state => state.user.user)
-    const notificationCount = useSelector(state => state.notification.count)
-    
+  const user = useSelector((state) => state.user.user);
+  const notificationCount = useSelector((state) => state.notification.count);
 
   const isFeed = location.pathname === "/feed";
   const isMyNetwork = location.pathname === "/mynetwork";
   const isResume = location.pathname === "/resume";
   const isMessage = location.pathname === "/message";
   const isNotifications = location.pathname === "/notifications";
-   const isProfile = location.pathname.startsWith("/profile");
+  const isProfile = location.pathname.startsWith("/profile");
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center text-xs py-2 md:flex lg:hidden z-50">
       {/* Home */}
-      <NavLink to='/feed'
+      <NavLink
+        to="/feed"
         className={`relative flex flex-col items-center cursor-pointer transition-transform duration-300 ${
           isFeed ? "scale-120 font-semibold border-b-1 border-black" : ""
         }`}
@@ -31,11 +31,11 @@ function BottomNavigation() {
       >
         <FcHome onClick={() => navigate("/feed")} size={20} />
         <span onClick={() => navigate("/feed")}>Home</span>
-        
       </NavLink>
 
       {/* My Network */}
-      <NavLink to='/mynetwork'
+      <NavLink
+        to="/mynetwork"
         className={`relative flex flex-col items-center cursor-pointer transition-transform duration-300 ${
           isMyNetwork ? "scale-120 font-semibold border-b-1 border-black" : ""
         }`}
@@ -70,14 +70,20 @@ function BottomNavigation() {
       {/* Notifications */}
       <div
         className={`relative flex flex-col items-center cursor-pointer transition-transform duration-300 ${
-          isNotifications ? "scale-120 font-semibold border-b-1 border-black" : ""
+          isNotifications
+            ? "scale-120 font-semibold border-b-1 border-black"
+            : ""
         }`}
         onClick={() => navigate("/notifications")}
       >
         <IoMdNotifications size={20} />
-        <span className={`absolute -top-2 -right-2 px-1.5 py-1 text-[10px] font-bold ${notificationCount === 0 ? '' : 'bg-red-600'}  text-white rounded-full leading-none`}>
-            {notificationCount !== 0 && notificationCount}
-          </span>
+        <span
+          className={`absolute -top-2 -right-2 px-1.5 py-1 text-[10px] font-bold ${
+            notificationCount === 0 ? "" : "bg-red-600"
+          }  text-white rounded-full leading-none`}
+        >
+          {notificationCount !== 0 && notificationCount}
+        </span>
         <span>Alerts</span>
       </div>
 

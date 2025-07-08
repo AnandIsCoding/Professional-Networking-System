@@ -1,25 +1,20 @@
-import multer from 'multer'
+import multer from "multer";
 
 const storage = multer.diskStorage({
-    // destination: function (req, file, cb) {
-    //     cb(null, 'uploads/')
-    // },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
-    }
-})
+  // destination: function (req, file, cb) {
+  //     cb(null, 'uploads/')
+  // },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-const upload = multer(
-    {
-            storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 }
-    }
-)
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 export default upload;
-
-
-
 
 //  notes :
 //  Multer is a middleware for handling file uploads in Node.js with Express. It allows users to upload images, PDFs, and other files to your server.

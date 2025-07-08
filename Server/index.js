@@ -67,12 +67,10 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/conversation", conversationRouter);
 app.use("/api/v1/message", messageRouter);
 
-
-
 const server = http.createServer(app);
 // ✅ Initialize the Socket.IO server
 
-initializeSocket(server)
+initializeSocket(server);
 
 // database connection
 connectToDb()

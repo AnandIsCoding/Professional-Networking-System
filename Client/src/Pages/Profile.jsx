@@ -160,23 +160,25 @@ function Profile() {
           id: toastId,
         });
         dispatch(setUser(data?.user));
-        dispatch(setShowModal(null))
+        dispatch(setShowModal(null));
         // console.log("data of sending friend request ---> ", data);
-      }else {
+      } else {
         toast.error(data.message || "Something went wrong", {
           id: toastId,
         });
-        dispatch(setShowModal(null))
+        dispatch(setShowModal(null));
       }
     } catch (error) {
       console.log("Error in sending friend requetst ---->> ", error);
-      toast.error(error?.response?.data?.message || "Something went wrong",{id: toastId});
-      dispatch(setShowModal(null))
+      toast.error(error?.response?.data?.message || "Something went wrong", {
+        id: toastId,
+      });
+      dispatch(setShowModal(null));
     }
   };
 
   const handleAccept = async () => {
-    // Accept request logic 
+    // Accept request logic
     const toastId = toast.loading("Please wait ...");
     try {
       const res = await axios.post(
@@ -190,78 +192,77 @@ function Profile() {
           id: toastId,
         });
         dispatch(setUser(data?.user));
-        dispatch(setShowModal(null))
+        dispatch(setShowModal(null));
         // console.log("data of accepting friend request ---> ", data);
-      }else {
+      } else {
         toast.error(data.message || "Something went wrong", {
           id: toastId,
         });
-        dispatch(setShowModal(null))
+        dispatch(setShowModal(null));
       }
     } catch (error) {
       console.log("Error in accepting friend requetst ---->> ", error);
-      toast.error(error?.response?.data?.message || "Something went wrong",{id: toastId});
-      dispatch(setShowModal(null))
+      toast.error(error?.response?.data?.message || "Something went wrong", {
+        id: toastId,
+      });
+      dispatch(setShowModal(null));
     }
   };
 
   // ignore a particular connection request, api not devloped just btn added, (future scope)
-const handleIgnore = async () => {
-  await Swal.fire({
-    title: "🚫 Feature Under Construction",
-    text: "As of now, you can't ignore a connection request.",
-    icon: "info",
-    confirmButtonText: "Okay",
-    confirmButtonColor: "#2563EB", // Tailwind blue-600
-  });
-};
-
+  const handleIgnore = async () => {
+    await Swal.fire({
+      title: "🚫 Feature Under Construction",
+      text: "As of now, you can't ignore a connection request.",
+      icon: "info",
+      confirmButtonText: "Okay",
+      confirmButtonColor: "#2563EB", // Tailwind blue-600
+    });
+  };
 
   // disconnect friend
   const handleDisconnect = async () => {
-  const confirmed = await Swal.fire({
-    title: "Are you sure?",
-    text: "Do you want to remove this connection?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, disconnect",
-    cancelButtonText: "Cancel",
-  });
+    const confirmed = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove this connection?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, disconnect",
+      cancelButtonText: "Cancel",
+    });
 
-  if (!confirmed.isConfirmed) return;
+    if (!confirmed.isConfirmed) return;
 
-  const toastId = toast.loading("Disconnecting...");
+    const toastId = toast.loading("Disconnecting...");
 
-  try {
-    const res = await axios.delete(
-      `${baseUrl}/user/removefriend/${userData?._id}`,
-      { withCredentials: true }
-    );
+    try {
+      const res = await axios.delete(
+        `${baseUrl}/user/removefriend/${userData?._id}`,
+        { withCredentials: true }
+      );
 
-    const { data } = res;
-    if (data?.success) {
-      toast.success(data?.message || "Disconnected successfully", {
+      const { data } = res;
+      if (data?.success) {
+        toast.success(data?.message || "Disconnected successfully", {
+          id: toastId,
+        });
+        dispatch(setUser(data?.user));
+        dispatch(setShowModal(null));
+        // console.log("Disconnected from friend --->", data);
+      } else {
+        toast.error(data?.message || "Something went wrong", {
+          id: toastId,
+        });
+        dispatch(setShowModal(null));
+      }
+    } catch (error) {
+      console.error("Error in disconnecting friend --->", error);
+      toast.error(error?.response?.data?.message || "Something went wrong", {
         id: toastId,
       });
-      dispatch(setUser(data?.user));
-      dispatch(setShowModal(null))
-      // console.log("Disconnected from friend --->", data);
-    } else {
-      toast.error(data?.message || "Something went wrong", {
-        id: toastId,
-      });
-      dispatch(setShowModal(null))
+      dispatch(setShowModal(null));
     }
-  } catch (error) {
-    console.error("Error in disconnecting friend --->", error);
-    toast.error(
-      error?.response?.data?.message || "Something went wrong",
-      { id: toastId }
-    );
-    dispatch(setShowModal(null))
-  }
-};
-
+  };
 
   return (
     <MainLayout>
@@ -354,9 +355,16 @@ const handleIgnore = async () => {
                   >
                     Share Profile
                   </button>
-                  {
-                    userData?.resume && <a target='_blank' title='Resume of the user' className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer" href={userData?.resume}>Resume</a>
-                  }
+                  {userData?.resume && (
+                    <a
+                      target="_blank"
+                      title="Resume of the user"
+                      className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer"
+                      href={userData?.resume}
+                    >
+                      Resume
+                    </a>
+                  )}
                 </div>
                 {/* show message only on other user's profile , not on my */}
                 <div className="flex gap-3">
@@ -380,7 +388,7 @@ const handleIgnore = async () => {
                             onClick={handleDisconnect}
                             className="px-5 py-2  text-sm bg-red-500 text-white hover:bg-red-700 rounded-xl transition cursor-pointer"
                           >
-                            Disconnect 
+                            Disconnect
                           </button>
                         </>
                       ) : isInMypending ? (
@@ -519,16 +527,16 @@ const handleIgnore = async () => {
               </div>
               {/* button to show all posts */}
               <div className="flex justify-center items-center">
-                {
-                  top5Posts?.length && <button
-                  onClick={() => navigate(`/profile/${id}/activities`)}
-                  title="Show All Posts"
-                  className="px-5 mt-2 py-2  flex justify-between text-sm bg-blue-300 text-black hover:bg-blue-200 rounded-xl transition cursor-pointer"
-                >
-                  <span>Show All Posts </span>
-                  <FaArrowRightLong className="mt-1 mx-3" />
-                </button>
-                }
+                {top5Posts?.length && (
+                  <button
+                    onClick={() => navigate(`/profile/${id}/activities`)}
+                    title="Show All Posts"
+                    className="px-5 mt-2 py-2  flex justify-between text-sm bg-blue-300 text-black hover:bg-blue-200 rounded-xl transition cursor-pointer"
+                  >
+                    <span>Show All Posts </span>
+                    <FaArrowRightLong className="mt-1 mx-3" />
+                  </button>
+                )}
               </div>
             </Card>
           </div>

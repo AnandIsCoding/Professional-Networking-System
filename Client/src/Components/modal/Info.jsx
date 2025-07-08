@@ -36,10 +36,10 @@ function Info() {
       try {
         // creating userPayload becoz after api call, it modifies already existing fields with ''
         const userPayload = {};
-        if (fullName.trim().length > 0){
-           userPayload.fullName = fullName.trim()
+        if (fullName.trim().length > 0) {
+          userPayload.fullName = fullName.trim();
         }
-        if(fullName.trim().length < 1) userPayload.fullName = user?.fullName
+        if (fullName.trim().length < 1) userPayload.fullName = user?.fullName;
         if (headline.trim().length > 0) userPayload.headline = headline.trim();
         if (currentCompany.trim().length > 0)
           userPayload.currentCompany = currentCompany.trim();
@@ -88,7 +88,7 @@ function Info() {
           <input
             type="text"
             onChange={(event) => setFullname(event.target.value)}
-            placeholder={user?.fullName || 'Anand Jha'}
+            placeholder={user?.fullName || "Anand Jha"}
             className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>

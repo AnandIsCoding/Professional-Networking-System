@@ -13,7 +13,8 @@ import PrivacyPolicyModal from "../Components/modal/PrivacyPolicyModal";
 import { setShowModal } from "../Redux/Slices/modal.slice";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
 
 // console.log(baseUrl);
 function Signup() {
@@ -21,8 +22,8 @@ function Signup() {
   const [showPassword, setShowPassowrd] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-    const dispatch = useDispatch()
-  const showModal = useSelector(state => state?.modal?.showModal)
+  const dispatch = useDispatch();
+  const showModal = useSelector((state) => state?.modal?.showModal);
   const [formData, setFormdata] = useState({
     fullName: "",
     email: "",
@@ -84,7 +85,7 @@ function Signup() {
           id: toastId,
         });
         // dispatch(setUser(data.user));
-         navigate("/verify");
+        navigate("/verify");
       } else {
         toast.error(data.message || "User registration failed", {
           id: toastId,
@@ -182,7 +183,9 @@ function Signup() {
             placeholder="Enter Email"
             className="w-full px-4 py-2 rounded-lg border-1 text-blue-950 my-2"
           />
-          {errors.email && <p className="text-red-600 text-sm ml-1">{errors.email}</p>}
+          {errors.email && (
+            <p className="text-red-600 text-sm ml-1">{errors.email}</p>
+          )}
 
           {/* password */}
           <label className="font-medium cursor-pointer" htmlFor="password">
@@ -206,13 +209,16 @@ function Signup() {
             >
               {!showPassword ? <FaEye size={20} /> : <FaEyeSlash size={20} />}
             </span>
-            
           </div>
-          {errors.password && <p className="text-red-600 text-sm ml-1">{errors.password}</p>}
+          {errors.password && (
+            <p className="text-red-600 text-sm ml-1">{errors.password}</p>
+          )}
 
           {/* signup signin btn */}
           <button
-            title={isSignupMode ? "Register to Devlinked" : "SignIn toDevlinked"}
+            title={
+              isSignupMode ? "Register to Devlinked" : "SignIn toDevlinked"
+            }
             className="w-full text-white bg-blue-600 hover:bg-blue-700 rounded-md my-1 text-base font-medium py-2 cursor-pointer"
           >
             {isSignupMode ? "Register" : "SignIn"}
@@ -237,27 +243,20 @@ function Signup() {
             </span>{" "}
           </p>
           <br></br>
-           <p onClick={()=>dispatch(setShowModal('privacyPolicy'))} className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4">
-                    By clicking <span className="font-medium">Continue</span> to join or
-                    sign in, you agree to Devlinked’s&nbsp;
-                    <a className="text-blue-600 hover:underline">
-                      User Agreement
-                    </a>
-                    ,&nbsp;
-                    <a className="text-blue-600 hover:underline">
-                      Privacy Policy
-                    </a>
-                    , and&nbsp;
-                    <a className="text-blue-600 hover:underline">
-                      Cookie Policy
-                    </a>
-                    .
-                  </p>
-
+          <p
+            onClick={() => dispatch(setShowModal("privacyPolicy"))}
+            className="text-sm cursor-pointer text-center text-gray-600 px-4 mt-4"
+          >
+            By clicking <span className="font-medium">Continue</span> to join or
+            sign in, you agree to Devlinked’s&nbsp;
+            <a className="text-blue-600 hover:underline">User Agreement</a>
+            ,&nbsp;
+            <a className="text-blue-600 hover:underline">Privacy Policy</a>,
+            and&nbsp;
+            <a className="text-blue-600 hover:underline">Cookie Policy</a>.
+          </p>
         </form>
-        {
-      showModal === 'privacyPolicy' && <PrivacyPolicyModal/>
-    }
+        {showModal === "privacyPolicy" && <PrivacyPolicyModal />}
       </div>
     </>
   );

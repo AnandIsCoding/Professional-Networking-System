@@ -20,71 +20,74 @@ function Experience() {
   };
 
   const handleExperienceSubmit = async (event) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  const { designation, companyName, duration, location } = experienceData;
+    const { designation, companyName, duration, location } = experienceData;
 
-  // 🔍 Check if all fields are empty
-  if (
-    !designation.trim() &&
-    !companyName.trim() &&
-    !duration.trim() &&
-    !location.trim()
-  ) {
-    return Swal.fire(
-      "Empty Fields",
-      "Please fill in at least one field to add experience.",
-      "warning"
-    );
-  }
+    // 🔍 Check if all fields are empty
+    if (
+      !designation.trim() &&
+      !companyName.trim() &&
+      !duration.trim() &&
+      !location.trim()
+    ) {
+      return Swal.fire(
+        "Empty Fields",
+        "Please fill in at least one field to add experience.",
+        "warning"
+      );
+    }
 
-  const confirmed = await Swal.fire({
-    title: "Are you sure?",
-    text: "Do you want to add this experience?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, Add it!",
-    cancelButtonText: "Cancel",
-  });
-
-  if (!confirmed.isConfirmed) return;
-
-  try {
-    const userPayload = {
-      experience: [experienceData],
-    };
-
-    const formData = new FormData();
-    formData.append("user", JSON.stringify(userPayload));
-
-    const res = await axios.put(`${baseUrl}/user/auth/update`, formData, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const confirmed = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to add this experience?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Add it!",
+      cancelButtonText: "Cancel",
     });
 
-    if (res.data.success) {
-      Swal.fire("Success", "Experience added successfully", "success");
-      dispatch(setUser(res.data.user));
-    } else {
-      Swal.fire("Error", "Something went wrong", "error");
-    }
-  } catch (error) {
-    console.error(error);
-    Swal.fire("Error", "Update failed", "error");
-  }
-};
+    if (!confirmed.isConfirmed) return;
 
+    try {
+      const userPayload = {
+        experience: [experienceData],
+      };
+
+      const formData = new FormData();
+      formData.append("user", JSON.stringify(userPayload));
+
+      const res = await axios.put(`${baseUrl}/user/auth/update`, formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res.data.success) {
+        Swal.fire("Success", "Experience added successfully", "success");
+        dispatch(setUser(res.data.user));
+      } else {
+        Swal.fire("Error", "Something went wrong", "error");
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Update failed", "error");
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Add Experience</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+        Add Experience
+      </h2>
 
       <form onSubmit={handleExperienceSubmit} className="space-y-5">
         {/* Role */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Role
+          </label>
           <input
             name="designation"
             type="text"
@@ -97,7 +100,9 @@ function Experience() {
 
         {/* Company */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Company
+          </label>
           <input
             name="companyName"
             type="text"
@@ -110,7 +115,9 @@ function Experience() {
 
         {/* Duration */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Duration
+          </label>
           <input
             name="duration"
             type="text"
@@ -123,7 +130,9 @@ function Experience() {
 
         {/* Location */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Location
+          </label>
           <input
             name="location"
             type="text"

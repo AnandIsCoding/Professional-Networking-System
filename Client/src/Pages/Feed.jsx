@@ -39,7 +39,7 @@ function Feed() {
   useEffect(() => {
     fetchPosts();
   }, []);
-  
+
   return (
     <MainLayout>
       <div className="flex flex-col lg:flex-row gap-4 w-full text-gray-800 ">
@@ -61,31 +61,32 @@ function Feed() {
         {/* Middle Feed */}
         <div className=" lg:h-[100vh] custom-scrollbar w-full lg:w-[50%]  overflow-y-auto ">
           <div className=" h-fit">
-          <StartPostBox showModal={showModal} allPost={allPost} setAllpost={setAllpost} />
-          <br></br>
-          {isLoading ? (
-            Array(2)
-              .fill(0)
-              .map((item, index) => {
-                return (                    
-                    <ShimmerPost key={index} />
+            <StartPostBox
+              showModal={showModal}
+              allPost={allPost}
+              setAllpost={setAllpost}
+            />
+            <br></br>
+            {isLoading ? (
+              Array(2)
+                .fill(0)
+                .map((item, index) => {
+                  return <ShimmerPost key={index} />;
+                })
+            ) : allPost?.length < 1 ? (
+              <p>No post found 🥲</p>
+            ) : (
+              allPost?.map((item, index) => {
+                return (
+                  <div key={item?._id} className="mb-6">
+                    <Post post={item} />
+                  </div>
                 );
               })
-          ) : allPost?.length < 1 ? (
-            <p>No post found 🥲</p>
-          ) : (
-            allPost?.map((item, index) => {
-              return (
-                <div key={item?._id} className="mb-6">
-                  <Post post={item} />
-                </div>
-              );
-            })
-          )}
-        </div>
+            )}
+          </div>
         </div>
 
-        
         {/* Right Sidebar */}
         <div className="w-full lg:w-[25%] flex flex-col space-y-4 h-fit ">
           <Card padding={1}>

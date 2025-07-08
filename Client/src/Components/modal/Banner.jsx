@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { FaCamera } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import axios from 'axios'
+import axios from "axios";
 import { setUser } from "../../Redux/Slices/auth.slice";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Banner({ banner }) {
   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [bannerImage, setBannerimage] = useState(null);
   const [preview, setPreview] = useState("");
 
@@ -76,20 +76,16 @@ function Banner({ banner }) {
       }
       try {
         // console.log(formData)
-        const res = await axios.put(
-          `${baseUrl}/user/auth/update`, 
-          formData,
-          {
-            withCredentials: true
-          }
-        );
+        const res = await axios.put(`${baseUrl}/user/auth/update`, formData, {
+          withCredentials: true,
+        });
 
         if (res?.data?.success) {
-          console.log(res)
+          console.log(res);
           Swal.fire("Updated!", `${labelText} has been changed.`, "success");
-          dispatch(setUser(res?.data?.user))
+          dispatch(setUser(res?.data?.user));
         } else {
-          setLoading(false)
+          setLoading(false);
           Swal.fire("Error", "Something went wrong while updating.", "error");
         }
       } catch (error) {

@@ -7,8 +7,8 @@ import { useDispatch } from "react-redux";
 import { setShowModal } from "../../Redux/Slices/modal.slice";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-function WritePostModal({allPost, setAllpost}) {
-  const dispatch = useDispatch()
+function WritePostModal({ allPost, setAllpost }) {
+  const dispatch = useDispatch();
   const [description, setDescription] = useState("");
   const [postImage, setPostimage] = useState("");
   const [preview, setPreview] = useState("");
@@ -44,7 +44,7 @@ function WritePostModal({allPost, setAllpost}) {
         toast.success(data.message || "Post created successfully", {
           id: toastId,
         });
-        
+
         // ✅ Optimistically add new post to feed
         setAllpost((prev) => [data.post, ...prev]);
 
@@ -52,7 +52,7 @@ function WritePostModal({allPost, setAllpost}) {
         setDescription("");
         setPostimage("");
         setPreview("");
-        dispatch(setShowModal(null))
+        dispatch(setShowModal(null));
       } else {
         toast.error(data.message || "Post creation failed failed", {
           id: toastId,

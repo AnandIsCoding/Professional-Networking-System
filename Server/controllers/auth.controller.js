@@ -14,11 +14,10 @@ import {
   uploadPdfToCloudinary,
 } from "../utils/helpers.utils.js";
 import cloudinary from "cloudinary";
-import Otp from '../models/otp.model.js'
+import Otp from "../models/otp.model.js";
 const { OAuth2Client } = pkg;
-import otpGenerator from 'otp-generator'
+import otpGenerator from "otp-generator";
 import otpVerificationEmail from "../mail/templates/otpVerificationEmail.js";
-
 
 dotenv.config();
 
@@ -105,11 +104,16 @@ export const userRegisterController = async (req, res) => {
 
     await Otp.create({ email, fullName, password: encryptedPassword, otp });
 
-    await mailSender(email, "Verify your DevLinked account", otpVerificationEmail(fullName, otp));
+    await mailSender(
+      email,
+      "Verify your DevLinked account",
+      otpVerificationEmail(fullName, otp)
+    );
 
     return res.status(200).json({
       success: true,
-      message: "OTP sent to your email. Please verify to complete registration.",
+      message:
+        "OTP sent to your email. Please verify to complete registration.",
     });
   } catch (error) {
     // Error handling, error response
@@ -142,20 +146,26 @@ export const verifyOtpController = async (req, res) => {
     const { otp } = req.body;
 
     if (!otp) {
-      return res.status(400).json({ success: false, message: "OTP is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "OTP is required" });
     }
 
     const otpRecord = await Otp.findOne({ otp }).sort({ createdAt: -1 });
 
     if (!otpRecord) {
-      return res.status(400).json({ success: false, message: "Invalid or expired OTP" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired OTP" });
     }
 
     const { email, fullName, password } = otpRecord;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(409).json({ success: false, message: "User already registered" });
+      return res
+        .status(409)
+        .json({ success: false, message: "User already registered" });
     }
 
     const newUser = await User.create({ email, fullName, password });
@@ -191,7 +201,7 @@ export const verifyOtpController = async (req, res) => {
       success: true,
       message: "User registered and verified successfully",
       user: newUser,
-      userToken:token,
+      userToken: token,
     });
   } catch (error) {
     console.error(chalk.bgRed("Error in verifyOtpController:"), error);
@@ -216,8 +226,14 @@ export const userLoginController = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid Credentials" });
 
-    if(user && !user.password){
-      return res.status(400).json({success:false, message:'Please Login through Google', error:'Please login through Google'})
+    if (user && !user.password) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Please Login through Google",
+          error: "Please login through Google",
+        });
     }
 
     // Rate limiting for login

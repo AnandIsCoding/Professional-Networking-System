@@ -6,18 +6,17 @@ import AdvertisementCard from "../Components/AdvertisementCard";
 import { useSelector } from "react-redux";
 import ShimmerPost from "../Components/Post/ShimmerPost";
 import { useParams } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 import Post from "../Components/Post/Post";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
-//  http://localhost:3000/api/v1/post/allpost/68555b1ce5436eec4064e01a
 
 function Activities() {
-    const {id} = useParams()
+  const { id } = useParams();
   const user = useSelector((state) => state.user.user);
-  const [activities, setActivities] = useState([])
+  const [activities, setActivities] = useState([]);
   const [isLoading, setIsloading] = useState(true);
-   const fetchPostsActivityPage = async () => {
+  const fetchPostsActivityPage = async () => {
     setIsloading(true);
     try {
       const res = await axios.get(`${baseUrl}/post/allpost/${id}`, {
@@ -48,7 +47,6 @@ function Activities() {
 
         {/* Middle Feed */}
         <div className="md:h-[100vh] w-full lg:w-[50%]  overflow-y-auto ">
-           
           <div className=" h-fit mt-1">
             {isLoading ? (
               Array(2)
@@ -73,13 +71,14 @@ function Activities() {
               })
             )}
           </div>
-          <h1 className=" font-semibold rounded-md bg-white px-4 py-2 w-fit text-center "> {activities?.length} &nbsp; Posts as of now</h1>
+          <h1 className=" font-semibold rounded-md bg-white px-4 py-2 w-fit text-center ">
+            {" "}
+            {activities?.length} &nbsp; Posts as of now
+          </h1>
         </div>
 
-         
         {/* Right Sidebar */}
-        <div className="w-full lg:w-[25%] flex flex-col space-y-4 h-fit ">         
-
+        <div className="w-full lg:w-[25%] flex flex-col space-y-4 h-fit ">
           <div className="">
             <AdvertisementCard />
           </div>

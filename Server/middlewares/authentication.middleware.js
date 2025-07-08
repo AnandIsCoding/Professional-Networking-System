@@ -43,10 +43,7 @@ export const isAuthenticated = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(
-      chalk.bgRed("Error in isAuthenticated middleware -->"),
-      error
-    );
+    console.log(chalk.bgRed("Error in isAuthenticated middleware -->"), error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",

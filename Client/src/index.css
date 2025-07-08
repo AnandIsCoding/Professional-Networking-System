@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
-body{
-  margin:0;
-  padding:0;
-  box-sizing: border-box;  
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-*{
- font-family: gilroy;
+* {
+  font-family: gilroy;
 }
 
 @media screen and (min-width: 768px) {
@@ -19,15 +19,12 @@ body{
   }
 }
 
-
-
-
 /* set scrollbar height and weidth to 0 so that it will be removed from page */
-::-webkit-scrollbar{
-    width: 0px;
-  }
+::-webkit-scrollbar {
+  width: 0px;
+}
 
-  /* This restores scrollbar only for .custom-scrollbar */
+/* This restores scrollbar only for .custom-scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -41,10 +38,9 @@ body{
   background: transparent;
 }
 
-
 .custom-posts-scrollbar::-webkit-scrollbar {
   width: 3px;
-  height:5px
+  height: 5px;
 }
 .custom-posts-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.3);
@@ -56,12 +52,16 @@ body{
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .animate-fadeIn {
   animation: fadeIn 0.25s ease-out;
 }
-
-

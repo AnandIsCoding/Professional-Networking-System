@@ -18,16 +18,16 @@ const notificationSchema = new mongoose.Schema(
     },
     notificationType: {
       type: String,
-      enum: ['friendRequest', 'comment', 'like', 'follow', 'mention'],
+      enum: ["friendRequest", "comment", "like", "follow", "mention"],
       required: true,
     },
     isRead: {
       type: Boolean,
       default: false,
     },
-    postId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Post'
+    postId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
     },
     link: {
       type: String,
@@ -43,7 +43,6 @@ const Notification =
   mongoose.models.Notification ||
   mongoose.model("Notification", notificationSchema);
 export default Notification;
-
 
 // sender ==> The user who triggered the notification (e.g., sent a request, commented).
 // receiver ==> The user who receives the notification.

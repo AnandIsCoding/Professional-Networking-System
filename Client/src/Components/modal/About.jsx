@@ -121,15 +121,15 @@ function About() {
         if (data?.success) {
           Swal.fire("Updated!", `Profile has been updated.`, "success");
           dispatch(setUser(res?.data?.user));
-          setShowModal(null)
+          setShowModal(null);
         } else {
           Swal.fire("Error", "Something went wrong while updating.", "error");
-          setShowModal(null)
+          setShowModal(null);
         }
       } catch (err) {
         console.error("Update failed", err);
         Swal.fire("Error", "Something went wrong while updating.", "error");
-        setShowModal(null)
+        setShowModal(null);
       }
     } else {
       console.log("User cancelled the action.");
