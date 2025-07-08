@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import MainLayout from "../layouts/MainLayout";
-import ProfileCard from "../Components/Cards/ProfileCard";
-import toast from "react-hot-toast";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+
+import ProfileCard from "../Components/Cards/ProfileCard";
+import MainLayout from "../layouts/MainLayout";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function MyNetwork() {

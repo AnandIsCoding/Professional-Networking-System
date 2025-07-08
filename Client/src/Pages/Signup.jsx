@@ -1,16 +1,17 @@
-import React, { useState } from "react";
 import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import Footer from "../Components/Footer";
-import GoogleLoginComponent from "../utils/GoogleLoginComponent";
-import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../Redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
+
+import Footer from "../Components/Footer";
 import PrivacyPolicyModal from "../Components/modal/PrivacyPolicyModal";
+import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
+import { setUser } from "../Redux/Slices/auth.slice";
 import { setShowModal } from "../Redux/Slices/modal.slice";
+import GoogleLoginComponent from "../utils/GoogleLoginComponent";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =

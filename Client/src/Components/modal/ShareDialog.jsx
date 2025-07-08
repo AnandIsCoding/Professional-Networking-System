@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import {
-  FaWhatsapp,
+  FaFacebookF,
   FaInstagram,
   FaTelegramPlane,
   FaTimes,
-  FaFacebookF,
   FaTwitter,
+  FaWhatsapp,
 } from "react-icons/fa";
 
 function ShareDialog({ showShareDialog, setShowshareDialog, heading }) {

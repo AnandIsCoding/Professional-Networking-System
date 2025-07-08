@@ -1,11 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
-import toast from "react-hot-toast";
 import axios from "axios";
-import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
-import { useDispatch } from "react-redux";
-import { setUser } from "../Redux/Slices/auth.slice.js";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect,useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { FaCheckCircle } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
+import { setUser } from "../Redux/Slices/auth.slice.js";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

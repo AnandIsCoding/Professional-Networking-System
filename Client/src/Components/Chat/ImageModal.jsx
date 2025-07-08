@@ -1,7 +1,8 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { setShowModal } from "../../Redux/Slices/modal.slice";
 import { FaTimes } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+
+import { setShowModal } from "../../Redux/Slices/modal.slice";
 
 function ImageModal({ imageUrl, setActiveimage }) {
   const dispatch = useDispatch();

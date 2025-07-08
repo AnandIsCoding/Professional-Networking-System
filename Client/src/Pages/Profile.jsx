@@ -1,28 +1,28 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import MainLayout from "../layouts/MainLayout";
-import Card from "../Components/Cards/Card";
-import AdvertisementCard from "../Components/AdvertisementCard";
+import toast from "react-hot-toast";
+import { FaArrowRightLong } from "react-icons/fa6";
 import { GrEdit } from "react-icons/gr";
+import { IoAddSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
-
-import Post from "../Components/Post/Post";
-import { IoAddSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowModal } from "../Redux/Slices/modal.slice";
-import ModalLayout from "../Components/modal/ModalLayout";
-import Banner from "../Components/modal/Banner";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+
+import AdvertisementCard from "../Components/AdvertisementCard";
+import Card from "../Components/Cards/Card";
 import About from "../Components/modal/About";
+import Banner from "../Components/modal/Banner";
 import Experience from "../Components/modal/Experience";
 import Info from "../Components/modal/Info";
 import Message from "../Components/modal/Message";
-import { FaArrowRightLong } from "react-icons/fa6";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import toast from "react-hot-toast";
+import ModalLayout from "../Components/modal/ModalLayout";
 import ShareDialog from "../Components/modal/ShareDialog";
-import Swal from "sweetalert2";
+import Post from "../Components/Post/Post";
+import MainLayout from "../layouts/MainLayout";
 import { setUser } from "../Redux/Slices/auth.slice";
+import { setShowModal } from "../Redux/Slices/modal.slice";
 import { useLogoutHandler } from "../utils/logoutHandler";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

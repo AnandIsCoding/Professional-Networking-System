@@ -1,11 +1,12 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import Footer from "../Components/Footer";
-import GoogleLoginComponent from "../utils/GoogleLoginComponent";
-import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowModal } from "../Redux/Slices/modal.slice";
+import { NavLink, useNavigate } from "react-router-dom";
+
+import Footer from "../Components/Footer";
 import PrivacyPolicyModal from "../Components/modal/PrivacyPolicyModal";
+import PublicNavbar from "../Components/NavbarV1/PublicNavbar";
+import { setShowModal } from "../Redux/Slices/modal.slice";
+import GoogleLoginComponent from "../utils/GoogleLoginComponent";
 function LandingPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

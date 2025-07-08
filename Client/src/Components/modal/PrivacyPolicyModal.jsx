@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+
 import { setShowModal } from "../../Redux/Slices/modal.slice";
 
 const tabs = ["Privacy Policy", "Terms & Conditions", "Cookie Policy"];

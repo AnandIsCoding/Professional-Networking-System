@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { MdPhotoLibrary, MdOndemandVideo, MdArticle } from "react-icons/md";
+import { MdArticle,MdOndemandVideo, MdPhotoLibrary } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setShowModal } from "../Redux/Slices/modal.slice";
 import ModalLayout from "./modal/ModalLayout";
 import WritePostModal from "./modal/WritePostModal";
-import { setShowModal } from "../Redux/Slices/modal.slice";
-import { useDispatch, useSelector } from "react-redux";
 
 const StartPostBox = ({ showModal, allPost, setAllpost }) => {
   const user = useSelector((state) => state.user.user);

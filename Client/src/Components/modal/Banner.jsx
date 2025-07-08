@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import React, { useEffect,useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import axios from "axios";
+
 import { setUser } from "../../Redux/Slices/auth.slice";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;

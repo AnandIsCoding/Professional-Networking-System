@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { FaImage } from "react-icons/fa6";
 import { FcGallery } from "react-icons/fc";
 import { useDispatch } from "react-redux";
+
 import { setShowModal } from "../../Redux/Slices/modal.slice";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

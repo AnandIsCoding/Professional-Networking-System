@@ -1,6 +1,7 @@
 import React from "react";
-import Card from "./Cards/Card";
 import { useSelector } from "react-redux";
+
+import Card from "./Cards/Card";
 
 function AdvertisementCard() {
   const user = useSelector((state) => state.user.user);

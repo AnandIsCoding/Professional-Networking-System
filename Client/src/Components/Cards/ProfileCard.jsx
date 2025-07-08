@@ -1,7 +1,8 @@
 import React from "react";
-import Card from "./Card";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+import Card from "./Card";
 
 function ProfileCard({ user }) {
   const navigate = useNavigate();

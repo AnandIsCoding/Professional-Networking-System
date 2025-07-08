@@ -1,13 +1,15 @@
+import "./index.css";
+
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.jsx";
-import { BrowserRouter } from "react-router-dom";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import appStore from "./Redux/appStore.js";
-import { Provider } from "react-redux";
-import AppWrapper from "./AppWrapper.jsx";
 import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+
+import App from "./App.jsx";
+import AppWrapper from "./AppWrapper.jsx";
+import appStore from "./Redux/appStore.js";
 
 const clientID = import.meta.env.VITE_GOOGLE_AUTH_KEY;
 

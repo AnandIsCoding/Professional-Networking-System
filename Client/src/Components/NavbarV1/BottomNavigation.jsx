@@ -1,10 +1,10 @@
 import React from "react";
 import { FcHome, FcVoicePresentation } from "react-icons/fc";
 import { HiUserGroup } from "react-icons/hi2";
-import { PiReadCvLogo } from "react-icons/pi";
 import { IoMdNotifications } from "react-icons/io";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { PiReadCvLogo } from "react-icons/pi";
 import { useSelector } from "react-redux";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 function BottomNavigation() {
   const location = useLocation();

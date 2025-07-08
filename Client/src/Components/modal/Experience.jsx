@@ -1,7 +1,8 @@
-import React, { useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+
 import { setUser } from "../../Redux/Slices/auth.slice";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;

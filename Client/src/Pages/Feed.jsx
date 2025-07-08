@@ -1,14 +1,15 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import StartPostBox from "../Components/StartPostBox";
-import MainLayout from "../layouts/MainLayout";
+import { useSelector } from "react-redux";
+
+import AdvertisementCard from "../Components/AdvertisementCard";
 import Card from "../Components/Cards/Card";
 import ProfileCard from "../Components/Cards/ProfileCard";
-import AdvertisementCard from "../Components/AdvertisementCard";
-import Post from "../Components/Post/Post";
 import ModalLayout from "../Components/modal/ModalLayout";
+import Post from "../Components/Post/Post";
 import ShimmerPost from "../Components/Post/ShimmerPost";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import StartPostBox from "../Components/StartPostBox";
+import MainLayout from "../layouts/MainLayout";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

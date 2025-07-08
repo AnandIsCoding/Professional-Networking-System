@@ -1,18 +1,18 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import MainLayout from "../layouts/MainLayout";
-import Card from "../Components/Cards/Card";
-import UserContactsPanel from "../Components/Chat/UserContactsPanel";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import ChatBubble from "../Components/Chat/ChatBubble";
-import ScrollChatToBottom from "../utils/ScrollChatToBottom";
+import toast from "react-hot-toast";
 import { FcGallery } from "react-icons/fc";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { IoMdSend } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import axios from "axios";
-import toast from "react-hot-toast";
 
 import socket from "../../socket.js";
+import Card from "../Components/Cards/Card";
+import ChatBubble from "../Components/Chat/ChatBubble";
+import UserContactsPanel from "../Components/Chat/UserContactsPanel";
+import MainLayout from "../layouts/MainLayout";
+import ScrollChatToBottom from "../utils/ScrollChatToBottom";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Message() {

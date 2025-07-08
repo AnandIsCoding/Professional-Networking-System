@@ -1,13 +1,14 @@
+import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { FaPaperPlane } from "react-icons/fa";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
+
 import { setUser } from "../../Redux/Slices/auth.slice";
 import { setShowModal } from "../../Redux/Slices/modal.slice";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Message({ userData }) {

@@ -1,7 +1,8 @@
 import React from "react";
-import MainLayout from "../layouts/MainLayout";
-import AdvertisementCard from "../Components/AdvertisementCard";
 import { useSelector } from "react-redux";
+
+import AdvertisementCard from "../Components/AdvertisementCard";
+import MainLayout from "../layouts/MainLayout";
 
 function Resume() {
   const user = useSelector((state) => state.user.user);

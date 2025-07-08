@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy } from "react";
+import React, { lazy,useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 const App = lazy(() => import("./App"));

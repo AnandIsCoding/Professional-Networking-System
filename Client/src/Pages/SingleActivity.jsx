@@ -1,13 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout";
-import ProfileCard from "../Components/Cards/ProfileCard";
+
 import AdvertisementCard from "../Components/AdvertisementCard";
-import toast from "react-hot-toast";
-import ShimmerPost from "../Components/Post/ShimmerPost";
+import ProfileCard from "../Components/Cards/ProfileCard";
 import Post from "../Components/Post/Post";
+import ShimmerPost from "../Components/Post/ShimmerPost";
+import MainLayout from "../layouts/MainLayout";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function SingleActivity() {

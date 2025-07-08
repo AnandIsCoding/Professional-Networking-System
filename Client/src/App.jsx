@@ -1,7 +1,6 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import PublicNavbar from "./Components/NavbarV1/PublicNavbar";
-import LandingPage from "./Pages/LandingPage";
-import Footer from "./Components/Footer";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Navigate,
   Route,
@@ -9,27 +8,29 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import Signup from "./Pages/Signup";
+
+import Footer from "./Components/Footer";
+import PublicNavbar from "./Components/NavbarV1/PublicNavbar";
 import UserNavbar from "./Components/NavbarV1/UserNavbar";
-import Feed from "./Pages/Feed";
-import ProtectedRoute from "./utils/ProtectedRoute";
-import AuthenticateNavigateFeed from "./utils/AuthenticateNavigateFeed";
-import HomePage from "./Pages/HomePage";
-import MyNetwork from "./Pages/MyNetwork";
-import Resume from "./Pages/Resume";
-import ScrollToTop from "./utils/ScrollToTop";
-import { useDispatch, useSelector } from "react-redux";
-import Message from "./Pages/Message";
-import Profile from "./Pages/Profile";
-import Notifications from "./Pages/Notification";
-import PageTitleUpdater from "./utils/PageTitleUpdater";
-import axios from "axios";
-import { setUser } from "./Redux/Slices/auth.slice";
-import { setNotificationCount } from "./Redux/Slices/notification.slice";
 import Activities from "./Pages/Activities";
+import Error from "./Pages/Error";
+import Feed from "./Pages/Feed";
+import HomePage from "./Pages/HomePage";
+import LandingPage from "./Pages/LandingPage";
+import Message from "./Pages/Message";
+import MyNetwork from "./Pages/MyNetwork";
+import Notifications from "./Pages/Notification";
+import Profile from "./Pages/Profile";
+import Resume from "./Pages/Resume";
+import Signup from "./Pages/Signup";
 import SingleActivity from "./Pages/SingleActivity";
 import Verify from "./Pages/Verify";
-import Error from "./Pages/Error";
+import { setUser } from "./Redux/Slices/auth.slice";
+import { setNotificationCount } from "./Redux/Slices/notification.slice";
+import AuthenticateNavigateFeed from "./utils/AuthenticateNavigateFeed";
+import PageTitleUpdater from "./utils/PageTitleUpdater";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import ScrollToTop from "./utils/ScrollToTop";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

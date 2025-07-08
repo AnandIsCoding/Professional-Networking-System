@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
-import { setShowModal } from "../../Redux/Slices/modal.slice";
 import { FaTimes } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setShowModal } from "../../Redux/Slices/modal.slice";
 
 function ModalLayout(props) {
   const user = useSelector((state) => state.user.user);

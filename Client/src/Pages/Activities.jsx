@@ -1,13 +1,14 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import MainLayout from "../layouts/MainLayout";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+import AdvertisementCard from "../Components/AdvertisementCard";
 import Card from "../Components/Cards/Card";
 import ProfileCard from "../Components/Cards/ProfileCard";
-import AdvertisementCard from "../Components/AdvertisementCard";
-import { useSelector } from "react-redux";
-import ShimmerPost from "../Components/Post/ShimmerPost";
-import { useParams } from "react-router-dom";
-import axios from "axios";
 import Post from "../Components/Post/Post";
+import ShimmerPost from "../Components/Post/ShimmerPost";
+import MainLayout from "../layouts/MainLayout";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

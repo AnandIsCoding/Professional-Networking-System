@@ -1,7 +1,8 @@
 // src/Components/MainLayout.jsx
 import React from "react";
-import UserNavbar from "../Components/NavbarV1/UserNavbar";
+
 import BottomNavigation from "../Components/NavbarV1/BottomNavigation";
+import UserNavbar from "../Components/NavbarV1/UserNavbar";
 
 function MainLayout({ children }) {
   return (

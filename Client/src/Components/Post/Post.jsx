@@ -1,17 +1,18 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Card from "../Cards/Card";
+import toast from "react-hot-toast";
 import { AiFillLike } from "react-icons/ai";
-import { MdComment } from "react-icons/md";
+import { AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { IoShareSocial } from "react-icons/io5";
-import { useLocation, useNavigate } from "react-router-dom";
-import { AiOutlineLike } from "react-icons/ai";
-import toast from "react-hot-toast";
-import axios from "axios";
+import { MdComment } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import ShareDialog from "../modal/ShareDialog";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { setShowModal } from "../../Redux/Slices/modal.slice";
+import Card from "../Cards/Card";
 import ImageModal from "../Chat/ImageModal";
+import ShareDialog from "../modal/ShareDialog";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

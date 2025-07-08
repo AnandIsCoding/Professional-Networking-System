@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { setShowModal } from "../../Redux/Slices/modal.slice";
 import ImageModal from "./ImageModal";
 

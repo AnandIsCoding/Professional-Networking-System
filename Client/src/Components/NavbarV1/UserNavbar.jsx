@@ -1,14 +1,14 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FcHome } from "react-icons/fc";
-import { HiUserGroup } from "react-icons/hi2";
-import { PiReadCvLogo } from "react-icons/pi";
 import { FcVoicePresentation } from "react-icons/fc";
+import { HiUserGroup } from "react-icons/hi2";
 import { IoMdNotifications } from "react-icons/io";
+import { PiReadCvLogo } from "react-icons/pi";
+import { useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import toast from "react-hot-toast";
 
 function UserNavbar() {
   const location = useLocation();
