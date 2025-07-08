@@ -1,6 +1,7 @@
 import chalk from "chalk";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
 import User from "../models/user.model.js";
 
 dotenv.config();

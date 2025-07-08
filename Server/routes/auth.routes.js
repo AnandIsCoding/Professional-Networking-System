@@ -1,4 +1,6 @@
 import { Router } from "express";
+
+import upload from "../configs/multer.config.js";
 import {
   getProfileByIdController,
   logoutController,
@@ -9,7 +11,6 @@ import {
   verifyOtpController,
 } from "../controllers/auth.controller.js";
 import { isAuthenticated } from "../middlewares/authentication.middleware.js";
-import upload from "../configs/multer.config.js";
 
 const authRouter = Router();
 

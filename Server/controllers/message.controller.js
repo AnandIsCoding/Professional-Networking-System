@@ -1,10 +1,11 @@
 import chalk from "chalk";
+import mongoose from "mongoose";
+
 import Message from "../models/message.model.js";
 import {
   isFileTypeSupported,
   uploadFileToCloudinary,
 } from "../utils/helpers.utils.js";
-import mongoose from "mongoose";
 export const sendNewMessageController = async (req, res) => {
   try {
     const senderId = req.user._id;

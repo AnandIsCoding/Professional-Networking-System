@@ -1,8 +1,9 @@
+import chalk from "chalk";
 import mongoose from "mongoose";
+
 import Comment from "../models/comment.model.js";
 import Notification from "../models/notification.model.js";
 import Post from "../models/post.model.js";
-import chalk from "chalk";
 
 // add comment to the post , accepts postId and comment from request body
 export const addCommentController = async (req, res) => {

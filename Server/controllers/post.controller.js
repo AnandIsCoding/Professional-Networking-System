@@ -1,10 +1,11 @@
 import chalk from "chalk";
+import mongoose from "mongoose";
+
 import Post from "../models/post.model.js";
 import {
   isFileTypeSupported,
   uploadFileToCloudinary,
 } from "../utils/helpers.utils.js";
-import mongoose from "mongoose";
 export const addPostController = async (req, res) => {
   try {
     const userId = req.user._id;

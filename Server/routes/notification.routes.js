@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { isAuthenticated } from "../middlewares/authentication.middleware.js";
+
 import {
   getActiveNotificationController,
   getNotificationsController,
   updateIsReadController,
 } from "../controllers/notification.controller.js";
+import { isAuthenticated } from "../middlewares/authentication.middleware.js";
 const notificationRouter = Router();
 
 notificationRouter.get("/all", isAuthenticated, getNotificationsController);

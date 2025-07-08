@@ -1,7 +1,7 @@
 // Import necessary modules
-import dotenv from "dotenv";
-import { v2 as cloudinary } from "cloudinary";
 import chalk from "chalk";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 
 dotenv.config();
 

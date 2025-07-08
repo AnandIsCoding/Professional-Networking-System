@@ -1,19 +1,19 @@
-import express from "express";
-import cors from "cors";
 import chalk from "chalk"; // Chalk for colored console logs
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import dotenv from "dotenv";
+import express from "express";
 import http from "http";
 
 import connectToCloudinary from "./configs/cloudinary.config.js";
 import connectToDb from "./configs/database.config.js";
 import authRouter from "./routes/auth.routes.js";
-import postRouter from "./routes/post.routes.js";
-import notificationRouter from "./routes/notification.routes.js";
 import commentRouter from "./routes/comment.routes.js";
-import userRouter from "./routes/user.routes.js";
 import conversationRouter from "./routes/conversation.routes.js";
 import messageRouter from "./routes/message.routes.js";
+import notificationRouter from "./routes/notification.routes.js";
+import postRouter from "./routes/post.routes.js";
+import userRouter from "./routes/user.routes.js";
 import initializeSocket from "./utils/socket.js";
 dotenv.config();
 

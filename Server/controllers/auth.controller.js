@@ -1,22 +1,23 @@
-import chalk from "chalk";
-import User from "../models/user.model.js";
-import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import chalk from "chalk";
 import dayjs from "dayjs";
+import dotenv from "dotenv";
 import pkg from "google-auth-library";
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import mailSender from "../utils/mailSender.utils.js";
+
 import userRegistrationSuccessEmail from "../mail/templates/userRegistrationSuccessEmail.js";
+import Otp from "../models/otp.model.js";
+import User from "../models/user.model.js";
 import {
   isFileTypeSupported,
   uploadFileToCloudinary,
   uploadPdfToCloudinary,
 } from "../utils/helpers.utils.js";
-import cloudinary from "cloudinary";
-import Otp from "../models/otp.model.js";
+import mailSender from "../utils/mailSender.utils.js";
 const { OAuth2Client } = pkg;
 import otpGenerator from "otp-generator";
+
 import otpVerificationEmail from "../mail/templates/otpVerificationEmail.js";
 
 dotenv.config();

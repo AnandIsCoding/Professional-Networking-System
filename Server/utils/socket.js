@@ -1,5 +1,5 @@
-import { Server } from "socket.io";
 import dotenv from "dotenv";
+import { Server } from "socket.io";
 dotenv.config();
 const initializeSocket = (server) => {
   // ✅ Initialize the Socket.IO server

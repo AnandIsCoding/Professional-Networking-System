@@ -1,7 +1,9 @@
-import User from "../models/user.model.js";
-import mongoose from "mongoose";
 import chalk from "chalk";
+import mongoose from "mongoose";
+
 import Notification from "../models/notification.model.js";
+import User from "../models/user.model.js";
+
 
 // search input box
 export const searchUserController = async (req, res) => {

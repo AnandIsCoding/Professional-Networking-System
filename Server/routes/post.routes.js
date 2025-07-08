@@ -1,5 +1,6 @@
 import Router from "express";
-import { isAuthenticated } from "../middlewares/authentication.middleware.js";
+
+import upload from "../configs/multer.config.js";
 import {
   addPostController,
   getAllPostController,
@@ -8,7 +9,7 @@ import {
   getTop5PostsController,
   likeDislikeController,
 } from "../controllers/post.controller.js";
-import upload from "../configs/multer.config.js";
+import { isAuthenticated } from "../middlewares/authentication.middleware.js";
 
 const postRouter = Router();
 

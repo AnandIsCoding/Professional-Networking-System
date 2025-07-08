@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer";
 import chalk from "chalk";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 

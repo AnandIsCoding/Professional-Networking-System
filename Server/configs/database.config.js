@@ -1,7 +1,7 @@
 // Import required modules
-import mongoose from "mongoose"; // Mongoose for MongoDB connection
 import chalk from "chalk"; // Chalk for colored console logs
 import dotenv from "dotenv"; // Dotenv to load environment variables
+import mongoose from "mongoose"; // Mongoose for MongoDB connection
 
 // Load environment variables from .env file
 dotenv.config();
