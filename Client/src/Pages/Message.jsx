@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import axios from "axios";
 import toast from "react-hot-toast";
+
+import socket from "../../socket.js";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function Message() {
@@ -87,6 +89,7 @@ function Message() {
       if (data?.success) {
         // setAllMessages((prev) => [...prev, data.newMessage]);
         if (img) toast.success("Image sent successfully", { id: toastId });
+        socket.emit('sendMessage',activeConversationId, data)
       } else {
         if (img)
           toast.error(data?.message || "Failed to send image", { id: toastId });
@@ -143,8 +146,10 @@ function Message() {
     fetchConversationMembers();
   }, []);
 
+  // setactive conversation id with socket
   const setActive = (id, details) => {
     setActiveConversationId(id);
+    socket.emit('joinConversation',id)
     setActiveConversationUser(details);
   };
 
@@ -158,7 +163,7 @@ function Message() {
       );
       const { data } = res;
       if (data?.success) {
-        console.log(data.messages);
+        // console.log(data.messages);
         setAllMessages(data.messages);
       } else {
         console.log("⚠️ Unexpected API structure:", res);
@@ -174,6 +179,12 @@ function Message() {
       fetchAllMessagesPerActiveId();
     }
   }, [activeConversationId]);
+
+  useEffect(()=>{
+      socket.on('receiveMessage',(response)=>{
+        setAllMessages([...allMessages,response?.newMessage])
+      })
+  },[allMessages])
 
   return (
     <MainLayout>

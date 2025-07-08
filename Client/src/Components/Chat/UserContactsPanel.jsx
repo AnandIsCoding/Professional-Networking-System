@@ -25,7 +25,7 @@ function UserContactsPanel({ setActive, activeConversationId, item }) {
       {/* user's name and occupation etc */}
       <div className="flex flex-col sm:pt-1 ">
         <h1>{friend?.fullName}</h1>
-        <p className="text-gray-600 text-sm">{friend?.headline}</p>
+        <p className="text-gray-600 text-sm">{friend?.headline?.split(' ').slice(0,5)?.join(' ')}</p>
       </div>
     </div>
   );
