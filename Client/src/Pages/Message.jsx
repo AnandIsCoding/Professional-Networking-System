@@ -64,40 +64,44 @@ function Message() {
   };
 
   const handleSendMessage = async (msg = message, img) => {
-  if ((msg?.trim?.().length || 0) === 0 && !img) return;
+    if ((msg?.trim?.().length || 0) === 0 && !img) return;
 
-  try {
-    const formData = new FormData();
-    formData.append("message", msg);
-    formData.append("conversationId", activeConversationId);
-    if (img) {
-      formData.append("image", img); // ✅ Append file properly
+    const toastId = img ? toast.loading("Sending image...") : null;
+
+    try {
+      const formData = new FormData();
+      formData.append("message", msg);
+      formData.append("conversationId", activeConversationId);
+      if (img) {
+        formData.append("image", img);
+      }
+
+      const res = await axios.post(`${baseUrl}/message/new`, formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const { data } = res;
+      if (data?.success) {
+        // setAllMessages((prev) => [...prev, data.newMessage]);
+        if (img) toast.success("Image sent successfully", { id: toastId });
+      } else {
+        if (img)
+          toast.error(data?.message || "Failed to send image", { id: toastId });
+      }
+    } catch (error) {
+      if (img)
+        toast.error(error?.response?.data?.message || "Failed to send image", {
+          id: toastId,
+        });
+      console.error("Error in sending message --->>", error);
+    } finally {
+      setImage("");
+      setMessage("");
     }
-
-    const res = await axios.post(`${baseUrl}/message/new`, formData, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "multipart/form-data", // ✅ Required
-      },
-    });
-
-    const { data } = res;
-    if (data?.success) {
-      console.log(`${img ? 'Image' : 'Message'} sent successfully`);
-      setAllMessages((prev) => [...prev, data.newMessage]); // optional: update chat immediately
-    } else {
-      console.log("Something went wrong in sending message");
-      toast.error(data?.message || "Something went wrong");
-    }
-  } catch (error) {
-    console.error("Error in sending message --->>", error);
-    toast.error(error?.response?.data?.message || "Something went wrong");
-  } finally {
-    setImage("");
-    setMessage("");
-  }
-};
-
+  };
 
   // Cleanup if needed elsewhere (not required with above revoke)
   useEffect(() => {
@@ -154,7 +158,7 @@ function Message() {
       );
       const { data } = res;
       if (data?.success) {
-        console.log(data.messages)
+        console.log(data.messages);
         setAllMessages(data.messages);
       } else {
         console.log("⚠️ Unexpected API structure:", res);
@@ -227,39 +231,23 @@ function Message() {
                     size={24}
                     className="cursor-pointer"
                   />
+                  
                 </div>
 
-                {/* User details */}
-                {activeConversationUser ? (
-                  <div className="flex flex-col gap-2 border-b border-zinc-300 px-4 py-2 bg-white">
-                    <img
-                      src={activeConversationUser?.profilePic}
-                      alt="user profile"
-                      className="h-16 w-16 rounded-full"
-                    />
-                    <div>
-                      <h1>{activeConversationUser?.fullName}</h1>
-                      <p className="text-gray-500 text-sm">
-                        {activeConversationUser?.headline
-                          .split(" ")
-                          .slice(0, 5)
-                          .join(" ")}
-                        ...
-                      </p>
-                    </div>
-                  </div>
-                ) : (<p className="px-10 py-4">Select a Conversation to start Chatting</p>)}
+              
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 custom-scrollbar">
-                  {(activeConversationId && allMessages.length < 1) ? (
+                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 custom-scrollbar z-[999]">
+                  {activeConversationId && allMessages.length < 1 ? (
                     <p className="text-sm text-gray-500">No messages yet.</p>
                   ) : (
                     allMessages.map((item, index) => (
                       <ChatBubble
                         key={index}
                         type={
-                          item?.sender?._id === user._id ? "outgoing" : "incoming"
+                          item?.sender?._id === user._id
+                            ? "outgoing"
+                            : "incoming"
                         }
                         name={item?.sender?.fullName}
                         image={item?.image}
@@ -268,13 +256,13 @@ function Message() {
                       />
                     ))
                   )}
-                  <ScrollChatToBottom />
+                  <ScrollChatToBottom dependency={allMessages.length} />
                 </div>
 
                 {/* Input Box */}
                 {activeConversationUser && (
                   <div className="border-t border-zinc-200 bg-white px-3 py-2">
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap  mb-[-20vw] md:mb-0">
                       <label
                         htmlFor="imageUpload"
                         className="cursor-pointer text-gray-600 hover:text-blue-500"
@@ -302,7 +290,7 @@ function Message() {
                       <button
                         type="button"
                         onClick={() => handleSendMessage()}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-all duration-200 flex items-center justify-center"
+                        className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-all duration-200 flex items-center justify-center"
                       >
                         <IoMdSend size={20} className="sm:size-5" />
                       </button>

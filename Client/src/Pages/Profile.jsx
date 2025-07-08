@@ -354,6 +354,9 @@ const handleIgnore = async () => {
                   >
                     Share Profile
                   </button>
+                  {
+                    userData?.resume && <a target='_blank' title='Resume of the user' className="px-5 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition cursor-pointer" href={userData?.resume}>Resume</a>
+                  }
                 </div>
                 {/* show message only on other user's profile , not on my */}
                 <div className="flex gap-3">

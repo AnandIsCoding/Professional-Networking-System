@@ -216,6 +216,10 @@ export const userLoginController = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid Credentials" });
 
+    if(user && !user.password){
+      return res.status(400).json({success:false, message:'Please Login through Google', error:'Please login through Google'})
+    }
+
     // Rate limiting for login
 
     const today = new Date();

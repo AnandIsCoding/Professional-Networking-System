@@ -1,13 +1,11 @@
 import { useEffect, useRef } from "react";
 
-const ScrollChatToBottom = () => {
+const ScrollChatToBottom = ({ dependency }) => {
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, []);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [dependency]);
 
   return <div ref={bottomRef} />;
 };

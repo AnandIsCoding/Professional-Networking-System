@@ -31,7 +31,7 @@ function ChatBubble({ type, name, message, image, profile }) {
           isIncoming ? "bg-gray-200 text-black" : "bg-blue-500 text-white"
         } rounded-lg px-3 py-2 ${!isIncoming && "text-right"}`}
       >
-        <h1 className="text-sm font-medium">{name}</h1>
+        <p className="text-sm font-medium">{name}</p>
 
         {/* Conditional text message */}
         {message && <p className="text-sm mt-1">{message}</p>}
