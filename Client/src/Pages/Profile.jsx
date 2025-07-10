@@ -122,7 +122,7 @@ function Profile() {
   useEffect(() => {
     fetchUserdata();
     fetchTop5Posts();
-  }, [user]);
+  }, [user,id]);
 
   useEffect(() => {
     if (userData && user?._id) {
