@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef  } from "react";
 import toast from "react-hot-toast";
 import { FcHome } from "react-icons/fc";
 import { FcVoicePresentation } from "react-icons/fc";
@@ -10,9 +10,25 @@ import { useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
+function useClickOutside(ref, callback) {
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [ref, callback]);
+}
+
 function UserNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const searchRef = useRef(null); // 🧩 Step 1
   const user = useSelector((state) => state.user.user);
   const notificationCount = useSelector((state) => state.notification.count);
   const [showSearchResult, setShowSearchResult] = useState(false);
@@ -26,6 +42,10 @@ function UserNavbar() {
   const [searchResults, setSearchresults] = useState([]);
   const [loading, setLoading] = useState(false);
   const baseUrl = import.meta.env.VITE_BASE_URL;
+
+    useClickOutside(searchRef, () => setShowSearchResult(false)); // 🧩 Step 2
+
+  
 
   const fetchSearchedUsers = async () => {
     try {
@@ -76,13 +96,13 @@ function UserNavbar() {
           />
         </div>
         {/* search box */}
-        <div className="w-full max-w-md mx-auto relative ml-4">
+        <div ref={searchRef} className="w-full max-w-md mx-auto relative ml-4">
           {/* Search Input */}
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            onBlur={(e) => setShowSearchResult(false)}
+           
             placeholder="Search..."
             className="w-full px-4 py-2 border rounded-md searchuserbox"
           />
