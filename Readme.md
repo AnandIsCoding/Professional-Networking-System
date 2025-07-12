@@ -24,7 +24,7 @@ A full-featured, real-time **MERN stack** application replicating core functiona
 ![Profile Screenshot](https://res.cloudinary.com/dm0rlehq8/image/upload/v1752339001/Screenshot_2025-07-12_221557_cvzisc.png)
 
 
-![Profile Screenshot](https://res.cloudinary.com/dm0rlehq8/image/upload/v1752339001/Screenshot_2025-07-12_221557_cvzisc.png)
+![Profile Screenshot](https://res.cloudinary.com/dm0rlehq8/image/upload/v1752339681/Screenshot_2025-07-12_222631_ri5cpo.png)
 ---
 
 ## Mobile View
