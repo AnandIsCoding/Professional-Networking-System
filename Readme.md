@@ -218,6 +218,6 @@ cd ../client && npm run dev
 Created with ❤️ by **Anand Kumar Jha**
 
 📧 Email: [anandkumarj669@gmail.com](mailto:anandkumarj669@gmail.com)
-🌐 Website: [https://anandjii.web.app](https://devlinked.site)
+🌐 Website: [https://anandjii.web.app](https://anandjii.web.app)
 
 > “Build what you want to use.”
