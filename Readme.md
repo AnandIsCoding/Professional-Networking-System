@@ -23,7 +23,18 @@ A full-featured, real-time **MERN stack** application replicating core functiona
 
 ![Profile Screenshot](https://res.cloudinary.com/dm0rlehq8/image/upload/v1752339001/Screenshot_2025-07-12_221557_cvzisc.png)
 
+
+![Profile Screenshot](https://res.cloudinary.com/dm0rlehq8/image/upload/v1752339001/Screenshot_2025-07-12_221557_cvzisc.png)
 ---
+
+## Mobile View
+
+<p align="center">
+  <img src="/Client/public/devlinked_mobile1.png" alt="Image 1" width="30%" />
+  <img src="/Client/public/devlinked_mobile2.png" alt="Image 2" width="30%" />
+  <img src="/Client/public/devlinked_mobile3.png" alt="Image 3" width="30%" />
+</p>
+
 
 ## ✨ Key Features
 
